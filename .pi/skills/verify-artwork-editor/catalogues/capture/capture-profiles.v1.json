@@ -1,0 +1,268 @@
+{
+  "schemaVersion": 1,
+  "captures": [
+    {
+      "schemaVersion": 1,
+      "captureProfileId": "single-target-v1",
+      "version": 1,
+      "requiredSources": [
+        {
+          "sourceId": "canonical-snapshot",
+          "role": "canonical",
+          "currentness": ["document", "bridge-generation", "revision", "epoch"],
+          "required": true
+        },
+        {
+          "sourceId": "renderer-geometry",
+          "role": "renderer",
+          "currentness": ["document", "bridge-generation", "revision", "renderer-stage"],
+          "required": true
+        },
+        {
+          "sourceId": "semantic-state",
+          "role": "semantic",
+          "currentness": ["document", "bridge-generation", "revision"],
+          "required": true
+        }
+      ],
+      "bracketing": ["anchor-A0", "sources", "anchor-A1", "quiescence"],
+      "acceptedObservationRule": "A bundle is accepted only when every required source shares the A0/A1 document, bridge generation, revision and epoch, and the renderer stage fingerprint matches the quiescence-established stable renderer fingerprint.",
+      "tornCandidateHandling": "A torn candidate receives no observationId and may be recaptured only inside the original non-extending deadline.",
+      "evidenceItemIds": ["geometry.canonical", "geometry.renderer", "observation"]
+    },
+    {
+      "schemaVersion": 1,
+      "captureProfileId": "typed-envelope-v1",
+      "version": 1,
+      "requiredSources": [
+        {
+          "sourceId": "canonical-snapshot",
+          "role": "canonical",
+          "currentness": ["document", "bridge-generation", "revision", "epoch"],
+          "required": true
+        },
+        {
+          "sourceId": "renderer-geometry",
+          "role": "renderer",
+          "currentness": ["document", "bridge-generation", "revision", "renderer-stage"],
+          "required": true
+        },
+        {
+          "sourceId": "typed-envelope-geometry",
+          "role": "renderer",
+          "currentness": ["document", "bridge-generation", "revision", "typed-envelope"],
+          "required": true
+        },
+        {
+          "sourceId": "semantic-state",
+          "role": "semantic",
+          "currentness": ["document", "bridge-generation", "revision"],
+          "required": true
+        }
+      ],
+      "bracketing": ["anchor-A0", "sources", "anchor-A1", "quiescence"],
+      "acceptedObservationRule": "A bundle is accepted only when every required source shares the same document, bridge generation, revision and epoch, the renderer stage fingerprint is stable, and the typed circle-control envelope fingerprint agrees across the bracketing anchors.",
+      "tornCandidateHandling": "A torn candidate receives no observationId and may be recaptured only inside the original non-extending deadline.",
+      "evidenceItemIds": [
+        "geometry.canonical",
+        "geometry.renderer",
+        "geometry.typed-envelope",
+        "observation"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "captureProfileId": "raster-target-v1",
+      "version": 1,
+      "requiredSources": [
+        {
+          "sourceId": "canonical-snapshot",
+          "role": "canonical",
+          "currentness": ["document", "bridge-generation", "revision", "epoch"],
+          "required": true
+        },
+        {
+          "sourceId": "renderer-geometry",
+          "role": "renderer",
+          "currentness": ["document", "bridge-generation", "revision", "renderer-stage"],
+          "required": true
+        },
+        {
+          "sourceId": "raster-capture",
+          "role": "raster",
+          "currentness": ["document", "bridge-generation", "revision", "raster"],
+          "required": true
+        },
+        {
+          "sourceId": "semantic-state",
+          "role": "semantic",
+          "currentness": ["document", "bridge-generation", "revision"],
+          "required": true
+        }
+      ],
+      "bracketing": ["anchor-A0", "sources", "anchor-A1", "quiescence"],
+      "acceptedObservationRule": "A bundle is accepted only when every required source shares the same document, bridge generation, revision and epoch, the renderer stage fingerprint is stable, and the raster start/complete anchors agree on the same source revision.",
+      "tornCandidateHandling": "A torn candidate receives no observationId and may be recaptured only inside the original non-extending deadline.",
+      "evidenceItemIds": [
+        "geometry.canonical",
+        "geometry.renderer",
+        "image.semantic-baseline",
+        "image.semantic-observed",
+        "observation",
+        "raster.accepted"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "captureProfileId": "nested-object-affine-capture-v1",
+      "version": 1,
+      "requiredSources": [
+        {
+          "sourceId": "canonical-snapshot",
+          "role": "canonical",
+          "currentness": ["document", "bridge-generation", "revision", "epoch"],
+          "required": true
+        },
+        {
+          "sourceId": "renderer-geometry",
+          "role": "renderer",
+          "currentness": ["document", "bridge-generation", "revision", "renderer-stage"],
+          "required": true
+        },
+        {
+          "sourceId": "typed-chain-v3",
+          "role": "semantic",
+          "currentness": ["document", "bridge-generation", "revision", "typed-chain-v3"],
+          "required": true
+        }
+      ],
+      "bracketing": ["anchor-A0", "sources", "anchor-A1", "quiescence"],
+      "acceptedObservationRule": "A bundle is accepted only when the pair-explicit typed geometry-v3 records for target and witness share the same document, bridge generation, revision, epoch and representation fingerprint.",
+      "tornCandidateHandling": "A torn candidate receives no observationId and may be recaptured only inside the original non-extending deadline.",
+      "evidenceItemIds": [
+        "geometry.canonical",
+        "geometry.renderer",
+        "geometry.typed-chain-v3",
+        "observation"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "captureProfileId": "crossword-generation-raster-v1",
+      "version": 1,
+      "requiredSources": [
+        {
+          "sourceId": "canonical-snapshot",
+          "role": "canonical",
+          "currentness": ["document", "bridge-generation", "revision", "epoch"],
+          "required": true
+        },
+        {
+          "sourceId": "renderer-geometry",
+          "role": "renderer",
+          "currentness": ["document", "bridge-generation", "revision", "renderer-stage"],
+          "required": true
+        },
+        {
+          "sourceId": "crossword-observation-set",
+          "role": "crossword-generation",
+          "currentness": [
+            "document",
+            "bridge-generation",
+            "revision",
+            "crossword-generation",
+            "raster"
+          ],
+          "required": true
+        }
+      ],
+      "bracketing": [
+        "anchor-A0",
+        "baseline-observation",
+        "repeat-observation",
+        "sensitive-observation",
+        "anchor-A1",
+        "quiescence"
+      ],
+      "acceptedObservationRule": "The baseline/repeat/sensitive observation set is accepted only when every child shares the same document, bridge generation and generation epoch, is ordered baseline → repeat → sensitive, and each raster anchor is current.",
+      "tornCandidateHandling": "A torn candidate receives no observationId and may be recaptured only inside the original non-extending deadline.",
+      "evidenceItemIds": [
+        "crossword.observation-baseline",
+        "crossword.observation-repeat",
+        "crossword.observation-sensitive",
+        "observation",
+        "raster.accepted"
+      ]
+    },
+    {
+      "schemaVersion": 1,
+      "captureProfileId": "history-whole-document-v1",
+      "version": 1,
+      "requiredSources": [
+        {
+          "sourceId": "serialized-source",
+          "role": "serialization",
+          "currentness": ["document", "bridge-generation", "revision", "history-snapshot"],
+          "required": true
+        },
+        {
+          "sourceId": "canonical-snapshot",
+          "role": "canonical",
+          "currentness": ["document", "bridge-generation", "revision", "epoch"],
+          "required": true
+        },
+        {
+          "sourceId": "history-transition",
+          "role": "history",
+          "currentness": ["document", "bridge-generation", "revision", "history-snapshot"],
+          "required": true
+        }
+      ],
+      "bracketing": ["anchor-A0", "sources", "anchor-A1", "quiescence"],
+      "acceptedObservationRule": "A bundle is accepted only when the pre-action snapshot and the post-transition snapshot share the same document and bridge generation and every history tuple is read from one coherent transition.",
+      "tornCandidateHandling": "A torn candidate receives no observationId and may be recaptured only inside the original non-extending deadline.",
+      "evidenceItemIds": ["history.source-snapshot", "history.transition-snapshot", "observation"]
+    },
+    {
+      "schemaVersion": 1,
+      "captureProfileId": "restore-whole-document-v1",
+      "version": 1,
+      "requiredSources": [
+        {
+          "sourceId": "serialized-source",
+          "role": "serialization",
+          "currentness": ["document", "restore-snapshot"],
+          "required": true
+        },
+        {
+          "sourceId": "restored-snapshot",
+          "role": "semantic",
+          "currentness": ["document", "bridge-generation", "restore-snapshot"],
+          "required": true
+        },
+        {
+          "sourceId": "normalized-meaning",
+          "role": "normalization",
+          "currentness": ["document", "restore-snapshot"],
+          "required": true
+        }
+      ],
+      "bracketing": [
+        "anchor-A0",
+        "source-snapshot",
+        "create-request",
+        "restore-navigation",
+        "restored-capture",
+        "quiescence"
+      ],
+      "acceptedObservationRule": "A bundle is accepted only when the source snapshot and the restored snapshot are captured from the same document identity, the exact create/GET requests bracket the navigation, and the normalized meaning is computed by the product-owned normalizer.",
+      "tornCandidateHandling": "A torn candidate receives no observationId and may be recaptured only inside the original non-extending deadline.",
+      "evidenceItemIds": [
+        "observation",
+        "restore.restored-snapshot",
+        "restore.route-request",
+        "restore.source-snapshot"
+      ]
+    }
+  ]
+}

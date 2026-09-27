@@ -1,0 +1,55 @@
+{
+  "schemaVersion": 1,
+  "label": "intended-inventory.v1",
+  "transactionKind": "run",
+  "transactionId": "fixture-committed-run-20260918T000000Z-000001",
+  "provenance": {
+    "schemaVersion": 1,
+    "policyVersion": 1,
+    "repositoryRevision": "6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d",
+    "dirtyPolicy": "clean",
+    "dirtyTreeDigest": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+    "lockfileDigest": "7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e",
+    "cliBootstrapDigest": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+    "runnerDigest": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+    "evidenceWriterDigest": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4",
+    "verifierDigest": "e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5",
+    "runtimeEngineDigest": "f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6",
+    "catalogueIdentities": [
+      {
+        "id": "catalogue:core",
+        "digest": "0707070707070707070707070707070707070707070707070707070707070707"
+      }
+    ],
+    "profileIdentities": [
+      {
+        "id": "profile:diagnostic",
+        "digest": "1818181818181818181818181818181818181818181818181818181818181818"
+      }
+    ]
+  },
+  "sealedStrictSchemas": {
+    "runRecordSchemaVersion": 4,
+    "suiteRecordSchemaVersion": 2,
+    "currentChildRecordLabel": "current-v4",
+    "suiteRecordLabel": "suite-v2"
+  },
+  "artifacts": [
+    {
+      "artifactId": "artifact:run-record",
+      "role": "required-authoritative",
+      "mediaType": "application/json",
+      "schema": "run-record.v1",
+      "relativePath": "run-record.json",
+      "byteLength": 5437,
+      "sha256": "19136aebd54c7a1d421548f5d7e9f218402e1e8b1935456d533b5811127d8a90",
+      "semanticDigest": "f0e33fd3b89fe568d3679f85be55398a67f68826d113b4395d143a383e5357d8",
+      "semanticDigestKind": "canonical-json",
+      "producerPhase": "finalization",
+      "consumedBy": [],
+      "sanitizationPolicy": "public-json-guard-v1",
+      "retentionStatus": "required-preserve"
+    }
+  ],
+  "createdAtUtc": "2026-09-18T00:00:00.000Z"
+}

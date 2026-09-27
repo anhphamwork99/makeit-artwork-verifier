@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "operations": [
+    { "discriminant": "changeContainment.to", "capability": "changeContainment" },
+    { "discriminant": "changeProperties.apply", "capability": "changeProperties" },
+    { "discriminant": "create.generated", "capability": "create" },
+    { "discriminant": "create.text", "capability": "create" },
+    { "discriminant": "editContent.set", "capability": "editContent" },
+    { "discriminant": "history.redo", "capability": "history" },
+    { "discriminant": "history.undo", "capability": "history" },
+    { "discriminant": "move.by", "capability": "move" },
+    { "discriminant": "reorder.to", "capability": "reorder" },
+    { "discriminant": "resize.to", "capability": "resize" },
+    { "discriminant": "resource.use", "capability": "changeProperties" },
+    { "discriminant": "rotate.by", "capability": "rotate" },
+    { "discriminant": "select.byId", "capability": "select" },
+    { "discriminant": "serialize.roundtrip", "capability": "frontendSerializeRestore" }
+  ]
+}

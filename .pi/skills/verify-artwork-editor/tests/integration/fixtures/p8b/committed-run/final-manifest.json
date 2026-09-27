@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "label": "final-manifest.v1",
+  "transactionKind": "run",
+  "transactionId": "fixture-committed-run-20260918T000000Z-000001",
+  "inventoryIdentity": "1da53bf42da4ba38213508e73ccc7cb1de54a7b3d3ca9b6a17f1c85cc2b096b3",
+  "provenanceIdentity": "9230e8493d047e823444ef27a74af806a6def34f9d71d8bc0ce6897aff3d5681",
+  "sealedStrictSchemas": {
+    "runRecordSchemaVersion": 4,
+    "suiteRecordSchemaVersion": 2,
+    "currentChildRecordLabel": "current-v4",
+    "suiteRecordLabel": "suite-v2"
+  },
+  "behaviorOutcome": "PASS",
+  "transactionResult": "committed",
+  "committedArtifacts": [
+    {
+      "artifactId": "artifact:run-record",
+      "relativePath": "run-record.json",
+      "byteLength": 5437,
+      "sha256": "19136aebd54c7a1d421548f5d7e9f218402e1e8b1935456d533b5811127d8a90",
+      "semanticDigest": "f0e33fd3b89fe568d3679f85be55398a67f68826d113b4395d143a383e5357d8"
+    }
+  ],
+  "references": [],
+  "committedAtUtc": "2026-09-18T00:00:30.000Z"
+}

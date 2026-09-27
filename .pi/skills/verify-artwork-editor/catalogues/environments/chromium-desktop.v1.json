@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "cells": [
+    {
+      "cellId": "chromium-desktop-1440x1000",
+      "classification": "required-credit",
+      "browserKind": "chromium",
+      "browserChannel": "bundled",
+      "playwrightVersion": "1.59.1",
+      "viewport": { "width": 1440, "height": 1000 },
+      "deviceScaleFactor": 1,
+      "locale": "en-US",
+      "timezoneId": "UTC",
+      "colorScheme": "light",
+      "reducedMotion": "no-preference",
+      "permissions": [],
+      "geolocation": null,
+      "storageState": null
+    }
+  ]
+}

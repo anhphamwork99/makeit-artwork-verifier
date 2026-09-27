@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 3,
+  "stepSchemaVersion": 2,
+  "workflows": [
+    {
+      "workflowId": "shared.move",
+      "capability": "move",
+      "steps": [
+        {
+          "stepId": "move.pointer-drag",
+          "primitive": "pointer.drag",
+          "targetRole": "target",
+          "parameters": [
+            {
+              "name": "dx",
+              "operation": "move.by",
+              "parameter": "dx"
+            },
+            {
+              "name": "dy",
+              "operation": "move.by",
+              "parameter": "dy"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "workflowId": "crossword.create-default",
+      "capability": "create",
+      "steps": [
+        {
+          "stepId": "crossword.open-more",
+          "primitive": "control.activate",
+          "targetRole": "control:more",
+          "parameters": []
+        },
+        {
+          "stepId": "crossword.create-default",
+          "primitive": "control.activate",
+          "targetRole": "control:crossword",
+          "parameters": []
+        }
+      ]
+    },
+    {
+      "workflowId": "image.upload-replace",
+      "capability": "changeProperties",
+      "steps": [
+        {
+          "stepId": "image.select-target",
+          "primitive": "pointer.click",
+          "targetRole": "target",
+          "parameters": []
+        },
+        {
+          "stepId": "image.open-upload",
+          "primitive": "control.activate",
+          "targetRole": "control:test-with-image",
+          "parameters": []
+        },
+        {
+          "stepId": "image.set-upload-a",
+          "primitive": "fileInput.set",
+          "targetRole": "dialog:test-with-image:file",
+          "parameters": [
+            {
+              "name": "resource",
+              "operation": "resource.use",
+              "parameter": "upload-initial"
+            }
+          ],
+          "checkpoint": "after-upload-current"
+        },
+        {
+          "stepId": "image.open-replace",
+          "primitive": "control.activate",
+          "targetRole": "control:replace-image",
+          "parameters": []
+        },
+        {
+          "stepId": "image.set-upload-b",
+          "primitive": "fileInput.set",
+          "targetRole": "dialog:test-with-image:file",
+          "parameters": [
+            {
+              "name": "resource",
+              "operation": "resource.use",
+              "parameter": "replace-final"
+            }
+          ],
+          "checkpoint": "after-replacement-current"
+        }
+      ]
+    },
+    {
+      "workflowId": "object.move",
+      "capability": "move",
+      "steps": [
+        {
+          "stepId": "object.move-parent",
+          "primitive": "pointer.drag",
+          "targetRole": "target",
+          "parameters": [
+            {
+              "name": "dx",
+              "operation": "move.by",
+              "parameter": "dx"
+            },
+            {
+              "name": "dy",
+              "operation": "move.by",
+              "parameter": "dy"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

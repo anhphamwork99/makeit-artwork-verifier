@@ -1,0 +1,5 @@
+{
+  "schemaVersion": 1,
+  "source": "src/lib/artwork/layers/registry.ts#ARTWORK_LAYER_REGISTRY",
+  "kinds": ["crossword", "image", "layout", "object", "starmap", "text", "vector"]
+}

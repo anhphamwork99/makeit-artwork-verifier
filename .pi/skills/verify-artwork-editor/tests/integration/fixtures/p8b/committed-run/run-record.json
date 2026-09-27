@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 4,
+  "command": "diagnostic",
+  "recordedAt": "2026-09-18T00:00:00.000Z",
+  "runId": "fixture-committed-run-20260918T000000Z-000001",
+  "caseId": "layer-text-move",
+  "materializationFingerprint": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+  "planFingerprint": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+  "profile": "diagnostic",
+  "observationId": null,
+  "resolvedProfileFingerprint": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+  "componentFingerprints": {
+    "readiness": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4",
+    "capture": "e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5",
+    "oracle": "f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6",
+    "capabilityBaseline": "0707070707070707070707070707070707070707070707070707070707070707",
+    "subjectAddition": "1818181818181818181818181818181818181818181818181818181818181818",
+    "requiredCheckSet": "2929292929292929292929292929292929292929292929292929292929292929",
+    "tolerances": "3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a",
+    "visuals": "4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b",
+    "normalization": "5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c"
+  },
+  "actionCycles": [
+    {
+      "schemaVersion": 1,
+      "actionCycleId": "cycle:1",
+      "resolvedProfileFingerprint": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+      "readinessFingerprint": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4"
+    }
+  ],
+  "requiredChecks": [
+    {
+      "schemaVersion": 1,
+      "checkId": "geometry.delta",
+      "status": "PASS",
+      "expected": { "dx": 0, "dy": 0 },
+      "actual": { "dx": 0, "dy": 0 },
+      "evidenceIds": [],
+      "toleranceRefs": [],
+      "visualRefs": [],
+      "normalizationRef": null,
+      "actionCycleRef": "cycle:1",
+      "consumedComponentFingerprints": {
+        "resolvedProfile": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+        "requiredCheckSet": "2929292929292929292929292929292929292929292929292929292929292929",
+        "oracle": "f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6",
+        "capture": "e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5",
+        "tolerances": "3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a",
+        "visuals": "4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b",
+        "normalization": "5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c5c"
+      }
+    }
+  ],
+  "nestedProjections": [
+    {
+      "schemaVersion": 4,
+      "family": "action-cycle",
+      "actionCycles": [
+        {
+          "schemaVersion": 1,
+          "actionCycleId": "cycle:1",
+          "resolvedProfileFingerprint": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+          "readinessFingerprint": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4"
+        }
+      ],
+      "readiness": {
+        "profileId": "readiness:fixture",
+        "timingCategory": "bounded",
+        "deadlineMs": 1000,
+        "signalWatchdogMs": 0,
+        "stableFrames": 0
+      }
+    }
+  ],
+  "provenance": "diagnostic-request",
+  "evidenceDepth": "standard",
+  "environmentCellId": "cell:fixture-committed",
+  "repository": {
+    "commit": "6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d",
+    "dirty": false,
+    "lockfileDigest": "7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e7e"
+  },
+  "fingerprints": {
+    "registry": "8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f8f",
+    "applicationInventory": "9090909090909090909090909090909090909090909090909090909090909090",
+    "operationCatalogue": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+    "adapterCatalogue": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+    "workflowCatalogue": "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+    "workflowSteps": "d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4d4",
+    "coverageModel": null,
+    "readinessProfile": "e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5e5",
+    "oracleProfile": "f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6"
+  },
+  "adapter": { "adapterId": "adapter:layer-text", "compatibilityVersion": 1 },
+  "workflow": { "workflowId": "shared.move", "version": 1 },
+  "fixture": {
+    "fixtureId": "fixture:layer-text-move",
+    "constructorId": "constructor:fixture",
+    "constructorVersion": 1
+  },
+  "targets": [{ "role": "subject", "elementId": "element:1" }],
+  "readiness": {
+    "profileId": "readiness:fixture",
+    "timingCategory": "bounded",
+    "deadlineMs": 1000,
+    "wakeSource": "none",
+    "fallbackPollCount": 0,
+    "watchdogWaits": 0,
+    "rendererStableFrames": 0,
+    "idle": null,
+    "timings": {}
+  },
+  "behaviorOutcome": "PASS",
+  "finalOutcome": "PASS",
+  "launch": {
+    "attempted": false,
+    "pid": null,
+    "processGroupId": null,
+    "readinessMs": null,
+    "serverLogArtifactId": null
+  },
+  "ownership": {
+    "status": "not-established",
+    "runId": "fixture-committed-run-20260918T000000Z-000001",
+    "allocationFailureCode": "dry-run-no-launch",
+    "requestedPort": null
+  },
+  "cleanup": null,
+  "diagnostics": [],
+  "runError": null
+}

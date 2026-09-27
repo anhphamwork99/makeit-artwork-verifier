@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "routeSelections": [
+    {
+      "subjectId": "layer/text",
+      "capability": "move",
+      "variant": "plain",
+      "readinessProfileId": "action-cycle-v1",
+      "oracleProfileId": "geometry-delta-v1",
+      "checks": []
+    },
+    {
+      "subjectId": "layer/text",
+      "capability": "move",
+      "variant": "warp-circle",
+      "readinessProfileId": "warped-text-action-cycle-v1",
+      "oracleProfileId": "warped-text-circle-move-v1",
+      "checks": ["geometry.warp-envelope"]
+    },
+    {
+      "subjectId": "container/object",
+      "capability": "move",
+      "variant": null,
+      "readinessProfileId": "nested-object-action-cycle-v1",
+      "oracleProfileId": "nested-object-move-v1",
+      "checks": []
+    },
+    {
+      "subjectId": "layer/image",
+      "capability": "changeProperties",
+      "variant": "static",
+      "readinessProfileId": "image-raster-action-cycle-v1",
+      "oracleProfileId": "image-upload-replace-v1",
+      "checks": []
+    },
+    {
+      "subjectId": "layer/crossword",
+      "capability": "create",
+      "variant": null,
+      "readinessProfileId": "crossword-generation-action-cycle-v1",
+      "oracleProfileId": "crossword-determinism-v1",
+      "checks": []
+    },
+    {
+      "subjectId": "artwork/editor",
+      "capability": "history",
+      "variant": null,
+      "readinessProfileId": "history-transition-v1",
+      "oracleProfileId": "history-cross-subject-v1",
+      "checks": []
+    },
+    {
+      "subjectId": "artwork/editor",
+      "capability": "frontendSerializeRestore",
+      "variant": null,
+      "readinessProfileId": "frontend-restore-transition-v1",
+      "oracleProfileId": "frontend-restore-v1",
+      "checks": []
+    }
+  ]
+}

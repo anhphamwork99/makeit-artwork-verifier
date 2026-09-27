@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "profile": "diagnostic",
+  "provenance": "diagnostic-request",
+  "evidenceDepth": "deep",
+  "intent": {
+    "subjectId": "artwork/editor",
+    "capability": "history",
+    "variant": null,
+    "scenario": "undo-redo-text",
+    "preState": {},
+    "operations": [{ "discriminant": "history.undo", "parameters": {} }],
+    "expected": {},
+    "resources": []
+  }
+}

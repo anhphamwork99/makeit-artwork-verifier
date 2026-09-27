@@ -1,0 +1,2 @@
+Synthetic app root that resolves to a real directory but exposes no product-meaning
+provider entry at src/lib/artwork/verification/productMeaningProvider.mjs.

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 2,
+  "stepSchemaVersion": 1,
+  "workflows": [
+    {
+      "workflowId": "shared.move",
+      "capability": "move",
+      "steps": [
+        {
+          "stepId": "move.pointer-drag",
+          "primitive": "pointer.drag",
+          "targetRole": "target",
+          "parameters": [
+            { "name": "dx", "operation": "move.by", "parameter": "dx" },
+            { "name": "dy", "operation": "move.by", "parameter": "dy" }
+          ]
+        }
+      ]
+    }
+  ]
+}

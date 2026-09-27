@@ -1,0 +1,157 @@
+{
+  "schemaVersion": 1,
+  "readiness": [
+    {
+      "schemaVersion": 1,
+      "profileId": "action-cycle-v1",
+      "version": 1,
+      "deadlineCategory": "INTERACTIVE_RENDER_V1",
+      "deadlineMs": 5000,
+      "signalWatchdogMs": 100,
+      "fallbackCadenceMs": [100, 200, 250],
+      "stableFrames": 3,
+      "quiescenceRequired": true,
+      "stableFrameRequired": true,
+      "currentnessIdentities": [
+        "bridge-generation",
+        "document",
+        "epoch",
+        "renderer-stage",
+        "revision"
+      ],
+      "captureProfileId": "single-target-v1",
+      "oracleProfileId": "geometry-delta-v1"
+    },
+    {
+      "schemaVersion": 1,
+      "profileId": "warped-text-action-cycle-v1",
+      "version": 1,
+      "deadlineCategory": "INTERACTIVE_RENDER_V1",
+      "deadlineMs": 5000,
+      "signalWatchdogMs": 100,
+      "fallbackCadenceMs": [100, 200, 250],
+      "stableFrames": 3,
+      "quiescenceRequired": true,
+      "stableFrameRequired": true,
+      "currentnessIdentities": [
+        "bridge-generation",
+        "document",
+        "epoch",
+        "renderer-stage",
+        "revision",
+        "typed-envelope"
+      ],
+      "captureProfileId": "typed-envelope-v1",
+      "oracleProfileId": "warped-text-circle-move-v1"
+    },
+    {
+      "schemaVersion": 1,
+      "profileId": "image-raster-action-cycle-v1",
+      "version": 1,
+      "deadlineCategory": "RESOURCE_RENDER_V1",
+      "deadlineMs": 8000,
+      "signalWatchdogMs": 100,
+      "fallbackCadenceMs": [100, 200, 250],
+      "stableFrames": 3,
+      "quiescenceRequired": true,
+      "stableFrameRequired": true,
+      "currentnessIdentities": [
+        "bridge-generation",
+        "document",
+        "epoch",
+        "raster",
+        "renderer-stage",
+        "revision"
+      ],
+      "captureProfileId": "raster-target-v1",
+      "oracleProfileId": "image-upload-replace-v1"
+    },
+    {
+      "schemaVersion": 1,
+      "profileId": "nested-object-action-cycle-v1",
+      "version": 1,
+      "deadlineCategory": "INTERACTIVE_RENDER_V1",
+      "deadlineMs": 5000,
+      "signalWatchdogMs": 100,
+      "fallbackCadenceMs": [100, 200, 250],
+      "stableFrames": 3,
+      "quiescenceRequired": true,
+      "stableFrameRequired": true,
+      "currentnessIdentities": [
+        "bridge-generation",
+        "document",
+        "epoch",
+        "renderer-stage",
+        "revision",
+        "typed-chain-v3"
+      ],
+      "captureProfileId": "nested-object-affine-capture-v1",
+      "oracleProfileId": "nested-object-move-v1"
+    },
+    {
+      "schemaVersion": 1,
+      "profileId": "crossword-generation-action-cycle-v1",
+      "version": 1,
+      "deadlineCategory": "DERIVED_GENERATION_V1",
+      "deadlineMs": 8000,
+      "signalWatchdogMs": 100,
+      "fallbackCadenceMs": [100, 200, 250],
+      "stableFrames": 3,
+      "quiescenceRequired": true,
+      "stableFrameRequired": true,
+      "currentnessIdentities": [
+        "bridge-generation",
+        "crossword-generation",
+        "document",
+        "epoch",
+        "raster",
+        "renderer-stage",
+        "revision"
+      ],
+      "captureProfileId": "crossword-generation-raster-v1",
+      "oracleProfileId": "crossword-determinism-v1"
+    },
+    {
+      "schemaVersion": 1,
+      "profileId": "history-transition-v1",
+      "version": 1,
+      "deadlineCategory": "INTERACTIVE_HISTORY_V1",
+      "deadlineMs": 5000,
+      "signalWatchdogMs": 100,
+      "fallbackCadenceMs": [100, 200, 250],
+      "stableFrames": 3,
+      "quiescenceRequired": true,
+      "stableFrameRequired": true,
+      "currentnessIdentities": [
+        "bridge-generation",
+        "document",
+        "epoch",
+        "history-snapshot",
+        "revision"
+      ],
+      "captureProfileId": "history-whole-document-v1",
+      "oracleProfileId": "history-cross-subject-v1"
+    },
+    {
+      "schemaVersion": 1,
+      "profileId": "frontend-restore-transition-v1",
+      "version": 1,
+      "deadlineCategory": "FRONTEND_RESTORE_V1",
+      "deadlineMs": 15000,
+      "signalWatchdogMs": 100,
+      "fallbackCadenceMs": [100, 200, 250],
+      "stableFrames": 3,
+      "quiescenceRequired": true,
+      "stableFrameRequired": true,
+      "currentnessIdentities": [
+        "bridge-generation",
+        "document",
+        "epoch",
+        "restore-snapshot",
+        "revision"
+      ],
+      "captureProfileId": "restore-whole-document-v1",
+      "oracleProfileId": "frontend-restore-v1"
+    }
+  ]
+}

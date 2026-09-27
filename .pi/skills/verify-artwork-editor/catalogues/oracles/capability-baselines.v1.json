@@ -1,0 +1,74 @@
+{
+  "schemaVersion": 1,
+  "capabilityBaselines": [
+    {
+      "capability": "move",
+      "checks": ["geometry.delta"]
+    },
+    {
+      "capability": "changeProperties",
+      "checks": []
+    },
+    {
+      "capability": "create",
+      "checks": []
+    },
+    {
+      "capability": "history",
+      "checks": ["history.depth"]
+    },
+    {
+      "capability": "frontendSerializeRestore",
+      "checks": ["serialize.roundtrip"]
+    }
+  ],
+  "subjectAdditions": [
+    {
+      "subjectId": "layer/text",
+      "capability": "move",
+      "checks": []
+    },
+    {
+      "subjectId": "container/object",
+      "capability": "move",
+      "checks": [
+        "containment.parent-chain",
+        "geometry.local-invariant",
+        "geometry.world-composition"
+      ]
+    },
+    {
+      "subjectId": "layer/image",
+      "capability": "changeProperties",
+      "checks": [
+        "image.content-distinct",
+        "image.frame-stable",
+        "image.raster-current",
+        "image.semantic-transition",
+        "image.structural-visual"
+      ]
+    },
+    {
+      "subjectId": "layer/crossword",
+      "capability": "create",
+      "checks": [
+        "crossword.created",
+        "crossword.different-seed-sensitive",
+        "crossword.raster-current",
+        "crossword.same-seed-repeatable",
+        "crossword.seed-derived",
+        "crossword.semantic-valid"
+      ]
+    },
+    {
+      "subjectId": "artwork/editor",
+      "capability": "history",
+      "checks": ["history.meaning"]
+    },
+    {
+      "subjectId": "artwork/editor",
+      "capability": "frontendSerializeRestore",
+      "checks": ["serialize.raw-semantic"]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "workflows": [
+    { "workflowId": "object.containment", "version": 1, "capability": "changeContainment" },
+    { "workflowId": "object.move", "version": 1, "capability": "move" },
+    { "workflowId": "object.resize", "version": 1, "capability": "resize" },
+    { "workflowId": "image.upload-replace", "version": 1, "capability": "changeProperties" },
+    { "workflowId": "crossword.create-default", "version": 1, "capability": "create" },
+    { "workflowId": "shared.changeProperties", "version": 1, "capability": "changeProperties" },
+    { "workflowId": "shared.containment", "version": 1, "capability": "changeContainment" },
+    { "workflowId": "shared.create", "version": 1, "capability": "create" },
+    { "workflowId": "shared.history", "version": 1, "capability": "history" },
+    { "workflowId": "shared.move", "version": 1, "capability": "move" },
+    { "workflowId": "shared.reorder", "version": 1, "capability": "reorder" },
+    { "workflowId": "shared.resize", "version": 1, "capability": "resize" },
+    { "workflowId": "shared.rotate", "version": 1, "capability": "rotate" },
+    { "workflowId": "shared.select", "version": 1, "capability": "select" },
+    { "workflowId": "shared.serialize", "version": 1, "capability": "frontendSerializeRestore" },
+    { "workflowId": "text.editContent", "version": 1, "capability": "editContent" }
+  ]
+}

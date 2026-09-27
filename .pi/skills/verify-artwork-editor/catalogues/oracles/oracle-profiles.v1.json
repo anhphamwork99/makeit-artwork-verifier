@@ -1,0 +1,311 @@
+{
+  "schemaVersion": 1,
+  "oracles": [
+    {
+      "schemaVersion": 1,
+      "oracleProfileId": "geometry-delta-v1",
+      "version": 1,
+      "evaluatorKind": "geometry-delta",
+      "checks": [
+        {
+          "checkId": "geometry.delta",
+          "evaluator": "canonical-delta",
+          "expectedSchema": "minimum-delta-v1",
+          "actualSchema": "geometry-delta-v1",
+          "requiredEvidence": ["geometry.canonical", "geometry.renderer", "observation"],
+          "toleranceRefs": ["canonical-matrix-epsilon-v1", "renderer-transform-px-v1"],
+          "visualRefs": [],
+          "normalizationRef": null
+        }
+      ],
+      "diagnosticOnlyEvidence": ["obstruction.diagnostic", "screenshot.diagnostic"]
+    },
+    {
+      "schemaVersion": 1,
+      "oracleProfileId": "warped-text-circle-move-v1",
+      "version": 1,
+      "evaluatorKind": "warped-text-envelope",
+      "checks": [
+        {
+          "checkId": "geometry.delta",
+          "evaluator": "typed-envelope",
+          "expectedSchema": "minimum-delta-v1",
+          "actualSchema": "warped-envelope-delta-v1",
+          "requiredEvidence": [
+            "geometry.canonical",
+            "geometry.renderer",
+            "geometry.typed-envelope",
+            "observation"
+          ],
+          "toleranceRefs": ["canonical-matrix-epsilon-v1", "renderer-transform-px-v1"],
+          "visualRefs": [],
+          "normalizationRef": null
+        },
+        {
+          "checkId": "geometry.warp-envelope",
+          "evaluator": "typed-envelope",
+          "expectedSchema": "circle-control-envelope-quad-v1",
+          "actualSchema": "circle-control-envelope-quad-v1",
+          "requiredEvidence": [
+            "geometry.canonical",
+            "geometry.renderer",
+            "geometry.typed-envelope",
+            "observation"
+          ],
+          "toleranceRefs": ["canonical-matrix-epsilon-v1", "renderer-transform-px-v1"],
+          "visualRefs": [],
+          "normalizationRef": null
+        }
+      ],
+      "diagnosticOnlyEvidence": ["obstruction.diagnostic", "screenshot.diagnostic"]
+    },
+    {
+      "schemaVersion": 1,
+      "oracleProfileId": "image-upload-replace-v1",
+      "version": 1,
+      "evaluatorKind": "image-upload-replace",
+      "checks": [
+        {
+          "checkId": "image.content-distinct",
+          "evaluator": "image-structural",
+          "expectedSchema": "image-content-distinct-v1",
+          "actualSchema": "image-content-fingerprint-v1",
+          "requiredEvidence": ["image.semantic-baseline", "image.semantic-observed", "observation"],
+          "toleranceRefs": ["canonical-matrix-epsilon-v1"],
+          "visualRefs": [],
+          "normalizationRef": null
+        },
+        {
+          "checkId": "image.frame-stable",
+          "evaluator": "renderer-transform",
+          "expectedSchema": "image-frame-v1",
+          "actualSchema": "image-frame-v1",
+          "requiredEvidence": ["geometry.renderer", "observation"],
+          "toleranceRefs": ["renderer-transform-px-v1"],
+          "visualRefs": [],
+          "normalizationRef": null
+        },
+        {
+          "checkId": "image.raster-current",
+          "evaluator": "image-structural",
+          "expectedSchema": "raster-current-v1",
+          "actualSchema": "raster-accepted-v1",
+          "requiredEvidence": ["observation", "raster.accepted"],
+          "toleranceRefs": ["backing-pixel-edge-v1"],
+          "visualRefs": [],
+          "normalizationRef": null
+        },
+        {
+          "checkId": "image.semantic-transition",
+          "evaluator": "image-structural",
+          "expectedSchema": "image-semantic-transition-v1",
+          "actualSchema": "image-semantic-fingerprint-v1",
+          "requiredEvidence": ["image.semantic-baseline", "image.semantic-observed"],
+          "toleranceRefs": [],
+          "visualRefs": [],
+          "normalizationRef": null
+        },
+        {
+          "checkId": "image.structural-visual",
+          "evaluator": "image-structural",
+          "expectedSchema": "image-structural-visual-v1",
+          "actualSchema": "raster-accepted-v1",
+          "requiredEvidence": ["geometry.canonical", "observation", "raster.accepted"],
+          "toleranceRefs": ["backing-pixel-edge-v1"],
+          "visualRefs": ["image-structural-visual-v1"],
+          "normalizationRef": null
+        }
+      ],
+      "diagnosticOnlyEvidence": ["image.raw-payload.diagnostic", "screenshot.diagnostic"]
+    },
+    {
+      "schemaVersion": 1,
+      "oracleProfileId": "nested-object-move-v1",
+      "version": 1,
+      "evaluatorKind": "nested-object-affine",
+      "checks": [
+        {
+          "checkId": "containment.parent-chain",
+          "evaluator": "nested-object-affine",
+          "expectedSchema": "nested-object-parent-chain-v1",
+          "actualSchema": "nested-object-parent-chain-v1",
+          "requiredEvidence": ["geometry.typed-chain-v3", "observation"],
+          "toleranceRefs": ["canonical-matrix-epsilon-v1"],
+          "visualRefs": [],
+          "normalizationRef": null
+        },
+        {
+          "checkId": "geometry.local-invariant",
+          "evaluator": "nested-object-affine",
+          "expectedSchema": "nested-object-local-invariant-v1",
+          "actualSchema": "nested-object-local-invariant-v1",
+          "requiredEvidence": ["geometry.typed-chain-v3", "observation"],
+          "toleranceRefs": ["canonical-matrix-epsilon-v1"],
+          "visualRefs": [],
+          "normalizationRef": null
+        },
+        {
+          "checkId": "geometry.world-composition",
+          "evaluator": "nested-object-affine",
+          "expectedSchema": "nested-object-world-composition-v1",
+          "actualSchema": "nested-object-world-composition-v1",
+          "requiredEvidence": ["geometry.typed-chain-v3", "observation"],
+          "toleranceRefs": ["renderer-transform-px-v1"],
+          "visualRefs": [],
+          "normalizationRef": null
+        },
+        {
+          "checkId": "geometry.delta",
+          "evaluator": "nested-object-affine",
+          "expectedSchema": "minimum-delta-v1",
+          "actualSchema": "nested-object-delta-v1",
+          "requiredEvidence": ["geometry.typed-chain-v3", "observation"],
+          "toleranceRefs": ["canonical-matrix-epsilon-v1", "renderer-transform-px-v1"],
+          "visualRefs": [],
+          "normalizationRef": null
+        }
+      ],
+      "diagnosticOnlyEvidence": ["obstruction.diagnostic", "screenshot.diagnostic"]
+    },
+    {
+      "schemaVersion": 1,
+      "oracleProfileId": "crossword-determinism-v1",
+      "version": 1,
+      "evaluatorKind": "crossword-determinism",
+      "checks": [
+        {
+          "checkId": "crossword.created",
+          "evaluator": "crossword-determinism",
+          "expectedSchema": "crossword-generation-observation-v1",
+          "actualSchema": "crossword-generation-observation-v1",
+          "requiredEvidence": ["crossword.observation-baseline", "observation"],
+          "toleranceRefs": [],
+          "visualRefs": [],
+          "normalizationRef": null
+        },
+        {
+          "checkId": "crossword.seed-derived",
+          "evaluator": "crossword-determinism",
+          "expectedSchema": "crossword-seed-derivation-v1",
+          "actualSchema": "crossword-seed-derivation-v1",
+          "requiredEvidence": ["crossword.observation-baseline", "observation"],
+          "toleranceRefs": [],
+          "visualRefs": [],
+          "normalizationRef": null
+        },
+        {
+          "checkId": "crossword.semantic-valid",
+          "evaluator": "crossword-determinism",
+          "expectedSchema": "crossword-semantic-v1",
+          "actualSchema": "crossword-semantic-v1",
+          "requiredEvidence": ["crossword.observation-baseline", "observation"],
+          "toleranceRefs": [],
+          "visualRefs": [],
+          "normalizationRef": null
+        },
+        {
+          "checkId": "crossword.same-seed-repeatable",
+          "evaluator": "crossword-determinism",
+          "expectedSchema": "crossword-repeat-digest-v1",
+          "actualSchema": "crossword-repeat-digest-v1",
+          "requiredEvidence": ["crossword.observation-baseline", "crossword.observation-repeat"],
+          "toleranceRefs": [],
+          "visualRefs": [],
+          "normalizationRef": null
+        },
+        {
+          "checkId": "crossword.different-seed-sensitive",
+          "evaluator": "crossword-determinism",
+          "expectedSchema": "crossword-sensitive-digest-v1",
+          "actualSchema": "crossword-sensitive-digest-v1",
+          "requiredEvidence": ["crossword.observation-baseline", "crossword.observation-sensitive"],
+          "toleranceRefs": [],
+          "visualRefs": [],
+          "normalizationRef": null
+        },
+        {
+          "checkId": "crossword.raster-current",
+          "evaluator": "crossword-determinism",
+          "expectedSchema": "raster-current-v1",
+          "actualSchema": "raster-accepted-v1",
+          "requiredEvidence": ["crossword.observation-baseline", "raster.accepted"],
+          "toleranceRefs": ["backing-pixel-edge-v1"],
+          "visualRefs": [],
+          "normalizationRef": null
+        }
+      ],
+      "diagnosticOnlyEvidence": ["crossword.raw-payload.diagnostic", "screenshot.diagnostic"]
+    },
+    {
+      "schemaVersion": 1,
+      "oracleProfileId": "history-cross-subject-v1",
+      "version": 1,
+      "evaluatorKind": "history-cross-subject",
+      "checks": [
+        {
+          "checkId": "history.depth",
+          "evaluator": "history-cross-subject",
+          "expectedSchema": "history-transition-expectation-v1",
+          "actualSchema": "history-tuple-v1",
+          "requiredEvidence": [
+            "history.source-snapshot",
+            "history.transition-snapshot",
+            "observation"
+          ],
+          "toleranceRefs": [],
+          "visualRefs": [],
+          "normalizationRef": null
+        },
+        {
+          "checkId": "history.meaning",
+          "evaluator": "history-cross-subject",
+          "expectedSchema": "history-meaning-expectation-v1",
+          "actualSchema": "history-meaning-fingerprint-v1",
+          "requiredEvidence": ["history.source-snapshot", "history.transition-snapshot"],
+          "toleranceRefs": [],
+          "visualRefs": [],
+          "normalizationRef": null
+        }
+      ],
+      "diagnosticOnlyEvidence": ["history.raw-payload.diagnostic", "screenshot.diagnostic"]
+    },
+    {
+      "schemaVersion": 1,
+      "oracleProfileId": "frontend-restore-v1",
+      "version": 1,
+      "evaluatorKind": "frontend-restore",
+      "checks": [
+        {
+          "checkId": "serialize.roundtrip",
+          "evaluator": "frontend-restore",
+          "expectedSchema": "restore-roundtrip-expectation-v1",
+          "actualSchema": "restore-fact-v1",
+          "requiredEvidence": [
+            "observation",
+            "restore.restored-snapshot",
+            "restore.route-request",
+            "restore.source-snapshot"
+          ],
+          "toleranceRefs": [],
+          "visualRefs": [],
+          "normalizationRef": "artwork-normalized-meaning-v1"
+        },
+        {
+          "checkId": "serialize.raw-semantic",
+          "evaluator": "frontend-restore",
+          "expectedSchema": "restore-raw-semantic-expectation-v1",
+          "actualSchema": "restore-fact-v1",
+          "requiredEvidence": [
+            "restore.restored-snapshot",
+            "restore.route-request",
+            "restore.source-snapshot"
+          ],
+          "toleranceRefs": [],
+          "visualRefs": [],
+          "normalizationRef": "artwork-normalized-meaning-v1"
+        }
+      ],
+      "diagnosticOnlyEvidence": ["restore.raw-payload.diagnostic", "screenshot.diagnostic"]
+    }
+  ]
+}

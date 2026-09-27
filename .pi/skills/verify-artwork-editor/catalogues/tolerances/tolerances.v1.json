@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "tolerances": [
+    {
+      "toleranceId": "canonical-matrix-epsilon-v1",
+      "version": 1,
+      "algorithm": "matrix-component-absolute",
+      "units": "matrix-unit",
+      "value": 1e-6,
+      "parameters": null,
+      "rationale": "Canonical matrix components are exact up to floating-point epsilon; a larger epsilon would accept a real transform change as noise.",
+      "compatibilityDomain": "canonical-geometry-matrix"
+    },
+    {
+      "toleranceId": "renderer-transform-px-v1",
+      "version": 1,
+      "algorithm": "css-pixel-absolute",
+      "units": "css-px",
+      "value": 0.25,
+      "parameters": null,
+      "rationale": "The renderer transform is compared to the canonical projection per point and axis within one quarter of a CSS pixel, the accepted rendering tolerance.",
+      "compatibilityDomain": "renderer-transform"
+    },
+    {
+      "toleranceId": "backing-pixel-edge-v1",
+      "version": 1,
+      "algorithm": "backing-pixel-edge",
+      "units": "effective-backing-pixel",
+      "value": 1,
+      "parameters": null,
+      "rationale": "Raster edge agreement is compared within one effective backing pixel; a wider band would hide a real raster drift.",
+      "compatibilityDomain": "raster-edge"
+    },
+    {
+      "toleranceId": "interaction-target-inset-v1",
+      "version": 1,
+      "algorithm": "interaction-target-inset",
+      "units": "css-px",
+      "value": null,
+      "parameters": { "minimumRegionPx": 6, "safetyInsetPx": 2 },
+      "rationale": "A native interaction origin must clear a declared safety inset and a target region must be large enough to host a safe drag.",
+      "compatibilityDomain": "interaction-target"
+    }
+  ]
+}

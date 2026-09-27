@@ -1,0 +1,29 @@
+{
+  "id": "text-layer-drag",
+  "title": "Drag a newly added text layer and preserve undo/redo",
+  "fixture": {
+    "route": "/artwork/editor",
+    "layoutCount": 2,
+    "layer": {
+      "kind": "text",
+      "creationAction": "Add text"
+    }
+  },
+  "action": {
+    "type": "drag",
+    "delta": {
+      "x": 80,
+      "y": 40
+    }
+  },
+  "expected": {
+    "minimumDelta": {
+      "x": 40,
+      "y": 20
+    },
+    "undoRedo": true,
+    "requireLiveKonvaMovement": true
+  },
+  "oracleDepth": ["content-state", "live-konva", "bounded-visual", "undo-redo"],
+  "evidence": ["doctor", "actions", "bounded-screenshots", "diagnostics"]
+}

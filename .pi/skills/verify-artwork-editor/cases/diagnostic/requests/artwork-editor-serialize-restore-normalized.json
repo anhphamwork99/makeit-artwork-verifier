@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "profile": "diagnostic",
+  "provenance": "diagnostic-request",
+  "evidenceDepth": "deep",
+  "intent": {
+    "subjectId": "artwork/editor",
+    "capability": "frontendSerializeRestore",
+    "variant": null,
+    "scenario": "serialize-roundtrip",
+    "preState": {},
+    "operations": [{ "discriminant": "serialize.roundtrip", "parameters": {} }],
+    "expected": {},
+    "resources": []
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "profile": "diagnostic",
+  "provenance": "diagnostic-request",
+  "evidenceDepth": "deep",
+  "intent": {
+    "subjectId": "layer/text",
+    "capability": "move",
+    "variant": "warp-circle",
+    "scenario": "drag-warped-nested",
+    "preState": { "x": 125, "y": 125 },
+    "operations": [{ "discriminant": "move.by", "parameters": { "dx": 80, "dy": 40 } }],
+    "expected": { "minimumDelta": { "x": 40, "y": 20 } },
+    "resources": []
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "adapters": [
+    {
+      "adapterId": "default",
+      "compatibilityVersion": 1
+    },
+    {
+      "adapterId": "generated-specialized",
+      "compatibilityVersion": 2
+    },
+    {
+      "adapterId": "image-specialized",
+      "compatibilityVersion": 2
+    },
+    {
+      "adapterId": "object-specialized",
+      "compatibilityVersion": 2
+    },
+    {
+      "adapterId": "text-specialized",
+      "compatibilityVersion": 3
+    }
+  ]
+}

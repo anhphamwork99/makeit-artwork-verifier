@@ -1,0 +1,1916 @@
+{
+  "schemaVersion": 1,
+  "models": [
+    {
+      "subjectId": "artwork/editor",
+      "capability": "frontendSerializeRestore",
+      "baselineScenarioId": "serialize-roundtrip",
+      "factors": [
+        {
+          "id": "normalization",
+          "label": "Serialization normalization",
+          "path": "/preState/normalization",
+          "allowsConcreteValues": true,
+          "residual": true,
+          "values": [
+            {
+              "id": "norm-normalized",
+              "value": "normalized",
+              "partition": "normalization-normalized",
+              "boundary": false
+            },
+            {
+              "id": "norm-raw-semantic",
+              "value": "raw-semantic",
+              "partition": "normalization-raw-semantic",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "normalization-normalized",
+              "values": ["norm-normalized"],
+              "representative": "norm-normalized",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Normalized semantic payload where intentionally excluded fields are removed."
+            },
+            {
+              "id": "normalization-raw-semantic",
+              "values": ["norm-raw-semantic"],
+              "representative": "norm-raw-semantic",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Raw semantic payload used to prove excluded fields are not silently fabricated."
+            }
+          ]
+        },
+        {
+          "id": "subject-mix",
+          "label": "Serialized Subject mix",
+          "path": "/preState/subjectMix",
+          "allowsConcreteValues": true,
+          "residual": true,
+          "values": [
+            {
+              "id": "mix-mixed",
+              "value": "mixed",
+              "partition": "subject-mix-mixed",
+              "boundary": false
+            },
+            {
+              "id": "mix-single-text",
+              "value": "single-text",
+              "partition": "subject-mix-single",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "subject-mix-mixed",
+              "values": ["mix-mixed"],
+              "representative": "mix-mixed",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Mixed Text/Image/Crossword document exercises cross-Subject reference normalization."
+            },
+            {
+              "id": "subject-mix-single",
+              "values": ["mix-single-text"],
+              "representative": "mix-single-text",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Single Text layer isolates restore of the common case."
+            }
+          ]
+        }
+      ],
+      "scenarios": [
+        {
+          "id": "serialize-raw-semantic",
+          "label": "Raw semantic serialize/restore",
+          "description": "Serialize and restore a mixed document while checking the raw semantic payload.",
+          "assignments": {
+            "normalization": "norm-raw-semantic",
+            "subject-mix": "mix-mixed"
+          },
+          "eligibility": "release-required"
+        },
+        {
+          "id": "serialize-roundtrip",
+          "label": "Normalized serialize/restore roundtrip",
+          "description": "Serialize and restore a single Text layer through the normalized frontend contract.",
+          "assignments": {
+            "normalization": "norm-normalized",
+            "subject-mix": "mix-single-text"
+          },
+          "eligibility": "release-required"
+        }
+      ],
+      "constraints": [],
+      "unsupported": [],
+      "obligations": [
+        {
+          "id": "baseline-serialize-roundtrip",
+          "kind": "baseline",
+          "description": "Canonical normalized serialize/restore baseline.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "serialize-roundtrip"
+          }
+        },
+        {
+          "id": "normalization-normalized",
+          "kind": "partition",
+          "description": "Normalized payload partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "normalization",
+            "partitionId": "normalization-normalized"
+          }
+        },
+        {
+          "id": "normalization-raw-semantic",
+          "kind": "partition",
+          "description": "Raw semantic payload partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "normalization",
+            "partitionId": "normalization-raw-semantic"
+          }
+        },
+        {
+          "id": "risk-raw-semantic",
+          "kind": "risk",
+          "description": "Raw semantic restore must not fabricate intentionally excluded fields.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "serialize-raw-semantic"
+          }
+        },
+        {
+          "id": "subject-mix-mixed",
+          "kind": "partition",
+          "description": "Mixed-Subject document partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "subject-mix",
+            "partitionId": "subject-mix-mixed"
+          }
+        },
+        {
+          "id": "subject-mix-single",
+          "kind": "partition",
+          "description": "Single-Text document partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "subject-mix",
+            "partitionId": "subject-mix-single"
+          }
+        }
+      ],
+      "residual": {
+        "defaultStrength": 2,
+        "submodels": []
+      }
+    },
+    {
+      "subjectId": "artwork/editor",
+      "capability": "history",
+      "baselineScenarioId": "undo-redo-text",
+      "factors": [
+        {
+          "id": "direction",
+          "label": "History direction",
+          "path": "/preState/historyDirection",
+          "allowsConcreteValues": true,
+          "residual": true,
+          "values": [
+            {
+              "id": "direction-invalid-redo-empty",
+              "value": "redo-empty",
+              "partition": "direction-invalid-redo-empty",
+              "boundary": false
+            },
+            {
+              "id": "direction-redo",
+              "value": "redo",
+              "partition": "direction-release",
+              "boundary": false
+            },
+            {
+              "id": "direction-undo",
+              "value": "undo",
+              "partition": "direction-release",
+              "boundary": false
+            },
+            {
+              "id": "direction-undo-redo",
+              "value": "undo-redo",
+              "partition": "direction-release",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "direction-release",
+              "values": ["direction-redo", "direction-undo", "direction-undo-redo"],
+              "representative": "direction-undo-redo",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Undo, Redo, and combined Undo/Redo against a non-empty stack."
+            },
+            {
+              "id": "direction-invalid-redo-empty",
+              "values": ["direction-invalid-redo-empty"],
+              "representative": "direction-invalid-redo-empty",
+              "boundaries": [],
+              "validity": "seller-invalid",
+              "rationale": "Redo with an empty redo stack is product-invalid but seller-attemptable."
+            }
+          ]
+        },
+        {
+          "id": "subject-class",
+          "label": "History Subject class",
+          "path": "/preState/historySubject",
+          "allowsConcreteValues": true,
+          "residual": true,
+          "values": [
+            {
+              "id": "class-crossword",
+              "value": "crossword",
+              "partition": "class-crossword",
+              "boundary": false
+            },
+            {
+              "id": "class-image",
+              "value": "image",
+              "partition": "class-image",
+              "boundary": false
+            },
+            {
+              "id": "class-text",
+              "value": "text",
+              "partition": "class-text",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "class-crossword",
+              "values": ["class-crossword"],
+              "representative": "class-crossword",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Generated Crossword participates in cross-Subject history."
+            },
+            {
+              "id": "class-image",
+              "values": ["class-image"],
+              "representative": "class-image",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Asynchronous Image participates in cross-Subject history."
+            },
+            {
+              "id": "class-text",
+              "values": ["class-text"],
+              "representative": "class-text",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Text participates in cross-Subject history."
+            }
+          ]
+        }
+      ],
+      "scenarios": [
+        {
+          "id": "history-crossword",
+          "label": "Undo/Redo across Crossword",
+          "description": "Undo then Redo a generated Crossword creation with a conclusive history depth.",
+          "assignments": {
+            "direction": "direction-undo-redo",
+            "subject-class": "class-crossword"
+          },
+          "eligibility": "release-required"
+        },
+        {
+          "id": "history-image",
+          "label": "Undo/Redo across Image",
+          "description": "Undo then Redo an Image change with a conclusive history depth.",
+          "assignments": {
+            "direction": "direction-undo-redo",
+            "subject-class": "class-image"
+          },
+          "eligibility": "release-required"
+        },
+        {
+          "id": "negative-redo-empty",
+          "label": "Redo with an empty stack",
+          "description": "Seller-attemptable Redo with no redo entry must not corrupt history.",
+          "assignments": {
+            "direction": "direction-invalid-redo-empty",
+            "subject-class": "class-text"
+          },
+          "eligibility": "diagnostic-only"
+        },
+        {
+          "id": "undo-redo-text",
+          "label": "Undo/Redo across Text",
+          "description": "Undo then Redo a Text transform with a conclusive history depth.",
+          "assignments": {
+            "direction": "direction-undo-redo",
+            "subject-class": "class-text"
+          },
+          "eligibility": "release-required"
+        }
+      ],
+      "constraints": [],
+      "unsupported": [],
+      "obligations": [
+        {
+          "id": "baseline-undo-redo-text",
+          "kind": "baseline",
+          "description": "Canonical cross-subject history baseline.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "undo-redo-text"
+          }
+        },
+        {
+          "id": "direction-release",
+          "kind": "partition",
+          "description": "Undo/Redo direction partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "direction",
+            "partitionId": "direction-release"
+          }
+        },
+        {
+          "id": "negative-redo-empty",
+          "kind": "risk",
+          "description": "Empty-stack Redo negative behavior is diagnostic-only.",
+          "requiredFor": "diagnostic",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "negative-redo-empty"
+          }
+        },
+        {
+          "id": "risk-history-crossword",
+          "kind": "risk",
+          "description": "History survives a generated Crossword Subject.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "history-crossword"
+          }
+        },
+        {
+          "id": "risk-history-image",
+          "kind": "risk",
+          "description": "History survives an asynchronous Image Subject.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "history-image"
+          }
+        },
+        {
+          "id": "subject-class-crossword",
+          "kind": "partition",
+          "description": "Crossword history partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "subject-class",
+            "partitionId": "class-crossword"
+          }
+        },
+        {
+          "id": "subject-class-image",
+          "kind": "partition",
+          "description": "Image history partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "subject-class",
+            "partitionId": "class-image"
+          }
+        },
+        {
+          "id": "subject-class-text",
+          "kind": "partition",
+          "description": "Text history partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "subject-class",
+            "partitionId": "class-text"
+          }
+        }
+      ],
+      "residual": {
+        "defaultStrength": 2,
+        "submodels": []
+      }
+    },
+    {
+      "subjectId": "container/object",
+      "capability": "changeContainment",
+      "baselineScenarioId": "contain-child",
+      "factors": [
+        {
+          "id": "ancestor-transform",
+          "label": "Ancestor transform",
+          "path": "/preState/ancestorTransform",
+          "allowsConcreteValues": true,
+          "residual": true,
+          "values": [
+            {
+              "id": "transform-identity",
+              "value": "identity",
+              "partition": "transform-identity",
+              "boundary": false
+            },
+            {
+              "id": "transform-rotated",
+              "value": "rotated",
+              "partition": "transform-rotated",
+              "boundary": false
+            },
+            {
+              "id": "transform-scaled",
+              "value": "scaled",
+              "partition": "transform-scaled",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "transform-identity",
+              "values": ["transform-identity"],
+              "representative": "transform-identity",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Untransformed ancestry keeps local and world containment identical."
+            },
+            {
+              "id": "transform-rotated",
+              "values": ["transform-rotated"],
+              "representative": "transform-rotated",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Rotated ancestry separates local and world geometry."
+            },
+            {
+              "id": "transform-scaled",
+              "values": ["transform-scaled"],
+              "representative": "transform-scaled",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Scaled ancestry scales containment deltas."
+            }
+          ]
+        },
+        {
+          "id": "depth",
+          "label": "Nesting depth",
+          "path": "/preState/depth",
+          "allowsConcreteValues": true,
+          "residual": true,
+          "values": [
+            {
+              "id": "depth-max",
+              "value": "max",
+              "partition": "depth-max",
+              "boundary": true
+            },
+            {
+              "id": "depth-one",
+              "value": "one",
+              "partition": "depth-one",
+              "boundary": false
+            },
+            {
+              "id": "depth-two",
+              "value": "two",
+              "partition": "depth-two",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "depth-max",
+              "values": ["depth-max"],
+              "representative": "depth-max",
+              "boundaries": ["depth-max"],
+              "validity": "valid",
+              "rationale": "Maximum valid nesting boundary for the binding."
+            },
+            {
+              "id": "depth-one",
+              "values": ["depth-one"],
+              "representative": "depth-one",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Single-level containment."
+            },
+            {
+              "id": "depth-two",
+              "values": ["depth-two"],
+              "representative": "depth-two",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Two-level nested containment."
+            }
+          ]
+        },
+        {
+          "id": "destination",
+          "label": "Destination container",
+          "path": "/preState/destination",
+          "allowsConcreteValues": true,
+          "residual": true,
+          "values": [
+            {
+              "id": "destination-layout",
+              "value": "layout",
+              "partition": "destination-valid",
+              "boundary": false
+            },
+            {
+              "id": "destination-object",
+              "value": "object",
+              "partition": "destination-valid",
+              "boundary": false
+            },
+            {
+              "id": "destination-self",
+              "value": "self",
+              "partition": "destination-invalid-self",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "destination-valid",
+              "values": ["destination-layout", "destination-object"],
+              "representative": "destination-object",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Reparenting into another Object or back to the Layout."
+            },
+            {
+              "id": "destination-invalid-self",
+              "values": ["destination-self"],
+              "representative": "destination-self",
+              "boundaries": [],
+              "validity": "seller-invalid",
+              "rationale": "Self-containment is product-invalid but seller-attemptable."
+            }
+          ]
+        }
+      ],
+      "scenarios": [
+        {
+          "id": "contain-child",
+          "label": "Contain a child",
+          "description": "Move a layer into a nested Object with identity ancestry.",
+          "assignments": {
+            "ancestor-transform": "transform-identity",
+            "depth": "depth-one",
+            "destination": "destination-object"
+          },
+          "eligibility": "release-required"
+        },
+        {
+          "id": "contain-max-depth",
+          "label": "Maximum valid nesting",
+          "description": "Contain a child at the maximum valid nesting depth.",
+          "assignments": {
+            "ancestor-transform": "transform-identity",
+            "depth": "depth-max",
+            "destination": "destination-layout"
+          },
+          "eligibility": "release-required"
+        },
+        {
+          "id": "contain-negative-self",
+          "label": "Self-containment attempt",
+          "description": "Seller-attemptable self-containment must be prevented or rejected visibly.",
+          "assignments": {
+            "ancestor-transform": "transform-identity",
+            "depth": "depth-one",
+            "destination": "destination-self"
+          },
+          "eligibility": "diagnostic-only"
+        }
+      ],
+      "constraints": [],
+      "unsupported": [
+        {
+          "id": "rotated-max-depth",
+          "combination": {
+            "ancestor-transform": "transform-rotated",
+            "depth": "depth-max"
+          },
+          "classification": "not-applicable",
+          "rationale": "Maximum nesting under a rotated ancestor is not applicable to this binding."
+        }
+      ],
+      "obligations": [
+        {
+          "id": "ancestor-transform-identity",
+          "kind": "partition",
+          "description": "Identity ancestry partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "ancestor-transform",
+            "partitionId": "transform-identity"
+          }
+        },
+        {
+          "id": "ancestor-transform-rotated",
+          "kind": "partition",
+          "description": "Rotated ancestry partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "ancestor-transform",
+            "partitionId": "transform-rotated"
+          }
+        },
+        {
+          "id": "ancestor-transform-scaled",
+          "kind": "partition",
+          "description": "Scaled ancestry partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "ancestor-transform",
+            "partitionId": "transform-scaled"
+          }
+        },
+        {
+          "id": "baseline-contain-child",
+          "kind": "baseline",
+          "description": "Canonical nested containment baseline.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "contain-child"
+          }
+        },
+        {
+          "id": "boundary-depth-max",
+          "kind": "boundary",
+          "description": "Maximum valid nesting depth boundary is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "value",
+            "factorId": "depth",
+            "valueId": "depth-max"
+          }
+        },
+        {
+          "id": "destination-valid",
+          "kind": "partition",
+          "description": "Valid destination partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "destination",
+            "partitionId": "destination-valid"
+          }
+        },
+        {
+          "id": "negative-self-containment",
+          "kind": "risk",
+          "description": "Self-containment negative behavior is diagnostic-only.",
+          "requiredFor": "diagnostic",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "contain-negative-self"
+          }
+        },
+        {
+          "id": "risk-max-depth",
+          "kind": "risk",
+          "description": "Maximum valid nesting is a release-mandatory risk.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "contain-max-depth"
+          }
+        }
+      ],
+      "residual": {
+        "defaultStrength": 2,
+        "submodels": [
+          {
+            "id": "containment-three-way",
+            "strength": 3,
+            "factors": ["ancestor-transform", "depth", "destination"],
+            "rationale": "Nested containment under a transformed ancestor is a known three-way risk."
+          }
+        ]
+      }
+    },
+    {
+      "subjectId": "container/object",
+      "capability": "move",
+      "baselineScenarioId": "move-child",
+      "factors": [
+        {
+          "id": "ancestry",
+          "label": "Child ancestry",
+          "path": "/preState/ancestry",
+          "allowsConcreteValues": true,
+          "residual": true,
+          "values": [
+            {
+              "id": "ancestry-identity",
+              "value": "identity",
+              "partition": "ancestry-identity",
+              "boundary": false
+            },
+            {
+              "id": "ancestry-rotated",
+              "value": "rotated",
+              "partition": "ancestry-rotated",
+              "boundary": false
+            },
+            {
+              "id": "ancestry-scaled",
+              "value": "scaled",
+              "partition": "ancestry-scaled",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "ancestry-identity",
+              "values": ["ancestry-identity"],
+              "representative": "ancestry-identity",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Untransformed ancestry."
+            },
+            {
+              "id": "ancestry-rotated",
+              "values": ["ancestry-rotated"],
+              "representative": "ancestry-rotated",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Rotated ancestry separates local and world movement."
+            },
+            {
+              "id": "ancestry-scaled",
+              "values": ["ancestry-scaled"],
+              "representative": "ancestry-scaled",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Scaled ancestry scales movement."
+            }
+          ]
+        },
+        {
+          "id": "child-class",
+          "label": "Child Subject class",
+          "path": "/preState/childClass",
+          "allowsConcreteValues": true,
+          "residual": true,
+          "values": [
+            {
+              "id": "child-layer",
+              "value": "layer",
+              "partition": "child-layer",
+              "boundary": false
+            },
+            {
+              "id": "child-object",
+              "value": "object",
+              "partition": "child-object",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "child-layer",
+              "values": ["child-layer"],
+              "representative": "child-layer",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "A layer child moved inside a nested Object."
+            },
+            {
+              "id": "child-object",
+              "values": ["child-object"],
+              "representative": "child-object",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "A nested Object child moved inside another Object."
+            }
+          ]
+        }
+      ],
+      "scenarios": [
+        {
+          "id": "move-child",
+          "label": "Move a nested child",
+          "description": "Move a layer child inside a nested Object with identity ancestry.",
+          "assignments": {
+            "ancestry": "ancestry-identity",
+            "child-class": "child-layer"
+          },
+          "eligibility": "release-required"
+        },
+        {
+          "id": "move-nested-rotated",
+          "label": "Move an Object under rotated ancestry",
+          "description": "Move the root parent Object (object-outer) through a complete rotated chain, and prove the child Object (object-inner) and Text witness keep their parent-local state while the witness's browser-client world movement equals the full affine projection.",
+          "assignments": {
+            "ancestry": "ancestry-rotated",
+            "child-class": "child-object"
+          },
+          "eligibility": "release-required"
+        },
+        {
+          "id": "move-nested-rotated-ambiguous",
+          "label": "Move an Object under rotated ancestry (ambiguous)",
+          "description": "Diagnostic-only negative case: two active-Layout root Objects match, so the harness must block before any native pointer dispatch.",
+          "assignments": {
+            "ancestry": "ancestry-rotated",
+            "child-class": "child-object"
+          },
+          "eligibility": "diagnostic-only"
+        },
+        {
+          "id": "move-nested-not-normalized",
+          "label": "Move under rotated ancestry (non-normalized fixture)",
+          "description": "Diagnostic-only negative case: the dedicated constructor embeds the historical malformed v1 state, so setup refuses before hydration as FIXTURE_NOT_NORMALIZED / FIXTURE_NOT_FIXED_POINT with no seller behavior.",
+          "assignments": {
+            "ancestry": "ancestry-rotated",
+            "child-class": "child-object"
+          },
+          "eligibility": "diagnostic-only"
+        }
+      ],
+      "constraints": [],
+      "unsupported": [],
+      "obligations": [
+        {
+          "id": "ancestry-identity",
+          "kind": "partition",
+          "description": "Identity ancestry partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "ancestry",
+            "partitionId": "ancestry-identity"
+          }
+        },
+        {
+          "id": "ancestry-rotated",
+          "kind": "partition",
+          "description": "Rotated ancestry partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "ancestry",
+            "partitionId": "ancestry-rotated"
+          }
+        },
+        {
+          "id": "ancestry-scaled",
+          "kind": "partition",
+          "description": "Scaled ancestry partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "ancestry",
+            "partitionId": "ancestry-scaled"
+          }
+        },
+        {
+          "id": "baseline-move-child",
+          "kind": "baseline",
+          "description": "Canonical nested Object move baseline.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "move-child"
+          }
+        },
+        {
+          "id": "child-class-layer",
+          "kind": "partition",
+          "description": "Layer child partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "child-class",
+            "partitionId": "child-layer"
+          }
+        },
+        {
+          "id": "child-class-object",
+          "kind": "partition",
+          "description": "Object child partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "child-class",
+            "partitionId": "child-object"
+          }
+        },
+        {
+          "id": "risk-nested-rotated",
+          "kind": "risk",
+          "description": "Nested Object movement under rotated ancestry is a release-mandatory risk.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "move-nested-rotated"
+          }
+        }
+      ],
+      "residual": {
+        "defaultStrength": 2,
+        "submodels": []
+      }
+    },
+    {
+      "subjectId": "layer/crossword",
+      "capability": "create",
+      "baselineScenarioId": "create-crossword",
+      "factors": [
+        {
+          "id": "grid-size",
+          "label": "Generated grid size",
+          "path": "/preState/gridSize",
+          "allowsConcreteValues": true,
+          "residual": true,
+          "values": [
+            {
+              "id": "size-large",
+              "value": "large",
+              "partition": "size-large",
+              "boundary": false
+            },
+            {
+              "id": "size-medium",
+              "value": "medium",
+              "partition": "size-medium",
+              "boundary": false
+            },
+            {
+              "id": "size-small",
+              "value": "small",
+              "partition": "size-small",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "size-large",
+              "values": ["size-large"],
+              "representative": "size-large",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Large generated grid."
+            },
+            {
+              "id": "size-medium",
+              "values": ["size-medium"],
+              "representative": "size-medium",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Medium generated grid."
+            },
+            {
+              "id": "size-small",
+              "values": ["size-small"],
+              "representative": "size-small",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Small generated grid."
+            }
+          ]
+        },
+        {
+          "id": "seed-mode",
+          "label": "Generation seed mode",
+          "path": "/preState/seedMode",
+          "allowsConcreteValues": true,
+          "residual": true,
+          "values": [
+            {
+              "id": "seed-different",
+              "value": "different-seed",
+              "partition": "seed-different",
+              "boundary": false
+            },
+            {
+              "id": "seed-same",
+              "value": "same-seed",
+              "partition": "seed-same",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "seed-different",
+              "values": ["seed-different"],
+              "representative": "seed-different",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Different seed must produce different generated output."
+            },
+            {
+              "id": "seed-same",
+              "values": ["seed-same"],
+              "representative": "seed-same",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Same seed must reproduce identical generated output."
+            }
+          ]
+        }
+      ],
+      "scenarios": [
+        {
+          "id": "create-crossword",
+          "label": "Deterministic Crossword creation",
+          "description": "Create a generated Crossword with a fixed seed and confirm same-seed reproducibility.",
+          "assignments": {
+            "grid-size": "size-medium",
+            "seed-mode": "seed-same"
+          },
+          "eligibility": "release-required"
+        },
+        {
+          "id": "create-crossword-different-seed",
+          "label": "Different-seed Crossword creation",
+          "description": "Create a generated Crossword with a different seed and confirm output sensitivity.",
+          "assignments": {
+            "grid-size": "size-medium",
+            "seed-mode": "seed-different"
+          },
+          "eligibility": "release-required"
+        },
+        {
+          "id": "create-crossword-intentional-collision",
+          "label": "Intentional 2 ms seed collision",
+          "description": "Diagnostic-only: two distinct seeds 2 ms apart yield the same generated layout, so the seed-sensitivity check must classify BUG instead of PASS. This is a documented diagnostic collision and never a product requirement of universal seed injectivity.",
+          "assignments": {
+            "grid-size": "size-medium",
+            "seed-mode": "seed-different"
+          },
+          "eligibility": "diagnostic-only"
+        },
+        {
+          "id": "create-crossword-ambiguous-host",
+          "label": "Ambiguous Crossword host (diagnostic)",
+          "description": "Diagnostic-only: the host role matches more than one active product Layout, so pre-action host resolution must classify HARNESS_BLOCKED before any native input and never guess a host.",
+          "assignments": {
+            "grid-size": "size-medium",
+            "seed-mode": "seed-same"
+          },
+          "eligibility": "diagnostic-only"
+        }
+      ],
+      "constraints": [],
+      "unsupported": [],
+      "obligations": [
+        {
+          "id": "baseline-create-crossword",
+          "kind": "baseline",
+          "description": "Canonical generated Crossword creation baseline.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "create-crossword"
+          }
+        },
+        {
+          "id": "grid-size-large",
+          "kind": "partition",
+          "description": "Large grid-size partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "grid-size",
+            "partitionId": "size-large"
+          }
+        },
+        {
+          "id": "grid-size-medium",
+          "kind": "partition",
+          "description": "Medium grid-size partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "grid-size",
+            "partitionId": "size-medium"
+          }
+        },
+        {
+          "id": "grid-size-small",
+          "kind": "partition",
+          "description": "Small grid-size partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "grid-size",
+            "partitionId": "size-small"
+          }
+        },
+        {
+          "id": "risk-different-seed",
+          "kind": "risk",
+          "description": "Different-seed sensitivity is a release-mandatory risk.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "create-crossword-different-seed"
+          }
+        },
+        {
+          "id": "seed-mode-different",
+          "kind": "partition",
+          "description": "Different-seed partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "seed-mode",
+            "partitionId": "seed-different"
+          }
+        },
+        {
+          "id": "seed-mode-same",
+          "kind": "partition",
+          "description": "Same-seed partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "seed-mode",
+            "partitionId": "seed-same"
+          }
+        }
+      ],
+      "residual": {
+        "defaultStrength": 2,
+        "submodels": []
+      }
+    },
+    {
+      "subjectId": "layer/image",
+      "capability": "changeProperties",
+      "baselineScenarioId": "replace-image",
+      "factors": [
+        {
+          "id": "containment",
+          "label": "Image containment",
+          "path": "/preState/containment",
+          "allowsConcreteValues": true,
+          "residual": true,
+          "values": [
+            {
+              "id": "containment-editor",
+              "value": "editor",
+              "partition": "containment-editor",
+              "boundary": false
+            },
+            {
+              "id": "containment-nested-object",
+              "value": "nested-object",
+              "partition": "containment-nested-object",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "containment-editor",
+              "values": ["containment-editor"],
+              "representative": "containment-editor",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Image directly under the Artwork Editor."
+            },
+            {
+              "id": "containment-nested-object",
+              "values": ["containment-nested-object"],
+              "representative": "containment-nested-object",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Image inside a nested Object."
+            }
+          ]
+        },
+        {
+          "id": "fit",
+          "label": "Image fit",
+          "path": "/preState/fit",
+          "allowsConcreteValues": true,
+          "residual": true,
+          "values": [
+            {
+              "id": "fit-contain",
+              "value": "contain",
+              "partition": "fit-contain",
+              "boundary": false
+            },
+            {
+              "id": "fit-cover",
+              "value": "cover",
+              "partition": "fit-cover",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "fit-contain",
+              "values": ["fit-contain"],
+              "representative": "fit-contain",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Contain fit preserves aspect ratio inside the frame."
+            },
+            {
+              "id": "fit-cover",
+              "values": ["fit-cover"],
+              "representative": "fit-cover",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Cover fit crops to fill the frame."
+            }
+          ]
+        },
+        {
+          "id": "resource-state",
+          "label": "Image resource lifecycle state",
+          "path": "/preState/imageState",
+          "allowsConcreteValues": true,
+          "residual": false,
+          "values": [
+            {
+              "id": "state-current-a",
+              "value": "current-a",
+              "partition": "state-current",
+              "boundary": false
+            },
+            {
+              "id": "state-current-b",
+              "value": "current-b",
+              "partition": "state-current",
+              "boundary": false
+            },
+            {
+              "id": "state-invalid-empty",
+              "value": "empty-source",
+              "partition": "state-invalid-empty",
+              "boundary": false
+            },
+            {
+              "id": "state-pending-b",
+              "value": "pending-b",
+              "partition": "state-pending",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "state-current",
+              "values": ["state-current-a", "state-current-b"],
+              "representative": "state-current-a",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "A rendered-raster-current image resource."
+            },
+            {
+              "id": "state-pending",
+              "values": ["state-pending-b"],
+              "representative": "state-pending-b",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "A newly selected image resource that is not yet rendered-raster-current."
+            },
+            {
+              "id": "state-invalid-empty",
+              "values": ["state-invalid-empty"],
+              "representative": "state-invalid-empty",
+              "boundaries": [],
+              "validity": "seller-invalid",
+              "rationale": "An empty image source is product-invalid but seller-attemptable."
+            }
+          ]
+        }
+      ],
+      "scenarios": [
+        {
+          "id": "replace-image",
+          "label": "Replace a current image",
+          "description": "Replace a current-ready image resource and check the rendered result.",
+          "assignments": {
+            "containment": "containment-editor",
+            "fit": "fit-contain",
+            "resource-state": "state-current-a"
+          },
+          "eligibility": "release-required"
+        },
+        {
+          "id": "replace-negative-empty-source",
+          "label": "Replace with an empty source",
+          "description": "Seller-attemptable empty image source must be prevented or rejected visibly.",
+          "assignments": {
+            "containment": "containment-editor",
+            "fit": "fit-contain",
+            "resource-state": "state-invalid-empty"
+          },
+          "eligibility": "diagnostic-only"
+        },
+        {
+          "id": "replace-pending-control",
+          "label": "Replace while pending",
+          "description": "Select the stale control A -> pending B -> current-ready B transition so stale output cannot satisfy the result.",
+          "assignments": {
+            "containment": "containment-editor",
+            "fit": "fit-contain",
+            "resource-state": "state-pending-b"
+          },
+          "eligibility": "release-required"
+        },
+        {
+          "id": "replace-image-ambiguous",
+          "label": "Ambiguous Image target",
+          "description": "A kind-only Image target role matches both placeholders and must block before any action or file input.",
+          "assignments": {
+            "containment": "containment-editor",
+            "fit": "fit-contain",
+            "resource-state": "state-current-a"
+          },
+          "eligibility": "diagnostic-only"
+        }
+      ],
+      "constraints": [],
+      "unsupported": [],
+      "obligations": [
+        {
+          "id": "baseline-replace-image",
+          "kind": "baseline",
+          "description": "Canonical Image replacement baseline.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "replace-image"
+          }
+        },
+        {
+          "id": "containment-editor",
+          "kind": "partition",
+          "description": "Editor containment partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "containment",
+            "partitionId": "containment-editor"
+          }
+        },
+        {
+          "id": "containment-nested-object",
+          "kind": "partition",
+          "description": "Nested Object containment partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "containment",
+            "partitionId": "containment-nested-object"
+          }
+        },
+        {
+          "id": "fit-contain",
+          "kind": "partition",
+          "description": "Contain fit partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "fit",
+            "partitionId": "fit-contain"
+          }
+        },
+        {
+          "id": "fit-cover",
+          "kind": "partition",
+          "description": "Cover fit partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "fit",
+            "partitionId": "fit-cover"
+          }
+        },
+        {
+          "id": "negative-empty-source",
+          "kind": "risk",
+          "description": "Empty-source negative behavior is diagnostic-only.",
+          "requiredFor": "diagnostic",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "replace-negative-empty-source"
+          }
+        },
+        {
+          "id": "risk-pending-control",
+          "kind": "risk",
+          "description": "Stale output A must not satisfy the pending-B replacement result.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "replace-pending-control"
+          }
+        },
+        {
+          "id": "state-current",
+          "kind": "partition",
+          "description": "Current-ready resource partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "resource-state",
+            "partitionId": "state-current"
+          }
+        },
+        {
+          "id": "state-pending",
+          "kind": "partition",
+          "description": "Pending resource partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "resource-state",
+            "partitionId": "state-pending"
+          }
+        }
+      ],
+      "residual": {
+        "defaultStrength": 2,
+        "submodels": []
+      }
+    },
+    {
+      "subjectId": "layer/text",
+      "capability": "move",
+      "baselineScenarioId": "drag-ordinary",
+      "factors": [
+        {
+          "id": "ancestry",
+          "label": "Text ancestry",
+          "path": "/preState/ancestry",
+          "allowsConcreteValues": true,
+          "residual": false,
+          "values": [
+            {
+              "id": "identity",
+              "value": "identity",
+              "partition": "ancestry-flat",
+              "boundary": false
+            },
+            {
+              "id": "nested-layout",
+              "value": "nested-layout",
+              "partition": "ancestry-nested",
+              "boundary": false
+            },
+            {
+              "id": "nested-object",
+              "value": "nested-object",
+              "partition": "ancestry-nested",
+              "boundary": false
+            },
+            {
+              "id": "rotated-ancestor",
+              "value": "rotated-ancestor",
+              "partition": "ancestry-transformed",
+              "boundary": true
+            },
+            {
+              "id": "transformed-container",
+              "value": "transformed-container",
+              "partition": "ancestry-transformed",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "ancestry-flat",
+              "values": ["identity"],
+              "representative": "identity",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Direct child of a Layout with identity ancestry."
+            },
+            {
+              "id": "ancestry-nested",
+              "values": ["nested-layout", "nested-object"],
+              "representative": "nested-layout",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Nested Layout or Object ancestry."
+            },
+            {
+              "id": "ancestry-transformed",
+              "values": ["rotated-ancestor", "transformed-container"],
+              "representative": "transformed-container",
+              "boundaries": ["rotated-ancestor"],
+              "validity": "valid",
+              "rationale": "Transformed ancestry where local and world interpretation differ."
+            }
+          ]
+        },
+        {
+          "id": "displacement",
+          "label": "Displacement class",
+          "path": "/preState/displacement",
+          "allowsConcreteValues": true,
+          "residual": true,
+          "values": [
+            {
+              "id": "large",
+              "value": "large",
+              "partition": "displacement-large",
+              "boundary": true
+            },
+            {
+              "id": "small",
+              "value": "small",
+              "partition": "displacement-small",
+              "boundary": false
+            },
+            {
+              "id": "typical",
+              "value": "typical",
+              "partition": "displacement-typical",
+              "boundary": false
+            },
+            {
+              "id": "zero",
+              "value": "zero",
+              "partition": "displacement-invalid-zero",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "displacement-large",
+              "values": ["large"],
+              "representative": "large",
+              "boundaries": ["large"],
+              "validity": "valid",
+              "rationale": "Large meaningful valid displacement boundary."
+            },
+            {
+              "id": "displacement-small",
+              "values": ["small"],
+              "representative": "small",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Small valid displacement."
+            },
+            {
+              "id": "displacement-typical",
+              "values": ["typical"],
+              "representative": "typical",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Typical valid displacement."
+            },
+            {
+              "id": "displacement-invalid-zero",
+              "values": ["zero"],
+              "representative": "zero",
+              "boundaries": [],
+              "validity": "seller-invalid",
+              "rationale": "Zero displacement is product-invalid but seller-attemptable."
+            }
+          ]
+        },
+        {
+          "id": "interaction",
+          "label": "Move interaction",
+          "path": "/preState/interaction",
+          "allowsConcreteValues": true,
+          "residual": true,
+          "values": [
+            {
+              "id": "keyboard-nudge",
+              "value": "keyboard-nudge",
+              "partition": "interaction-keyboard",
+              "boundary": false
+            },
+            {
+              "id": "pointer-drag",
+              "value": "pointer-drag",
+              "partition": "interaction-pointer",
+              "boundary": false
+            }
+          ],
+          "partitions": [
+            {
+              "id": "interaction-keyboard",
+              "values": ["keyboard-nudge"],
+              "representative": "keyboard-nudge",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Keyboard nudge move primitive."
+            },
+            {
+              "id": "interaction-pointer",
+              "values": ["pointer-drag"],
+              "representative": "pointer-drag",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Native pointer drag primitive."
+            }
+          ]
+        },
+        {
+          "id": "rendering-mode",
+          "label": "Text rendering mode",
+          "path": "/preState/renderingMode",
+          "allowsConcreteValues": true,
+          "residual": false,
+          "values": [
+            {
+              "id": "plain",
+              "value": "plain",
+              "partition": "mode-ordinary",
+              "boundary": false
+            },
+            {
+              "id": "warp-circle",
+              "value": "warp-circle",
+              "partition": "mode-warped",
+              "boundary": false
+            },
+            {
+              "id": "warp-distort",
+              "value": "warp-distort",
+              "partition": "mode-warped",
+              "boundary": false
+            },
+            {
+              "id": "warp-wave",
+              "value": "warp-wave",
+              "partition": "mode-warped",
+              "boundary": false
+            },
+            {
+              "id": "warp-wrap",
+              "value": "warp-wrap",
+              "partition": "mode-warped",
+              "boundary": true
+            }
+          ],
+          "partitions": [
+            {
+              "id": "mode-ordinary",
+              "values": ["plain"],
+              "representative": "plain",
+              "boundaries": [],
+              "validity": "valid",
+              "rationale": "Ordinary unwarped Text."
+            },
+            {
+              "id": "mode-warped",
+              "values": ["warp-circle", "warp-distort", "warp-wave", "warp-wrap"],
+              "representative": "warp-circle",
+              "boundaries": ["warp-wrap"],
+              "validity": "valid",
+              "rationale": "Specialized warped Text where local/world interpretation differs."
+            }
+          ]
+        }
+      ],
+      "scenarios": [
+        {
+          "id": "drag-negative-zero-displacement",
+          "label": "Zero-displacement drag",
+          "description": "Seller-attemptable zero-displacement drag must not be treated as a successful move.",
+          "assignments": {
+            "ancestry": "identity",
+            "displacement": "zero",
+            "interaction": "pointer-drag",
+            "rendering-mode": "plain"
+          },
+          "eligibility": "diagnostic-only"
+        },
+        {
+          "id": "drag-ordinary",
+          "label": "Ordinary Text drag",
+          "description": "Drag ordinary Text directly under a Layout with identity ancestry.",
+          "assignments": {
+            "ancestry": "identity",
+            "displacement": "typical",
+            "interaction": "pointer-drag",
+            "rendering-mode": "plain"
+          },
+          "eligibility": "release-required"
+        },
+        {
+          "id": "drag-warped-nested",
+          "label": "Warped nested Text drag",
+          "description": "Drag specialized warped Text under transformed ancestry.",
+          "assignments": {
+            "ancestry": "transformed-container",
+            "displacement": "typical",
+            "interaction": "pointer-drag",
+            "rendering-mode": "warp-circle"
+          },
+          "eligibility": "release-required"
+        },
+        {
+          "id": "drag-ordinary-ambiguous",
+          "label": "Ambiguous ordinary Text target",
+          "description": "A kind-only ordinary Text role matches two ordinary Text layers and must block before native input.",
+          "assignments": {
+            "ancestry": "identity",
+            "displacement": "typical",
+            "interaction": "pointer-drag",
+            "rendering-mode": "plain"
+          },
+          "eligibility": "diagnostic-only"
+        },
+        {
+          "id": "drag-warped-nested-ambiguous",
+          "label": "Ambiguous circle-warped Text target",
+          "description": "A kind-only circle-envelope Text role matches two circle-warped Text layers and must block before native input or typed geometry evaluation.",
+          "assignments": {
+            "ancestry": "transformed-container",
+            "displacement": "typical",
+            "interaction": "pointer-drag",
+            "rendering-mode": "warp-circle"
+          },
+          "eligibility": "diagnostic-only"
+        }
+      ],
+      "constraints": [
+        {
+          "id": "keyboard-nudge-not-large",
+          "exclude": {
+            "displacement": "large",
+            "interaction": "keyboard-nudge"
+          },
+          "rationale": "A keyboard nudge cannot produce a large one-step displacement."
+        }
+      ],
+      "unsupported": [
+        {
+          "id": "keyboard-nudge-warp-distort",
+          "combination": {
+            "interaction": "keyboard-nudge",
+            "rendering-mode": "warp-distort"
+          },
+          "classification": "not-applicable",
+          "rationale": "Distort warp has no keyboard-nudge interaction path for this binding."
+        }
+      ],
+      "obligations": [
+        {
+          "id": "ancestry-flat",
+          "kind": "partition",
+          "description": "Flat ancestry partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "ancestry",
+            "partitionId": "ancestry-flat"
+          }
+        },
+        {
+          "id": "ancestry-nested",
+          "kind": "partition",
+          "description": "Nested ancestry partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "ancestry",
+            "partitionId": "ancestry-nested"
+          }
+        },
+        {
+          "id": "ancestry-transformed",
+          "kind": "partition",
+          "description": "Transformed ancestry partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "ancestry",
+            "partitionId": "ancestry-transformed"
+          }
+        },
+        {
+          "id": "baseline-drag-ordinary",
+          "kind": "baseline",
+          "description": "Canonical ordinary Text drag baseline.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "drag-ordinary"
+          }
+        },
+        {
+          "id": "boundary-displacement-large",
+          "kind": "boundary",
+          "description": "Large meaningful valid displacement boundary is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "value",
+            "factorId": "displacement",
+            "valueId": "large"
+          }
+        },
+        {
+          "id": "interaction-keyboard",
+          "kind": "interaction",
+          "description": "Keyboard nudge interaction distinction is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "interaction",
+            "partitionId": "interaction-keyboard"
+          }
+        },
+        {
+          "id": "interaction-pointer",
+          "kind": "interaction",
+          "description": "Pointer drag interaction distinction is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "interaction",
+            "partitionId": "interaction-pointer"
+          }
+        },
+        {
+          "id": "mode-ordinary",
+          "kind": "partition",
+          "description": "Ordinary rendering-mode partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "rendering-mode",
+            "partitionId": "mode-ordinary"
+          }
+        },
+        {
+          "id": "mode-warped",
+          "kind": "partition",
+          "description": "Warped rendering-mode partition is represented.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "partition",
+            "factorId": "rendering-mode",
+            "partitionId": "mode-warped"
+          }
+        },
+        {
+          "id": "negative-zero-displacement",
+          "kind": "risk",
+          "description": "Zero-displacement negative behavior is diagnostic-only.",
+          "requiredFor": "diagnostic",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "drag-negative-zero-displacement"
+          }
+        },
+        {
+          "id": "risk-warped-nested",
+          "kind": "risk",
+          "description": "Warped Text under transformed ancestry is a release-mandatory risk.",
+          "requiredFor": "release",
+          "match": {
+            "kind": "scenario",
+            "scenarioId": "drag-warped-nested"
+          }
+        }
+      ],
+      "residual": {
+        "defaultStrength": 2,
+        "submodels": []
+      }
+    }
+  ]
+}

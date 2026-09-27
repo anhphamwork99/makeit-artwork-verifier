@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "visuals": [
+    {
+      "visualId": "image-structural-visual-v1",
+      "version": 1,
+      "mode": "structural",
+      "algorithm": "structural-probe-v1",
+      "evidenceSource": "raster.accepted",
+      "authorityRole": "required-authoritative",
+      "toleranceRef": "backing-pixel-edge-v1",
+      "boundedRegion": "target-viewport-rect",
+      "currentness": ["bridge-generation", "document", "raster", "revision"]
+    },
+    {
+      "visualId": "diagnostic-screenshot-v1",
+      "version": 1,
+      "mode": "bounded-capture",
+      "algorithm": "screenshot-capture-v1",
+      "evidenceSource": "screenshot.diagnostic",
+      "authorityRole": "diagnostic-only",
+      "toleranceRef": null,
+      "boundedRegion": "viewport",
+      "currentness": ["bridge-generation", "document", "revision"]
+    }
+  ]
+}

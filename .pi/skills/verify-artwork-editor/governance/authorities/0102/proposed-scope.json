@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "state": "PROPOSED_NOT_APPROVED",
+  "manifestId": "96efe5d3f3d67a911afa4d6085cff03236d6865b3c5370b2789adb7af1743e58",
+  "contentFingerprint": "4217bb7ecdabf6bde9f702bb71a4ebd1ed87077cf88ba443c44053c6f0f0323c",
+  "artifact": "cases/selection-manifests/drafts/draft-4fb06edd4de0cd64e0c56f926342599b0d1c323811c06e3fcc0a89649b1cb173.json",
+  "releaseCredit": false,
+  "scope": "Exactly the eight declared executable entries in the referenced draft and one Chromium desktop required cell. No complete editor or complete coverage-model claim.",
+  "qualificationEntryIdsInOrder": [
+    "3b244208ea3d8f1e373d63fb8611fcbc9e7680822423a92a987d9aab052ef3b0",
+    "a1785d09ebbe5377b9c80d2f8dd5274a26350749c90087d30d4c9a580d5fa8b0",
+    "cddacddbea78bcc47f3a68bdacb404496d232d26c77d187ba6fdeba8a75c2569"
+  ],
+  "qualificationScenarioOrder": ["drag-warped-nested", "replace-image", "serialize-raw-semantic"],
+  "selectionRationale": "Exercise three distinct complex correctness paths: nested warped-text native pointer geometry; image replacement with asynchronous resource identity; raw semantic serialize/restore reconciliation. Selection fixed before any qualification result; all eight entries remain required for a later Release.",
+  "lostObligationsByBinding": [
+    {
+      "subjectId": "artwork/editor",
+      "capability": "frontendSerializeRestore",
+      "includedEntryIds": [
+        "cddacddbea78bcc47f3a68bdacb404496d232d26c77d187ba6fdeba8a75c2569",
+        "64e71c2a7d930f5d79b42c4a88c0b3cce5d50532a4eb970110d377e948801215"
+      ],
+      "uncoveredObligations": []
+    },
+    {
+      "subjectId": "artwork/editor",
+      "capability": "history",
+      "includedEntryIds": ["be05b2d7bf9bfc6993c85a26c8ad2f5aa4c44d585e2b6ab5085bed989ef453fe"],
+      "uncoveredObligations": [
+        "risk-history-crossword",
+        "risk-history-image",
+        "subject-class-crossword",
+        "subject-class-image"
+      ]
+    },
+    {
+      "subjectId": "container/object",
+      "capability": "changeContainment",
+      "includedEntryIds": [],
+      "uncoveredObligations": [
+        "ancestor-transform-identity",
+        "ancestor-transform-rotated",
+        "ancestor-transform-scaled",
+        "baseline-contain-child",
+        "boundary-depth-max",
+        "destination-valid",
+        "risk-max-depth"
+      ]
+    },
+    {
+      "subjectId": "container/object",
+      "capability": "move",
+      "includedEntryIds": ["a4b6441d2031a7082333a91ad2fd0c97f0c2e2e711b473bf5c66be9ab7487519"],
+      "uncoveredObligations": [
+        "ancestry-identity",
+        "ancestry-scaled",
+        "baseline-move-child",
+        "child-class-layer"
+      ]
+    },
+    {
+      "subjectId": "layer/crossword",
+      "capability": "create",
+      "includedEntryIds": ["dfd55a47504b6e690245da8fcffc5b9165ca82b7c162a7eb515f9670486ca844"],
+      "uncoveredObligations": [
+        "grid-size-large",
+        "grid-size-small",
+        "risk-different-seed",
+        "seed-mode-different"
+      ]
+    },
+    {
+      "subjectId": "layer/image",
+      "capability": "changeProperties",
+      "includedEntryIds": ["a1785d09ebbe5377b9c80d2f8dd5274a26350749c90087d30d4c9a580d5fa8b0"],
+      "uncoveredObligations": [
+        "containment-nested-object",
+        "fit-cover",
+        "risk-pending-control",
+        "state-pending"
+      ]
+    },
+    {
+      "subjectId": "layer/text",
+      "capability": "move",
+      "includedEntryIds": [
+        "3b244208ea3d8f1e373d63fb8611fcbc9e7680822423a92a987d9aab052ef3b0",
+        "9b9f80738bc7ba115ba5c173f943293c6e386897e37e0ab893dcb995824bc469"
+      ],
+      "uncoveredObligations": [
+        "ancestry-nested",
+        "boundary-displacement-large",
+        "interaction-keyboard"
+      ]
+    }
+  ],
+  "exclusionCount": 47,
+  "exclusionReasonCounts": {
+    "SCENARIO_UNAVAILABLE": 40,
+    "TEMPLATE_UNAVAILABLE": 7
+  },
+  "completeExclusionLedgerSource": "Referenced immutable draft content.exclusions; no exclusions omitted from that ledger."
+}

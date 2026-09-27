@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "profile": "diagnostic",
+  "provenance": "diagnostic-request",
+  "evidenceDepth": "deep",
+  "intent": {
+    "subjectId": "layer/image",
+    "capability": "changeProperties",
+    "variant": "static",
+    "scenario": "replace-image-ambiguous",
+    "preState": { "containment": "editor", "fit": "contain", "imageState": "current-a" },
+    "operations": [{ "discriminant": "changeProperties.apply", "parameters": {} }],
+    "expected": { "imageFrame": { "x": 90, "y": 110, "width": 320, "height": 240, "rotation": 0 } },
+    "resources": []
+  }
+}

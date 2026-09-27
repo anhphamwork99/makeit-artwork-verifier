@@ -1,0 +1,57 @@
+{
+  "schemaVersion": 1,
+  "suiteId": "representative",
+  "version": 1,
+  "profile": "diagnostic",
+  "execution": "sequential-independent-runs",
+  "cases": [
+    {
+      "order": 1,
+      "caseId": "506afaa6864d5230947582e74bf7d38ef65fa1bada1a2b888edbb28680714096",
+      "request": "cases/diagnostic/requests/layer-text-move-drag-ordinary.json",
+      "expectedOutcome": "PASS"
+    },
+    {
+      "order": 2,
+      "caseId": "bb3c9f9349a70a968dec453e18c9602faef15fcee4c4ba1bca035dc1dff54274",
+      "request": "cases/diagnostic/requests/layer-text-move-drag-warped-nested.json",
+      "expectedOutcome": "PASS"
+    },
+    {
+      "order": 3,
+      "caseId": "7f8aee1166fc1e111f9178e7ed38a2d83669e15653f4616e0c284899e59f55c9",
+      "request": "cases/diagnostic/requests/layer-image-upload-replace.json",
+      "expectedOutcome": "PASS"
+    },
+    {
+      "order": 4,
+      "caseId": "69d91a528e7ceab705be5a92093b89d477c43b2e4fb785502996ceb5cb9f730a",
+      "request": "cases/diagnostic/requests/container-object-move-nested-rotated.json",
+      "expectedOutcome": "PASS"
+    },
+    {
+      "order": 5,
+      "caseId": "243cb9c1d7edc26e64d5afcfda221d28bd59dfdc68a20d123d6fc781fe512f84",
+      "request": "cases/diagnostic/requests/layer-crossword-create.json",
+      "expectedOutcome": "PASS"
+    },
+    {
+      "order": 6,
+      "caseId": "76eadd5ad7b6c06eee55db07e455e45f0b1567fb7af6443319d7aacb5c6d9262",
+      "request": "cases/diagnostic/requests/artwork-editor-history-undo-redo.json",
+      "expectedOutcome": "PASS"
+    },
+    {
+      "order": 7,
+      "caseId": "b0f3d39b062182ec96e4ab97b1202dbc89b16a892acc34ee39d22a39cb23af67",
+      "request": "cases/diagnostic/requests/artwork-editor-serialize-restore-normalized.json",
+      "expectedOutcome": "PASS"
+    },
+    {
+      "order": 8,
+      "caseId": "c19b842f8b1018cca03db845673acba86e750be755e5d76e2a7ef3f25701ad86",
+      "request": "cases/diagnostic/requests/artwork-editor-serialize-restore-mixed-raw.json",
+      "expectedOutcome": "PASS"
+    }
+  ]
+}

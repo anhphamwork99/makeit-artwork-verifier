@@ -1,0 +1,29 @@
+{
+  "id": "text-layer-drag-intentional-failure",
+  "title": "Prove the failure bundle with an intentionally impossible movement expectation",
+  "fixture": {
+    "route": "/artwork/editor",
+    "layoutCount": 2,
+    "layer": {
+      "kind": "text",
+      "creationAction": "Add text"
+    }
+  },
+  "action": {
+    "type": "drag",
+    "delta": {
+      "x": 80,
+      "y": 40
+    }
+  },
+  "expected": {
+    "minimumDelta": {
+      "x": 500,
+      "y": 500
+    },
+    "undoRedo": true,
+    "requireLiveKonvaMovement": true
+  },
+  "oracleDepth": ["content-state", "live-konva", "bounded-visual", "undo-redo"],
+  "evidence": ["doctor", "actions", "bounded-screenshots", "diagnostics"]
+}

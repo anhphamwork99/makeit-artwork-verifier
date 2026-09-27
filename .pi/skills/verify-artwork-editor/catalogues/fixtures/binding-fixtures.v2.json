@@ -1,0 +1,497 @@
+{
+  "schemaVersion": 2,
+  "fixtures": [
+    {
+      "fixtureId": "artwork-editor-history-undo-redo-text-v1",
+      "subjectId": "artwork/editor",
+      "capability": "history",
+      "scenarioId": "undo-redo-text",
+      "constructorId": "artwork.two-layout-text.v1",
+      "constructorVersion": 1,
+      "inputs": {
+        "artworkWidth": 500,
+        "artworkHeight": 500,
+        "layouts": [
+          { "id": "layout-a", "name": "History Layout", "x": 0, "y": 0, "text": "Alpha" },
+          { "id": "layout-b", "name": "Layout B", "x": 560, "y": 0, "text": "Beta" }
+        ]
+      },
+      "semanticTargetRoles": [
+        {
+          "role": "target",
+          "kind": "text",
+          "layoutRole": "active",
+          "resolution": "pre-action-existing"
+        }
+      ]
+    },
+    {
+      "fixtureId": "container-object-move-nested-not-normalized-v1",
+      "subjectId": "container/object",
+      "capability": "move",
+      "scenarioId": "move-nested-not-normalized",
+      "constructorId": "artwork.nested-object.normalization-negative.v1",
+      "constructorVersion": 1,
+      "inputs": {},
+      "semanticTargetRoles": [
+        {
+          "role": "target",
+          "kind": "object",
+          "layoutRole": "active",
+          "resolution": "pre-action-existing",
+          "geometryProfile": "nested-object-affine-chain-v2"
+        },
+        {
+          "role": "witness",
+          "kind": "text",
+          "layoutRole": "active",
+          "resolution": "pre-action-existing",
+          "geometryProfile": "nested-object-affine-chain-v2"
+        }
+      ]
+    },
+    {
+      "fixtureId": "container-object-move-nested-rotated-ambiguous-v2",
+      "subjectId": "container/object",
+      "capability": "move",
+      "scenarioId": "move-nested-rotated-ambiguous",
+      "constructorId": "artwork.nested-object.v2",
+      "constructorVersion": 2,
+      "inputs": {
+        "artworkWidth": 600,
+        "artworkHeight": 520,
+        "activeLayout": {
+          "id": "layout-object-active",
+          "name": "Nested Object",
+          "x": 120,
+          "y": 90
+        },
+        "controlLayout": {
+          "id": "layout-object-control",
+          "name": "Object Control",
+          "x": 860,
+          "y": 90
+        }
+      },
+      "semanticTargetRoles": [
+        {
+          "role": "target",
+          "kind": "object",
+          "layoutRole": "any",
+          "resolution": "pre-action-existing",
+          "geometryProfile": "nested-object-affine-chain-v2"
+        },
+        {
+          "role": "witness",
+          "kind": "text",
+          "layoutRole": "active",
+          "resolution": "pre-action-existing",
+          "geometryProfile": "nested-object-affine-chain-v2"
+        }
+      ]
+    },
+    {
+      "fixtureId": "container-object-move-nested-rotated-v2",
+      "subjectId": "container/object",
+      "capability": "move",
+      "scenarioId": "move-nested-rotated",
+      "constructorId": "artwork.nested-object.v2",
+      "constructorVersion": 2,
+      "inputs": {
+        "artworkWidth": 600,
+        "artworkHeight": 520,
+        "activeLayout": {
+          "id": "layout-object-active",
+          "name": "Nested Object",
+          "x": 120,
+          "y": 90
+        },
+        "controlLayout": {
+          "id": "layout-object-control",
+          "name": "Object Control",
+          "x": 860,
+          "y": 90
+        }
+      },
+      "semanticTargetRoles": [
+        {
+          "role": "target",
+          "kind": "object",
+          "layoutRole": "active",
+          "resolution": "pre-action-existing",
+          "geometryProfile": "nested-object-affine-chain-v2"
+        },
+        {
+          "role": "witness",
+          "kind": "text",
+          "layoutRole": "active",
+          "resolution": "pre-action-existing",
+          "geometryProfile": "nested-object-affine-chain-v2"
+        }
+      ]
+    },
+    {
+      "fixtureId": "layer-crossword-create-ambiguous-host",
+      "subjectId": "layer/crossword",
+      "capability": "create",
+      "scenarioId": "create-crossword-ambiguous-host",
+      "constructorId": "artwork.two-layout-text.v1",
+      "constructorVersion": 1,
+      "inputs": {
+        "artworkWidth": 500,
+        "artworkHeight": 500,
+        "layouts": [
+          { "id": "layout-a", "name": "Crossword Host", "x": 0, "y": 0, "text": "Host A" },
+          { "id": "layout-b", "name": "Control Layout", "x": 560, "y": 0, "text": "Host B" }
+        ],
+        "clock": {
+          "schemaVersion": 1,
+          "profileId": "crossword-create-comparison-clock-v1",
+          "providerId": "playwright-clock-fixed-wall-v1",
+          "comparisonProfileId": "crossword-determinism-comparison-v1",
+          "baselines": [
+            "2026-01-02T03:04:05.000Z",
+            "2026-01-02T03:04:05.000Z",
+            "1970-01-02T10:17:36.789Z"
+          ]
+        }
+      },
+      "semanticTargetRoles": [
+        {
+          "role": "host",
+          "kind": "layout",
+          "layoutRole": "any",
+          "resolution": "pre-action-existing"
+        },
+        {
+          "role": "created-target",
+          "kind": "crossword",
+          "layoutRole": "active",
+          "resolution": "post-action-new",
+          "semanticProfile": "crossword-semantic-v1"
+        }
+      ]
+    },
+    {
+      "fixtureId": "layer-crossword-create-deterministic-v1",
+      "subjectId": "layer/crossword",
+      "capability": "create",
+      "scenarioId": "create-crossword",
+      "constructorId": "artwork.two-layout-text.v1",
+      "constructorVersion": 1,
+      "inputs": {
+        "artworkWidth": 500,
+        "artworkHeight": 500,
+        "layouts": [
+          { "id": "layout-a", "name": "Crossword Host", "x": 0, "y": 0, "text": "Host A" },
+          { "id": "layout-b", "name": "Control Layout", "x": 560, "y": 0, "text": "Host B" }
+        ],
+        "clock": {
+          "schemaVersion": 1,
+          "profileId": "crossword-create-comparison-clock-v1",
+          "providerId": "playwright-clock-fixed-wall-v1",
+          "comparisonProfileId": "crossword-determinism-comparison-v1",
+          "baselines": [
+            "2026-01-02T03:04:05.000Z",
+            "2026-01-02T03:04:05.000Z",
+            "1970-01-02T10:17:36.789Z"
+          ]
+        }
+      },
+      "semanticTargetRoles": [
+        {
+          "role": "host",
+          "kind": "layout",
+          "layoutRole": "active",
+          "resolution": "pre-action-existing"
+        },
+        {
+          "role": "created-target",
+          "kind": "crossword",
+          "layoutRole": "active",
+          "resolution": "post-action-new",
+          "semanticProfile": "crossword-semantic-v1"
+        }
+      ]
+    },
+    {
+      "fixtureId": "layer-crossword-create-intentional-collision",
+      "subjectId": "layer/crossword",
+      "capability": "create",
+      "scenarioId": "create-crossword-intentional-collision",
+      "constructorId": "artwork.two-layout-text.v1",
+      "constructorVersion": 1,
+      "inputs": {
+        "artworkWidth": 500,
+        "artworkHeight": 500,
+        "layouts": [
+          { "id": "layout-a", "name": "Crossword Host", "x": 0, "y": 0, "text": "Host A" },
+          { "id": "layout-b", "name": "Control Layout", "x": 560, "y": 0, "text": "Host B" }
+        ],
+        "clock": {
+          "schemaVersion": 1,
+          "profileId": "crossword-create-comparison-clock-v1",
+          "providerId": "playwright-clock-fixed-wall-v1",
+          "comparisonProfileId": "crossword-determinism-comparison-v1",
+          "baselines": [
+            "2026-01-02T03:04:05.000Z",
+            "2026-01-02T03:04:05.000Z",
+            "2026-01-02T03:04:05.002Z"
+          ]
+        }
+      },
+      "semanticTargetRoles": [
+        {
+          "role": "host",
+          "kind": "layout",
+          "layoutRole": "active",
+          "resolution": "pre-action-existing"
+        },
+        {
+          "role": "created-target",
+          "kind": "crossword",
+          "layoutRole": "active",
+          "resolution": "post-action-new",
+          "semanticProfile": "crossword-semantic-v1"
+        }
+      ]
+    },
+    {
+      "fixtureId": "layer-image-change-properties-upload-replace",
+      "subjectId": "layer/image",
+      "capability": "changeProperties",
+      "scenarioId": "replace-image",
+      "constructorId": "artwork.two-layout-image.v1",
+      "constructorVersion": 1,
+      "resourceRefs": [
+        { "logicalId": "image.upload-a", "version": 1, "role": "upload-initial" },
+        { "logicalId": "image.upload-b", "version": 1, "role": "replace-final" }
+      ],
+      "inputs": {
+        "artworkWidth": 500,
+        "artworkHeight": 500,
+        "imageFrame": { "width": 320, "height": 240 },
+        "layouts": [
+          { "id": "layout-image-a", "name": "Image Layout", "x": 80, "y": 60 },
+          { "id": "layout-image-control", "name": "Control Layout", "x": 660, "y": 60 }
+        ]
+      },
+      "semanticTargetRoles": [
+        {
+          "role": "target",
+          "kind": "image",
+          "layoutRole": "active",
+          "resolution": "pre-action-existing"
+        }
+      ]
+    },
+    {
+      "fixtureId": "layer-image-change-properties-upload-replace-ambiguous",
+      "subjectId": "layer/image",
+      "capability": "changeProperties",
+      "scenarioId": "replace-image-ambiguous",
+      "constructorId": "artwork.two-layout-image.v1",
+      "constructorVersion": 1,
+      "resourceRefs": [
+        { "logicalId": "image.upload-a", "version": 1, "role": "upload-initial" },
+        { "logicalId": "image.upload-b", "version": 1, "role": "replace-final" }
+      ],
+      "inputs": {
+        "artworkWidth": 500,
+        "artworkHeight": 500,
+        "imageFrame": { "width": 320, "height": 240 },
+        "layouts": [
+          { "id": "layout-image-a", "name": "Image Layout", "x": 80, "y": 60 },
+          { "id": "layout-image-control", "name": "Control Layout", "x": 660, "y": 60 }
+        ]
+      },
+      "semanticTargetRoles": [
+        {
+          "role": "target",
+          "kind": "image",
+          "layoutRole": "any",
+          "resolution": "pre-action-existing"
+        }
+      ]
+    },
+    {
+      "fixtureId": "layer-text-move-drag-ordinary",
+      "subjectId": "layer/text",
+      "capability": "move",
+      "scenarioId": "drag-ordinary",
+      "constructorId": "artwork.two-layout-text.v1",
+      "constructorVersion": 1,
+      "inputs": {
+        "artworkWidth": 500,
+        "artworkHeight": 500,
+        "layouts": [
+          { "id": "layout-a", "name": "Layout A", "x": 0, "y": 0, "text": "Alpha" },
+          { "id": "layout-b", "name": "Layout B", "x": 560, "y": 0, "text": "Beta" }
+        ]
+      },
+      "semanticTargetRoles": [
+        {
+          "role": "target",
+          "kind": "text",
+          "layoutRole": "active",
+          "resolution": "pre-action-existing"
+        }
+      ]
+    },
+    {
+      "fixtureId": "layer-text-move-drag-ordinary-ambiguous",
+      "subjectId": "layer/text",
+      "capability": "move",
+      "scenarioId": "drag-ordinary-ambiguous",
+      "constructorId": "artwork.two-layout-text.v1",
+      "constructorVersion": 1,
+      "inputs": {
+        "artworkWidth": 500,
+        "artworkHeight": 500,
+        "layouts": [
+          { "id": "layout-a", "name": "Layout A", "x": 0, "y": 0, "text": "Alpha" },
+          { "id": "layout-b", "name": "Layout B", "x": 560, "y": 0, "text": "Beta" }
+        ]
+      },
+      "semanticTargetRoles": [
+        {
+          "role": "target",
+          "kind": "text",
+          "layoutRole": "any",
+          "resolution": "pre-action-existing"
+        }
+      ]
+    },
+    {
+      "fixtureId": "layer-text-move-drag-warped-nested",
+      "subjectId": "layer/text",
+      "capability": "move",
+      "scenarioId": "drag-warped-nested",
+      "constructorId": "artwork.two-layout-text.v2",
+      "constructorVersion": 2,
+      "inputs": {
+        "artworkWidth": 500,
+        "artworkHeight": 500,
+        "layouts": [
+          {
+            "id": "layout-a",
+            "name": "Layout A",
+            "x": 120,
+            "y": 90,
+            "text": "Merry",
+            "warp": "circle"
+          },
+          { "id": "layout-b", "name": "Layout B", "x": 560, "y": 0, "text": "Beta", "warp": "none" }
+        ]
+      },
+      "semanticTargetRoles": [
+        {
+          "role": "target",
+          "kind": "text",
+          "layoutRole": "active",
+          "resolution": "pre-action-existing",
+          "geometryProfile": "circle-control-envelope-quad-v1"
+        }
+      ]
+    },
+    {
+      "fixtureId": "layer-text-move-drag-warped-nested-ambiguous",
+      "subjectId": "layer/text",
+      "capability": "move",
+      "scenarioId": "drag-warped-nested-ambiguous",
+      "constructorId": "artwork.two-layout-text.v2",
+      "constructorVersion": 2,
+      "inputs": {
+        "artworkWidth": 500,
+        "artworkHeight": 500,
+        "layouts": [
+          {
+            "id": "layout-a",
+            "name": "Layout A",
+            "x": 120,
+            "y": 90,
+            "text": "Merry",
+            "warp": "circle"
+          },
+          {
+            "id": "layout-b",
+            "name": "Layout B",
+            "x": 560,
+            "y": 0,
+            "text": "Beta",
+            "warp": "circle"
+          }
+        ]
+      },
+      "semanticTargetRoles": [
+        {
+          "role": "target",
+          "kind": "text",
+          "layoutRole": "any",
+          "resolution": "pre-action-existing",
+          "geometryProfile": "circle-control-envelope-quad-v1"
+        }
+      ]
+    },
+    {
+      "fixtureId": "artwork-editor-serialize-restore-normalized-v1",
+      "subjectId": "artwork/editor",
+      "capability": "frontendSerializeRestore",
+      "scenarioId": "serialize-roundtrip",
+      "constructorId": "artwork.two-layout-text.v1",
+      "constructorVersion": 1,
+      "inputs": {
+        "artworkWidth": 500,
+        "artworkHeight": 500,
+        "layouts": [
+          { "id": "layout-a", "name": "Serialize Layout", "x": 0, "y": 0, "text": "Alpha" },
+          { "id": "layout-b", "name": "Layout B", "x": 560, "y": 0, "text": "Beta" }
+        ]
+      },
+      "semanticTargetRoles": [
+        {
+          "role": "setup-text",
+          "kind": "text",
+          "layoutRole": "active",
+          "resolution": "post-action-new"
+        }
+      ]
+    },
+    {
+      "fixtureId": "artwork-editor-serialize-restore-mixed-raw-v1",
+      "subjectId": "artwork/editor",
+      "capability": "frontendSerializeRestore",
+      "scenarioId": "serialize-raw-semantic",
+      "constructorId": "artwork.two-layout-text.v1",
+      "constructorVersion": 1,
+      "inputs": {
+        "artworkWidth": 500,
+        "artworkHeight": 500,
+        "layouts": [
+          { "id": "layout-a", "name": "Serialize Layout", "x": 0, "y": 0, "text": "Alpha" },
+          { "id": "layout-b", "name": "Layout B", "x": 560, "y": 0, "text": "Beta" }
+        ]
+      },
+      "semanticTargetRoles": [
+        {
+          "role": "setup-text",
+          "kind": "text",
+          "layoutRole": "active",
+          "resolution": "post-action-new"
+        },
+        {
+          "role": "setup-image-placeholder",
+          "kind": "image",
+          "layoutRole": "active",
+          "resolution": "post-action-new"
+        },
+        {
+          "role": "setup-crossword",
+          "kind": "crossword",
+          "layoutRole": "active",
+          "resolution": "post-action-new"
+        }
+      ]
+    }
+  ]
+}

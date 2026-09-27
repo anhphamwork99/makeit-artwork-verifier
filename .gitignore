@@ -1,0 +1,59 @@
+# makeit-artwork-verifier — transfer boundary exclusions (WP2)
+#
+# This repository is a private, toolkit-only snapshot. Anything that carries
+# historical evidence, source provenance, machine-local state, credentials, or
+# generated output must never enter Git. Patterns are anchored to the repository
+# root unless a `**/` prefix is used so that a product-owned directory such as
+# `src/coverage/` or `src/evidence/` is never accidentally excluded.
+
+# --- WP1 planning / provenance inventory (never committed) ---
+/.planning/
+
+# --- Verification evidence (historical and generated; never committed) ---
+# Historical run/suite records are revision-bound, contain maintainer-local
+# absolute paths, and stay outside the transfer boundary. New runs are written
+# here at runtime and are reproduced locally, not transferred.
+/evidence/
+/.pi/skills/verify-artwork-editor/evidence/
+
+# --- Dependencies ---
+node_modules/
+.pnpm-store/
+
+# --- Environment and credentials ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+/credentials/
+/credentials.json
+/secrets.json
+
+# --- Build output, caches and generated local test artifacts ---
+/.next/
+/dist/
+/build/
+/out/
+/coverage/
+/tmp/
+/.turbo/
+/.cache/
+/.vitest/
+/vitest.cache/
+*.tsbuildinfo
+playwright-report/
+/test-results/
+/playwright/.cache/
+
+# --- OS / editor noise ---
+.DS_Store
+Thumbs.db
+*.swp
+*.log
+
+# --- Packaging scratch ---
+*.tgz

@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "profile": "diagnostic",
+  "provenance": "diagnostic-request",
+  "evidenceDepth": "deep",
+  "intent": {
+    "subjectId": "layer/crossword",
+    "capability": "create",
+    "variant": null,
+    "scenario": "create-crossword",
+    "preState": {},
+    "operations": [{ "discriminant": "create.generated", "parameters": {} }],
+    "expected": {},
+    "resources": []
+  }
+}

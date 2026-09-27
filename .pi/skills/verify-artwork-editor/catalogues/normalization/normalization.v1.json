@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "normalizations": [
+    {
+      "normalizationId": "artwork-normalized-meaning-v1",
+      "version": 1,
+      "applicability": "frontend-serialize-restore",
+      "meaningRef": "artwork-product-meaning-v1",
+      "evaluator": "restore-normalization-v1"
+    }
+  ]
+}

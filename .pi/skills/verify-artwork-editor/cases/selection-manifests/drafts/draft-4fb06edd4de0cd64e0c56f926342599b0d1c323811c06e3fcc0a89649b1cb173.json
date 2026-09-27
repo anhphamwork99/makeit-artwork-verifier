@@ -1,0 +1,2658 @@
+{
+  "content": {
+    "bindings": [
+      {
+        "capability": "frontendSerializeRestore",
+        "modelFingerprint": "aea6856dd6f20218a4371e6144f92517a545ee6aa717322dc585e5a83311e82e",
+        "selection": {
+          "cases": [
+            {
+              "assignments": { "normalization": "norm-normalized", "subject-mix": "mix-mixed" },
+              "caseKey": "118980df8a5ad5ace41cf8c21105c40c5b951ded0970d1c4dcfbfc2e8da97b80",
+              "obligationIds": ["normalization-normalized", "subject-mix-mixed"],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": ["normalization=norm-normalized", "subject-mix=mix-mixed"],
+              "scenarioId": null
+            },
+            {
+              "assignments": { "normalization": "norm-raw-semantic", "subject-mix": "mix-mixed" },
+              "caseKey": "648211a50ee9b368775f22eb96bcd7cc3cbeb103eb3f5f28a9524cc3a3f1a6ec",
+              "obligationIds": [
+                "normalization-raw-semantic",
+                "risk-raw-semantic",
+                "subject-mix-mixed"
+              ],
+              "origin": "mandatory",
+              "releaseBasis": "declared-release-scenario",
+              "releaseEligible": true,
+              "representativeIds": ["normalization=norm-raw-semantic", "subject-mix=mix-mixed"],
+              "scenarioId": "serialize-raw-semantic"
+            },
+            {
+              "assignments": {
+                "normalization": "norm-normalized",
+                "subject-mix": "mix-single-text"
+              },
+              "caseKey": "a5b19d688203eb0c69ca14898425f62dd8ed5e22e2d7e6cd33f5662861105dd7",
+              "obligationIds": [
+                "baseline-serialize-roundtrip",
+                "normalization-normalized",
+                "subject-mix-single"
+              ],
+              "origin": "baseline",
+              "releaseBasis": "declared-release-scenario",
+              "releaseEligible": true,
+              "representativeIds": ["normalization=norm-normalized", "subject-mix=mix-single-text"],
+              "scenarioId": "serialize-roundtrip"
+            },
+            {
+              "assignments": {
+                "normalization": "norm-raw-semantic",
+                "subject-mix": "mix-single-text"
+              },
+              "caseKey": "d00f8ab96bcbc8894b39215b1f79f5333b6395ff901c3fb221e06a79867fab5f",
+              "obligationIds": ["normalization-raw-semantic", "subject-mix-single"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "normalization=norm-raw-semantic",
+                "subject-mix=mix-single-text"
+              ],
+              "scenarioId": null
+            }
+          ],
+          "coverageModelFingerprint": "aea6856dd6f20218a4371e6144f92517a545ee6aa717322dc585e5a83311e82e",
+          "inputFingerprint": "f9908a31e613e72e8017c6fc8da9cf48e0b6d965f78713d19d15a40409494334",
+          "obligationMappings": [
+            {
+              "caseKeys": ["a5b19d688203eb0c69ca14898425f62dd8ed5e22e2d7e6cd33f5662861105dd7"],
+              "kind": "baseline",
+              "obligationId": "baseline-serialize-roundtrip",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "118980df8a5ad5ace41cf8c21105c40c5b951ded0970d1c4dcfbfc2e8da97b80",
+                "a5b19d688203eb0c69ca14898425f62dd8ed5e22e2d7e6cd33f5662861105dd7"
+              ],
+              "kind": "partition",
+              "obligationId": "normalization-normalized",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "648211a50ee9b368775f22eb96bcd7cc3cbeb103eb3f5f28a9524cc3a3f1a6ec",
+                "d00f8ab96bcbc8894b39215b1f79f5333b6395ff901c3fb221e06a79867fab5f"
+              ],
+              "kind": "partition",
+              "obligationId": "normalization-raw-semantic",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": ["648211a50ee9b368775f22eb96bcd7cc3cbeb103eb3f5f28a9524cc3a3f1a6ec"],
+              "kind": "risk",
+              "obligationId": "risk-raw-semantic",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "118980df8a5ad5ace41cf8c21105c40c5b951ded0970d1c4dcfbfc2e8da97b80",
+                "648211a50ee9b368775f22eb96bcd7cc3cbeb103eb3f5f28a9524cc3a3f1a6ec"
+              ],
+              "kind": "partition",
+              "obligationId": "subject-mix-mixed",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "a5b19d688203eb0c69ca14898425f62dd8ed5e22e2d7e6cd33f5662861105dd7",
+                "d00f8ab96bcbc8894b39215b1f79f5333b6395ff901c3fb221e06a79867fab5f"
+              ],
+              "kind": "partition",
+              "obligationId": "subject-mix-single",
+              "requiredFor": "release",
+              "satisfied": true
+            }
+          ],
+          "policyVersion": "coverage-selection/v1",
+          "profile": "release",
+          "schemaVersion": 1,
+          "seed": null,
+          "tupleCoverage": {
+            "pairwise": {
+              "covered": 4,
+              "factors": ["normalization", "subject-mix"],
+              "required": 4,
+              "strength": 2,
+              "submodelId": null,
+              "uncovered": []
+            },
+            "submodels": []
+          },
+          "uncoveredObligations": [],
+          "warnings": []
+        },
+        "subjectId": "artwork/editor"
+      },
+      {
+        "capability": "history",
+        "modelFingerprint": "88f6fcef65a326873d52a5964c35ce4f7a973782b71f0ac30181b99de99352d4",
+        "selection": {
+          "cases": [
+            {
+              "assignments": { "direction": "direction-undo", "subject-class": "class-image" },
+              "caseKey": "09f120d84689c53222a151ced1b58d178b6c2da70044175673b4c1399db398cb",
+              "obligationIds": ["direction-release", "subject-class-image"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": ["direction=direction-undo", "subject-class=class-image"],
+              "scenarioId": null
+            },
+            {
+              "assignments": { "direction": "direction-redo", "subject-class": "class-text" },
+              "caseKey": "3729fc69a271115cbe2683657f60d7e1d653aff2b5985ace25270a67fdad0c7a",
+              "obligationIds": ["direction-release", "subject-class-text"],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": ["direction=direction-redo", "subject-class=class-text"],
+              "scenarioId": null
+            },
+            {
+              "assignments": { "direction": "direction-redo", "subject-class": "class-crossword" },
+              "caseKey": "3ca8d86e867bd51f82935c083a1fd525638f1902d8fb11888c60a1c2ade50c88",
+              "obligationIds": ["direction-release", "subject-class-crossword"],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": ["direction=direction-redo", "subject-class=class-crossword"],
+              "scenarioId": null
+            },
+            {
+              "assignments": { "direction": "direction-undo", "subject-class": "class-text" },
+              "caseKey": "4ed528273d36196459c071f1ceab339f30f203ca2689d1f22e23e67c774754d3",
+              "obligationIds": ["direction-release", "subject-class-text"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": ["direction=direction-undo", "subject-class=class-text"],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "direction": "direction-undo-redo",
+                "subject-class": "class-crossword"
+              },
+              "caseKey": "5ed1a3d4c3256f409750e105b421130cb1238df2db3878090732c5fa95e10498",
+              "obligationIds": [
+                "direction-release",
+                "risk-history-crossword",
+                "subject-class-crossword"
+              ],
+              "origin": "mandatory",
+              "releaseBasis": "declared-release-scenario",
+              "releaseEligible": true,
+              "representativeIds": [
+                "direction=direction-undo-redo",
+                "subject-class=class-crossword"
+              ],
+              "scenarioId": "history-crossword"
+            },
+            {
+              "assignments": { "direction": "direction-undo", "subject-class": "class-crossword" },
+              "caseKey": "792616e0e5ab0838d7d0efeef3c15a725912c46f2b8cf0ea7d8a74f619e1b23f",
+              "obligationIds": ["direction-release", "subject-class-crossword"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": ["direction=direction-undo", "subject-class=class-crossword"],
+              "scenarioId": null
+            },
+            {
+              "assignments": { "direction": "direction-undo-redo", "subject-class": "class-image" },
+              "caseKey": "8ac65acf5cf5672c8d5701bade419731fe978a482eeebc85d2450e4139335653",
+              "obligationIds": ["direction-release", "risk-history-image", "subject-class-image"],
+              "origin": "mandatory",
+              "releaseBasis": "declared-release-scenario",
+              "releaseEligible": true,
+              "representativeIds": ["direction=direction-undo-redo", "subject-class=class-image"],
+              "scenarioId": "history-image"
+            },
+            {
+              "assignments": { "direction": "direction-redo", "subject-class": "class-image" },
+              "caseKey": "8cbcd22d4939fcd52e8c98cee7381c97f5d3e24772a0444ee8b1b2d840b8fffe",
+              "obligationIds": ["direction-release", "subject-class-image"],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": ["direction=direction-redo", "subject-class=class-image"],
+              "scenarioId": null
+            },
+            {
+              "assignments": { "direction": "direction-undo-redo", "subject-class": "class-text" },
+              "caseKey": "a0592e55b96496ad4885edee149da17009ae9077f620a86111c792c96b1fba2d",
+              "obligationIds": [
+                "baseline-undo-redo-text",
+                "direction-release",
+                "subject-class-text"
+              ],
+              "origin": "baseline",
+              "releaseBasis": "declared-release-scenario",
+              "releaseEligible": true,
+              "representativeIds": ["direction=direction-undo-redo", "subject-class=class-text"],
+              "scenarioId": "undo-redo-text"
+            }
+          ],
+          "coverageModelFingerprint": "88f6fcef65a326873d52a5964c35ce4f7a973782b71f0ac30181b99de99352d4",
+          "inputFingerprint": "80d0750af02be4673d72a7240e3dca47d133e517090a0bb4ad41c95725462b70",
+          "obligationMappings": [
+            {
+              "caseKeys": ["a0592e55b96496ad4885edee149da17009ae9077f620a86111c792c96b1fba2d"],
+              "kind": "baseline",
+              "obligationId": "baseline-undo-redo-text",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "09f120d84689c53222a151ced1b58d178b6c2da70044175673b4c1399db398cb",
+                "3729fc69a271115cbe2683657f60d7e1d653aff2b5985ace25270a67fdad0c7a",
+                "3ca8d86e867bd51f82935c083a1fd525638f1902d8fb11888c60a1c2ade50c88",
+                "4ed528273d36196459c071f1ceab339f30f203ca2689d1f22e23e67c774754d3",
+                "5ed1a3d4c3256f409750e105b421130cb1238df2db3878090732c5fa95e10498",
+                "792616e0e5ab0838d7d0efeef3c15a725912c46f2b8cf0ea7d8a74f619e1b23f",
+                "8ac65acf5cf5672c8d5701bade419731fe978a482eeebc85d2450e4139335653",
+                "8cbcd22d4939fcd52e8c98cee7381c97f5d3e24772a0444ee8b1b2d840b8fffe",
+                "a0592e55b96496ad4885edee149da17009ae9077f620a86111c792c96b1fba2d"
+              ],
+              "kind": "partition",
+              "obligationId": "direction-release",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": ["5ed1a3d4c3256f409750e105b421130cb1238df2db3878090732c5fa95e10498"],
+              "kind": "risk",
+              "obligationId": "risk-history-crossword",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": ["8ac65acf5cf5672c8d5701bade419731fe978a482eeebc85d2450e4139335653"],
+              "kind": "risk",
+              "obligationId": "risk-history-image",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "3ca8d86e867bd51f82935c083a1fd525638f1902d8fb11888c60a1c2ade50c88",
+                "5ed1a3d4c3256f409750e105b421130cb1238df2db3878090732c5fa95e10498",
+                "792616e0e5ab0838d7d0efeef3c15a725912c46f2b8cf0ea7d8a74f619e1b23f"
+              ],
+              "kind": "partition",
+              "obligationId": "subject-class-crossword",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "09f120d84689c53222a151ced1b58d178b6c2da70044175673b4c1399db398cb",
+                "8ac65acf5cf5672c8d5701bade419731fe978a482eeebc85d2450e4139335653",
+                "8cbcd22d4939fcd52e8c98cee7381c97f5d3e24772a0444ee8b1b2d840b8fffe"
+              ],
+              "kind": "partition",
+              "obligationId": "subject-class-image",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "3729fc69a271115cbe2683657f60d7e1d653aff2b5985ace25270a67fdad0c7a",
+                "4ed528273d36196459c071f1ceab339f30f203ca2689d1f22e23e67c774754d3",
+                "a0592e55b96496ad4885edee149da17009ae9077f620a86111c792c96b1fba2d"
+              ],
+              "kind": "partition",
+              "obligationId": "subject-class-text",
+              "requiredFor": "release",
+              "satisfied": true
+            }
+          ],
+          "policyVersion": "coverage-selection/v1",
+          "profile": "release",
+          "schemaVersion": 1,
+          "seed": null,
+          "tupleCoverage": {
+            "pairwise": {
+              "covered": 9,
+              "factors": ["direction", "subject-class"],
+              "required": 9,
+              "strength": 2,
+              "submodelId": null,
+              "uncovered": []
+            },
+            "submodels": []
+          },
+          "uncoveredObligations": [],
+          "warnings": []
+        },
+        "subjectId": "artwork/editor"
+      },
+      {
+        "capability": "changeContainment",
+        "modelFingerprint": "cc3dec680c845f57780d6b4be970ba620504d09846ec94399ce1bc1ad128b4f4",
+        "selection": {
+          "cases": [
+            {
+              "assignments": {
+                "ancestor-transform": "transform-scaled",
+                "depth": "depth-two",
+                "destination": "destination-layout"
+              },
+              "caseKey": "108612f39cb71286c92373bd8b625e6582711bd687f3f7f238f5789ad7ea0b6b",
+              "obligationIds": ["ancestor-transform-scaled", "destination-valid"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-scaled",
+                "depth=depth-two",
+                "destination=destination-layout"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestor-transform": "transform-scaled",
+                "depth": "depth-max",
+                "destination": "destination-object"
+              },
+              "caseKey": "1b40e6445323d9bfbdb2098d723fe7d9094127dd9ca5c456d926a46fed3ef5fe",
+              "obligationIds": [
+                "ancestor-transform-scaled",
+                "boundary-depth-max",
+                "destination-valid"
+              ],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-scaled",
+                "depth=depth-max",
+                "destination=destination-object"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestor-transform": "transform-rotated",
+                "depth": "depth-one",
+                "destination": "destination-object"
+              },
+              "caseKey": "1b467d630a3fa14111b62c38c050eee52c5021c2ae01e5890856f5097c9cdd78",
+              "obligationIds": ["ancestor-transform-rotated", "destination-valid"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-rotated",
+                "depth=depth-one",
+                "destination=destination-object"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestor-transform": "transform-identity",
+                "depth": "depth-one",
+                "destination": "destination-layout"
+              },
+              "caseKey": "3ca9f36d97b39e0793c33f4ad9e6a318766d0ac09699217b4b96068b12d6495d",
+              "obligationIds": ["ancestor-transform-identity", "destination-valid"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-identity",
+                "depth=depth-one",
+                "destination=destination-layout"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestor-transform": "transform-rotated",
+                "depth": "depth-two",
+                "destination": "destination-layout"
+              },
+              "caseKey": "4081606a4a6db89400dcde1779d91bd90b2add72157cd955005c7aec50558b3b",
+              "obligationIds": ["ancestor-transform-rotated", "destination-valid"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-rotated",
+                "depth=depth-two",
+                "destination=destination-layout"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestor-transform": "transform-rotated",
+                "depth": "depth-two",
+                "destination": "destination-object"
+              },
+              "caseKey": "5a830bf9325959cec1b88b545737a78018360d9e3333906f019aae4118f977bd",
+              "obligationIds": ["ancestor-transform-rotated", "destination-valid"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-rotated",
+                "depth=depth-two",
+                "destination=destination-object"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestor-transform": "transform-identity",
+                "depth": "depth-max",
+                "destination": "destination-object"
+              },
+              "caseKey": "6939855df19b35073afd9be358ef9526ce055d095aab794902ba83de99af576e",
+              "obligationIds": [
+                "ancestor-transform-identity",
+                "boundary-depth-max",
+                "destination-valid"
+              ],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-identity",
+                "depth=depth-max",
+                "destination=destination-object"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestor-transform": "transform-rotated",
+                "depth": "depth-one",
+                "destination": "destination-layout"
+              },
+              "caseKey": "6a0adb0407b7076178d7373eb38af9b578c50405d397402847bd1a0367708368",
+              "obligationIds": ["ancestor-transform-rotated", "destination-valid"],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-rotated",
+                "depth=depth-one",
+                "destination=destination-layout"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestor-transform": "transform-identity",
+                "depth": "depth-one",
+                "destination": "destination-object"
+              },
+              "caseKey": "6c15c9ca58c5e5d2c9429bb665e6ea4c49ec14c8d32156eed0f2ffb356450f59",
+              "obligationIds": [
+                "ancestor-transform-identity",
+                "baseline-contain-child",
+                "destination-valid"
+              ],
+              "origin": "baseline",
+              "releaseBasis": "declared-release-scenario",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-identity",
+                "depth=depth-one",
+                "destination=destination-object"
+              ],
+              "scenarioId": "contain-child"
+            },
+            {
+              "assignments": {
+                "ancestor-transform": "transform-scaled",
+                "depth": "depth-max",
+                "destination": "destination-layout"
+              },
+              "caseKey": "777ada4a05df8e511cf48489c2953d21caf58de0aad8573d75e244e9b44ee99c",
+              "obligationIds": [
+                "ancestor-transform-scaled",
+                "boundary-depth-max",
+                "destination-valid"
+              ],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-scaled",
+                "depth=depth-max",
+                "destination=destination-layout"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestor-transform": "transform-identity",
+                "depth": "depth-two",
+                "destination": "destination-layout"
+              },
+              "caseKey": "7dac2c88379a7990d986854a8e0dfe37bd9084b7f94cdb0b8c5be35974cd5745",
+              "obligationIds": ["ancestor-transform-identity", "destination-valid"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-identity",
+                "depth=depth-two",
+                "destination=destination-layout"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestor-transform": "transform-scaled",
+                "depth": "depth-one",
+                "destination": "destination-object"
+              },
+              "caseKey": "9b2c31f967626c39c6b529ee28835f8eb2cb92964187999c9546e6a1a029414c",
+              "obligationIds": ["ancestor-transform-scaled", "destination-valid"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-scaled",
+                "depth=depth-one",
+                "destination=destination-object"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestor-transform": "transform-scaled",
+                "depth": "depth-one",
+                "destination": "destination-layout"
+              },
+              "caseKey": "a504530a114a4f7d71ea00dd7c2baeb66887f797575ff2c0de8cf150f684405b",
+              "obligationIds": ["ancestor-transform-scaled", "destination-valid"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-scaled",
+                "depth=depth-one",
+                "destination=destination-layout"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestor-transform": "transform-identity",
+                "depth": "depth-max",
+                "destination": "destination-layout"
+              },
+              "caseKey": "ca6a501e2de0371997543589541935818f5f7d1014ec1d2d0d75eb3b061c425b",
+              "obligationIds": [
+                "ancestor-transform-identity",
+                "boundary-depth-max",
+                "destination-valid",
+                "risk-max-depth"
+              ],
+              "origin": "mandatory",
+              "releaseBasis": "declared-release-scenario",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-identity",
+                "depth=depth-max",
+                "destination=destination-layout"
+              ],
+              "scenarioId": "contain-max-depth"
+            },
+            {
+              "assignments": {
+                "ancestor-transform": "transform-identity",
+                "depth": "depth-two",
+                "destination": "destination-object"
+              },
+              "caseKey": "e71e46c63639a92a2552c8836c2204c5f715c8e4df9277c5716025e30fdddde0",
+              "obligationIds": ["ancestor-transform-identity", "destination-valid"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-identity",
+                "depth=depth-two",
+                "destination=destination-object"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestor-transform": "transform-scaled",
+                "depth": "depth-two",
+                "destination": "destination-object"
+              },
+              "caseKey": "efa1b040c0c06b983d461a4d40caaca0d174eb49c1d2f378643c1c97a7ea4c04",
+              "obligationIds": ["ancestor-transform-scaled", "destination-valid"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestor-transform=transform-scaled",
+                "depth=depth-two",
+                "destination=destination-object"
+              ],
+              "scenarioId": null
+            }
+          ],
+          "coverageModelFingerprint": "cc3dec680c845f57780d6b4be970ba620504d09846ec94399ce1bc1ad128b4f4",
+          "inputFingerprint": "3ec303bbf89a6ff270932f6219eafc0191e2630c408f81f6282f29668eb8e38d",
+          "obligationMappings": [
+            {
+              "caseKeys": [
+                "3ca9f36d97b39e0793c33f4ad9e6a318766d0ac09699217b4b96068b12d6495d",
+                "6939855df19b35073afd9be358ef9526ce055d095aab794902ba83de99af576e",
+                "6c15c9ca58c5e5d2c9429bb665e6ea4c49ec14c8d32156eed0f2ffb356450f59",
+                "7dac2c88379a7990d986854a8e0dfe37bd9084b7f94cdb0b8c5be35974cd5745",
+                "ca6a501e2de0371997543589541935818f5f7d1014ec1d2d0d75eb3b061c425b",
+                "e71e46c63639a92a2552c8836c2204c5f715c8e4df9277c5716025e30fdddde0"
+              ],
+              "kind": "partition",
+              "obligationId": "ancestor-transform-identity",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "1b467d630a3fa14111b62c38c050eee52c5021c2ae01e5890856f5097c9cdd78",
+                "4081606a4a6db89400dcde1779d91bd90b2add72157cd955005c7aec50558b3b",
+                "5a830bf9325959cec1b88b545737a78018360d9e3333906f019aae4118f977bd",
+                "6a0adb0407b7076178d7373eb38af9b578c50405d397402847bd1a0367708368"
+              ],
+              "kind": "partition",
+              "obligationId": "ancestor-transform-rotated",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "108612f39cb71286c92373bd8b625e6582711bd687f3f7f238f5789ad7ea0b6b",
+                "1b40e6445323d9bfbdb2098d723fe7d9094127dd9ca5c456d926a46fed3ef5fe",
+                "777ada4a05df8e511cf48489c2953d21caf58de0aad8573d75e244e9b44ee99c",
+                "9b2c31f967626c39c6b529ee28835f8eb2cb92964187999c9546e6a1a029414c",
+                "a504530a114a4f7d71ea00dd7c2baeb66887f797575ff2c0de8cf150f684405b",
+                "efa1b040c0c06b983d461a4d40caaca0d174eb49c1d2f378643c1c97a7ea4c04"
+              ],
+              "kind": "partition",
+              "obligationId": "ancestor-transform-scaled",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": ["6c15c9ca58c5e5d2c9429bb665e6ea4c49ec14c8d32156eed0f2ffb356450f59"],
+              "kind": "baseline",
+              "obligationId": "baseline-contain-child",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "1b40e6445323d9bfbdb2098d723fe7d9094127dd9ca5c456d926a46fed3ef5fe",
+                "6939855df19b35073afd9be358ef9526ce055d095aab794902ba83de99af576e",
+                "777ada4a05df8e511cf48489c2953d21caf58de0aad8573d75e244e9b44ee99c",
+                "ca6a501e2de0371997543589541935818f5f7d1014ec1d2d0d75eb3b061c425b"
+              ],
+              "kind": "boundary",
+              "obligationId": "boundary-depth-max",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "108612f39cb71286c92373bd8b625e6582711bd687f3f7f238f5789ad7ea0b6b",
+                "1b40e6445323d9bfbdb2098d723fe7d9094127dd9ca5c456d926a46fed3ef5fe",
+                "1b467d630a3fa14111b62c38c050eee52c5021c2ae01e5890856f5097c9cdd78",
+                "3ca9f36d97b39e0793c33f4ad9e6a318766d0ac09699217b4b96068b12d6495d",
+                "4081606a4a6db89400dcde1779d91bd90b2add72157cd955005c7aec50558b3b",
+                "5a830bf9325959cec1b88b545737a78018360d9e3333906f019aae4118f977bd",
+                "6939855df19b35073afd9be358ef9526ce055d095aab794902ba83de99af576e",
+                "6a0adb0407b7076178d7373eb38af9b578c50405d397402847bd1a0367708368",
+                "6c15c9ca58c5e5d2c9429bb665e6ea4c49ec14c8d32156eed0f2ffb356450f59",
+                "777ada4a05df8e511cf48489c2953d21caf58de0aad8573d75e244e9b44ee99c",
+                "7dac2c88379a7990d986854a8e0dfe37bd9084b7f94cdb0b8c5be35974cd5745",
+                "9b2c31f967626c39c6b529ee28835f8eb2cb92964187999c9546e6a1a029414c",
+                "a504530a114a4f7d71ea00dd7c2baeb66887f797575ff2c0de8cf150f684405b",
+                "ca6a501e2de0371997543589541935818f5f7d1014ec1d2d0d75eb3b061c425b",
+                "e71e46c63639a92a2552c8836c2204c5f715c8e4df9277c5716025e30fdddde0",
+                "efa1b040c0c06b983d461a4d40caaca0d174eb49c1d2f378643c1c97a7ea4c04"
+              ],
+              "kind": "partition",
+              "obligationId": "destination-valid",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": ["ca6a501e2de0371997543589541935818f5f7d1014ec1d2d0d75eb3b061c425b"],
+              "kind": "risk",
+              "obligationId": "risk-max-depth",
+              "requiredFor": "release",
+              "satisfied": true
+            }
+          ],
+          "policyVersion": "coverage-selection/v1",
+          "profile": "release",
+          "schemaVersion": 1,
+          "seed": null,
+          "tupleCoverage": {
+            "pairwise": {
+              "covered": 20,
+              "factors": ["ancestor-transform", "depth", "destination"],
+              "required": 20,
+              "strength": 2,
+              "submodelId": null,
+              "uncovered": []
+            },
+            "submodels": [
+              {
+                "covered": 16,
+                "factors": ["ancestor-transform", "depth", "destination"],
+                "required": 16,
+                "strength": 3,
+                "submodelId": "containment-three-way",
+                "uncovered": []
+              }
+            ]
+          },
+          "uncoveredObligations": [],
+          "warnings": []
+        },
+        "subjectId": "container/object"
+      },
+      {
+        "capability": "move",
+        "modelFingerprint": "394875017e241b7375e7653ff0f4f7be562627f43fa5ea5295afa91e5e04e1f9",
+        "selection": {
+          "cases": [
+            {
+              "assignments": { "ancestry": "ancestry-identity", "child-class": "child-layer" },
+              "caseKey": "13ba425bf9721cb0c71d14b290883ec6ae0788ad5c2c172390f837eeb3b5cf13",
+              "obligationIds": ["ancestry-identity", "baseline-move-child", "child-class-layer"],
+              "origin": "baseline",
+              "releaseBasis": "declared-release-scenario",
+              "releaseEligible": true,
+              "representativeIds": ["ancestry=ancestry-identity", "child-class=child-layer"],
+              "scenarioId": "move-child"
+            },
+            {
+              "assignments": { "ancestry": "ancestry-scaled", "child-class": "child-object" },
+              "caseKey": "1fb36296bfb700d1695f8d0163bc24330286ed7eda8624dfa94ec5cab46f1ee1",
+              "obligationIds": ["ancestry-scaled", "child-class-object"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": ["ancestry=ancestry-scaled", "child-class=child-object"],
+              "scenarioId": null
+            },
+            {
+              "assignments": { "ancestry": "ancestry-identity", "child-class": "child-object" },
+              "caseKey": "377faa5c9a03ca89790e8fb00e125e4c6cf3dd16fdc435352ed6aaa83032c0e1",
+              "obligationIds": ["ancestry-identity", "child-class-object"],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": ["ancestry=ancestry-identity", "child-class=child-object"],
+              "scenarioId": null
+            },
+            {
+              "assignments": { "ancestry": "ancestry-rotated", "child-class": "child-layer" },
+              "caseKey": "48a454521d73b410d2f3ace46347f5fb723bfd2fbfd8c1508dba0b7f61c16962",
+              "obligationIds": ["ancestry-rotated", "child-class-layer"],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": ["ancestry=ancestry-rotated", "child-class=child-layer"],
+              "scenarioId": null
+            },
+            {
+              "assignments": { "ancestry": "ancestry-scaled", "child-class": "child-layer" },
+              "caseKey": "7032d0bcda40dbff2e7edc7c12bbfa9bd1c04c8442a4e39085d7d37665d80120",
+              "obligationIds": ["ancestry-scaled", "child-class-layer"],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": ["ancestry=ancestry-scaled", "child-class=child-layer"],
+              "scenarioId": null
+            },
+            {
+              "assignments": { "ancestry": "ancestry-rotated", "child-class": "child-object" },
+              "caseKey": "a8e6a3acb432d1970facd265b5c5ae4d965e2c438b343a6addb1ee695d401d50",
+              "obligationIds": ["ancestry-rotated", "child-class-object", "risk-nested-rotated"],
+              "origin": "mandatory",
+              "releaseBasis": "declared-release-scenario",
+              "releaseEligible": true,
+              "representativeIds": ["ancestry=ancestry-rotated", "child-class=child-object"],
+              "scenarioId": "move-nested-rotated"
+            }
+          ],
+          "coverageModelFingerprint": "394875017e241b7375e7653ff0f4f7be562627f43fa5ea5295afa91e5e04e1f9",
+          "inputFingerprint": "b52a6b6e6b5d8519595d1aa08ea52ab036ea8c34eab371a4f35ee347caa61188",
+          "obligationMappings": [
+            {
+              "caseKeys": [
+                "13ba425bf9721cb0c71d14b290883ec6ae0788ad5c2c172390f837eeb3b5cf13",
+                "377faa5c9a03ca89790e8fb00e125e4c6cf3dd16fdc435352ed6aaa83032c0e1"
+              ],
+              "kind": "partition",
+              "obligationId": "ancestry-identity",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "48a454521d73b410d2f3ace46347f5fb723bfd2fbfd8c1508dba0b7f61c16962",
+                "a8e6a3acb432d1970facd265b5c5ae4d965e2c438b343a6addb1ee695d401d50"
+              ],
+              "kind": "partition",
+              "obligationId": "ancestry-rotated",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "1fb36296bfb700d1695f8d0163bc24330286ed7eda8624dfa94ec5cab46f1ee1",
+                "7032d0bcda40dbff2e7edc7c12bbfa9bd1c04c8442a4e39085d7d37665d80120"
+              ],
+              "kind": "partition",
+              "obligationId": "ancestry-scaled",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": ["13ba425bf9721cb0c71d14b290883ec6ae0788ad5c2c172390f837eeb3b5cf13"],
+              "kind": "baseline",
+              "obligationId": "baseline-move-child",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "13ba425bf9721cb0c71d14b290883ec6ae0788ad5c2c172390f837eeb3b5cf13",
+                "48a454521d73b410d2f3ace46347f5fb723bfd2fbfd8c1508dba0b7f61c16962",
+                "7032d0bcda40dbff2e7edc7c12bbfa9bd1c04c8442a4e39085d7d37665d80120"
+              ],
+              "kind": "partition",
+              "obligationId": "child-class-layer",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "1fb36296bfb700d1695f8d0163bc24330286ed7eda8624dfa94ec5cab46f1ee1",
+                "377faa5c9a03ca89790e8fb00e125e4c6cf3dd16fdc435352ed6aaa83032c0e1",
+                "a8e6a3acb432d1970facd265b5c5ae4d965e2c438b343a6addb1ee695d401d50"
+              ],
+              "kind": "partition",
+              "obligationId": "child-class-object",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": ["a8e6a3acb432d1970facd265b5c5ae4d965e2c438b343a6addb1ee695d401d50"],
+              "kind": "risk",
+              "obligationId": "risk-nested-rotated",
+              "requiredFor": "release",
+              "satisfied": true
+            }
+          ],
+          "policyVersion": "coverage-selection/v1",
+          "profile": "release",
+          "schemaVersion": 1,
+          "seed": null,
+          "tupleCoverage": {
+            "pairwise": {
+              "covered": 6,
+              "factors": ["ancestry", "child-class"],
+              "required": 6,
+              "strength": 2,
+              "submodelId": null,
+              "uncovered": []
+            },
+            "submodels": []
+          },
+          "uncoveredObligations": [],
+          "warnings": []
+        },
+        "subjectId": "container/object"
+      },
+      {
+        "capability": "create",
+        "modelFingerprint": "4d82d3d36607543a2bd16653ac7961f3a173941960ef23d30a60e93b057130d6",
+        "selection": {
+          "cases": [
+            {
+              "assignments": { "grid-size": "size-small", "seed-mode": "seed-same" },
+              "caseKey": "0af1f337778f6b13c0684a285109de00ccaf528d8b1eda6839b7923c51c87988",
+              "obligationIds": ["grid-size-small", "seed-mode-same"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": ["grid-size=size-small", "seed-mode=seed-same"],
+              "scenarioId": null
+            },
+            {
+              "assignments": { "grid-size": "size-small", "seed-mode": "seed-different" },
+              "caseKey": "806d63fc63e00a0de2a1d291b4f51f3d92b1ea5b45eb2eb03aa803d235a89ebf",
+              "obligationIds": ["grid-size-small", "seed-mode-different"],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": ["grid-size=size-small", "seed-mode=seed-different"],
+              "scenarioId": null
+            },
+            {
+              "assignments": { "grid-size": "size-large", "seed-mode": "seed-different" },
+              "caseKey": "91fc2d7bb5dd9b6c0331ca521042877b851fd47272752e6c89583bb40a9b52dc",
+              "obligationIds": ["grid-size-large", "seed-mode-different"],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": ["grid-size=size-large", "seed-mode=seed-different"],
+              "scenarioId": null
+            },
+            {
+              "assignments": { "grid-size": "size-medium", "seed-mode": "seed-same" },
+              "caseKey": "bc435076f376bb67dc96a07f5f7e53897c5f37088248b1df9f54d3f8f5e06c9b",
+              "obligationIds": ["baseline-create-crossword", "grid-size-medium", "seed-mode-same"],
+              "origin": "baseline",
+              "releaseBasis": "declared-release-scenario",
+              "releaseEligible": true,
+              "representativeIds": ["grid-size=size-medium", "seed-mode=seed-same"],
+              "scenarioId": "create-crossword"
+            },
+            {
+              "assignments": { "grid-size": "size-medium", "seed-mode": "seed-different" },
+              "caseKey": "d777e11f275fd75e0d4f7ea4ab1ee5efb45d0f675e8d834f581773421251ca49",
+              "obligationIds": ["grid-size-medium", "risk-different-seed", "seed-mode-different"],
+              "origin": "mandatory",
+              "releaseBasis": "declared-release-scenario",
+              "releaseEligible": true,
+              "representativeIds": ["grid-size=size-medium", "seed-mode=seed-different"],
+              "scenarioId": "create-crossword-different-seed"
+            },
+            {
+              "assignments": { "grid-size": "size-large", "seed-mode": "seed-same" },
+              "caseKey": "e5e8dc2b32d78b084df467be5aacc4dffe0c4b5e189399c881405daee1b3d610",
+              "obligationIds": ["grid-size-large", "seed-mode-same"],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": ["grid-size=size-large", "seed-mode=seed-same"],
+              "scenarioId": null
+            }
+          ],
+          "coverageModelFingerprint": "4d82d3d36607543a2bd16653ac7961f3a173941960ef23d30a60e93b057130d6",
+          "inputFingerprint": "affaa8e3717eed381fccb1f7afc6d9450d70711471219688753c6c86154036fb",
+          "obligationMappings": [
+            {
+              "caseKeys": ["bc435076f376bb67dc96a07f5f7e53897c5f37088248b1df9f54d3f8f5e06c9b"],
+              "kind": "baseline",
+              "obligationId": "baseline-create-crossword",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "91fc2d7bb5dd9b6c0331ca521042877b851fd47272752e6c89583bb40a9b52dc",
+                "e5e8dc2b32d78b084df467be5aacc4dffe0c4b5e189399c881405daee1b3d610"
+              ],
+              "kind": "partition",
+              "obligationId": "grid-size-large",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "bc435076f376bb67dc96a07f5f7e53897c5f37088248b1df9f54d3f8f5e06c9b",
+                "d777e11f275fd75e0d4f7ea4ab1ee5efb45d0f675e8d834f581773421251ca49"
+              ],
+              "kind": "partition",
+              "obligationId": "grid-size-medium",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "0af1f337778f6b13c0684a285109de00ccaf528d8b1eda6839b7923c51c87988",
+                "806d63fc63e00a0de2a1d291b4f51f3d92b1ea5b45eb2eb03aa803d235a89ebf"
+              ],
+              "kind": "partition",
+              "obligationId": "grid-size-small",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": ["d777e11f275fd75e0d4f7ea4ab1ee5efb45d0f675e8d834f581773421251ca49"],
+              "kind": "risk",
+              "obligationId": "risk-different-seed",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "806d63fc63e00a0de2a1d291b4f51f3d92b1ea5b45eb2eb03aa803d235a89ebf",
+                "91fc2d7bb5dd9b6c0331ca521042877b851fd47272752e6c89583bb40a9b52dc",
+                "d777e11f275fd75e0d4f7ea4ab1ee5efb45d0f675e8d834f581773421251ca49"
+              ],
+              "kind": "partition",
+              "obligationId": "seed-mode-different",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "0af1f337778f6b13c0684a285109de00ccaf528d8b1eda6839b7923c51c87988",
+                "bc435076f376bb67dc96a07f5f7e53897c5f37088248b1df9f54d3f8f5e06c9b",
+                "e5e8dc2b32d78b084df467be5aacc4dffe0c4b5e189399c881405daee1b3d610"
+              ],
+              "kind": "partition",
+              "obligationId": "seed-mode-same",
+              "requiredFor": "release",
+              "satisfied": true
+            }
+          ],
+          "policyVersion": "coverage-selection/v1",
+          "profile": "release",
+          "schemaVersion": 1,
+          "seed": null,
+          "tupleCoverage": {
+            "pairwise": {
+              "covered": 6,
+              "factors": ["grid-size", "seed-mode"],
+              "required": 6,
+              "strength": 2,
+              "submodelId": null,
+              "uncovered": []
+            },
+            "submodels": []
+          },
+          "uncoveredObligations": [],
+          "warnings": []
+        },
+        "subjectId": "layer/crossword"
+      },
+      {
+        "capability": "changeProperties",
+        "modelFingerprint": "99c603cb51805efe8676f632bd35b0b40b819286ef78c99a22e31ece6d4e7e62",
+        "selection": {
+          "cases": [
+            {
+              "assignments": {
+                "containment": "containment-editor",
+                "fit": "fit-cover",
+                "resource-state": "state-current-a"
+              },
+              "caseKey": "68894dddbaa79eb93188db567751b7a7879ad0489d52ea3e3a54f29cd0d95fa7",
+              "obligationIds": ["containment-editor", "fit-cover", "state-current"],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "containment=containment-editor",
+                "fit=fit-cover",
+                "resource-state=state-current-a"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "containment": "containment-editor",
+                "fit": "fit-contain",
+                "resource-state": "state-current-a"
+              },
+              "caseKey": "9c106b6c9326ab0d4d95c23dbdfac82c850a6a2cfabf60ccd8f82bce18ac6a6b",
+              "obligationIds": [
+                "baseline-replace-image",
+                "containment-editor",
+                "fit-contain",
+                "state-current"
+              ],
+              "origin": "baseline",
+              "releaseBasis": "declared-release-scenario",
+              "releaseEligible": true,
+              "representativeIds": [
+                "containment=containment-editor",
+                "fit=fit-contain",
+                "resource-state=state-current-a"
+              ],
+              "scenarioId": "replace-image"
+            },
+            {
+              "assignments": {
+                "containment": "containment-nested-object",
+                "fit": "fit-cover",
+                "resource-state": "state-current-a"
+              },
+              "caseKey": "ab150cb3c7072fb2fb4e77f878d64c65ddbb170666258fb5c86b94e1f58e5ddb",
+              "obligationIds": ["containment-nested-object", "fit-cover", "state-current"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "containment=containment-nested-object",
+                "fit=fit-cover",
+                "resource-state=state-current-a"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "containment": "containment-nested-object",
+                "fit": "fit-contain",
+                "resource-state": "state-current-a"
+              },
+              "caseKey": "d49505614a6bc3d865506f3d45b4d8cc74d14b27c60b4266d78501df473e55dd",
+              "obligationIds": ["containment-nested-object", "fit-contain", "state-current"],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "containment=containment-nested-object",
+                "fit=fit-contain",
+                "resource-state=state-current-a"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "containment": "containment-editor",
+                "fit": "fit-contain",
+                "resource-state": "state-pending-b"
+              },
+              "caseKey": "f681d2894b2d3c72fa36f714056ea39dd285e7ce5f16fba197f9cc9e27c5696e",
+              "obligationIds": [
+                "containment-editor",
+                "fit-contain",
+                "risk-pending-control",
+                "state-pending"
+              ],
+              "origin": "mandatory",
+              "releaseBasis": "declared-release-scenario",
+              "releaseEligible": true,
+              "representativeIds": [
+                "containment=containment-editor",
+                "fit=fit-contain",
+                "resource-state=state-pending-b"
+              ],
+              "scenarioId": "replace-pending-control"
+            }
+          ],
+          "coverageModelFingerprint": "99c603cb51805efe8676f632bd35b0b40b819286ef78c99a22e31ece6d4e7e62",
+          "inputFingerprint": "bf07d29af0b7251cbc28634ce03d2ce45648c1fad1c7a9e8d7962e19aad37100",
+          "obligationMappings": [
+            {
+              "caseKeys": ["9c106b6c9326ab0d4d95c23dbdfac82c850a6a2cfabf60ccd8f82bce18ac6a6b"],
+              "kind": "baseline",
+              "obligationId": "baseline-replace-image",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "68894dddbaa79eb93188db567751b7a7879ad0489d52ea3e3a54f29cd0d95fa7",
+                "9c106b6c9326ab0d4d95c23dbdfac82c850a6a2cfabf60ccd8f82bce18ac6a6b",
+                "f681d2894b2d3c72fa36f714056ea39dd285e7ce5f16fba197f9cc9e27c5696e"
+              ],
+              "kind": "partition",
+              "obligationId": "containment-editor",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "ab150cb3c7072fb2fb4e77f878d64c65ddbb170666258fb5c86b94e1f58e5ddb",
+                "d49505614a6bc3d865506f3d45b4d8cc74d14b27c60b4266d78501df473e55dd"
+              ],
+              "kind": "partition",
+              "obligationId": "containment-nested-object",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "9c106b6c9326ab0d4d95c23dbdfac82c850a6a2cfabf60ccd8f82bce18ac6a6b",
+                "d49505614a6bc3d865506f3d45b4d8cc74d14b27c60b4266d78501df473e55dd",
+                "f681d2894b2d3c72fa36f714056ea39dd285e7ce5f16fba197f9cc9e27c5696e"
+              ],
+              "kind": "partition",
+              "obligationId": "fit-contain",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "68894dddbaa79eb93188db567751b7a7879ad0489d52ea3e3a54f29cd0d95fa7",
+                "ab150cb3c7072fb2fb4e77f878d64c65ddbb170666258fb5c86b94e1f58e5ddb"
+              ],
+              "kind": "partition",
+              "obligationId": "fit-cover",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": ["f681d2894b2d3c72fa36f714056ea39dd285e7ce5f16fba197f9cc9e27c5696e"],
+              "kind": "risk",
+              "obligationId": "risk-pending-control",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "68894dddbaa79eb93188db567751b7a7879ad0489d52ea3e3a54f29cd0d95fa7",
+                "9c106b6c9326ab0d4d95c23dbdfac82c850a6a2cfabf60ccd8f82bce18ac6a6b",
+                "ab150cb3c7072fb2fb4e77f878d64c65ddbb170666258fb5c86b94e1f58e5ddb",
+                "d49505614a6bc3d865506f3d45b4d8cc74d14b27c60b4266d78501df473e55dd"
+              ],
+              "kind": "partition",
+              "obligationId": "state-current",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": ["f681d2894b2d3c72fa36f714056ea39dd285e7ce5f16fba197f9cc9e27c5696e"],
+              "kind": "partition",
+              "obligationId": "state-pending",
+              "requiredFor": "release",
+              "satisfied": true
+            }
+          ],
+          "policyVersion": "coverage-selection/v1",
+          "profile": "release",
+          "schemaVersion": 1,
+          "seed": null,
+          "tupleCoverage": {
+            "pairwise": {
+              "covered": 4,
+              "factors": ["containment", "fit"],
+              "required": 4,
+              "strength": 2,
+              "submodelId": null,
+              "uncovered": []
+            },
+            "submodels": []
+          },
+          "uncoveredObligations": [],
+          "warnings": []
+        },
+        "subjectId": "layer/image"
+      },
+      {
+        "capability": "move",
+        "modelFingerprint": "861479f449030adfc7d09b25d452ed3d65cde512da29f291761cd17239274d0f",
+        "selection": {
+          "cases": [
+            {
+              "assignments": {
+                "ancestry": "rotated-ancestor",
+                "displacement": "large",
+                "interaction": "pointer-drag",
+                "rendering-mode": "plain"
+              },
+              "caseKey": "1c3b10a90a97d56b3497a98a573d2d98bd37ac1a4a2fa2441b21330ffe68de88",
+              "obligationIds": [
+                "ancestry-transformed",
+                "boundary-displacement-large",
+                "interaction-pointer",
+                "mode-ordinary"
+              ],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestry=rotated-ancestor",
+                "displacement=large",
+                "interaction=pointer-drag",
+                "rendering-mode=plain"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestry": "identity",
+                "displacement": "large",
+                "interaction": "pointer-drag",
+                "rendering-mode": "warp-circle"
+              },
+              "caseKey": "28ca032f172607385a5780b59168f5b3c2dca2547d99dacd2c6da3f0d69b8b2c",
+              "obligationIds": [
+                "ancestry-flat",
+                "boundary-displacement-large",
+                "interaction-pointer",
+                "mode-warped"
+              ],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestry=identity",
+                "displacement=large",
+                "interaction=pointer-drag",
+                "rendering-mode=warp-circle"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestry": "identity",
+                "displacement": "small",
+                "interaction": "pointer-drag",
+                "rendering-mode": "plain"
+              },
+              "caseKey": "31119fddcd4f8fdae6c62d460242fefa2dd74e4dd547a6f620f1bd963c1f3077",
+              "obligationIds": ["ancestry-flat", "interaction-pointer", "mode-ordinary"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestry=identity",
+                "displacement=small",
+                "interaction=pointer-drag",
+                "rendering-mode=plain"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestry": "identity",
+                "displacement": "large",
+                "interaction": "pointer-drag",
+                "rendering-mode": "plain"
+              },
+              "caseKey": "3326266386c0f04deb61870c24e827b43b1900646f3f092c809540b39ebc87a5",
+              "obligationIds": [
+                "ancestry-flat",
+                "boundary-displacement-large",
+                "interaction-pointer",
+                "mode-ordinary"
+              ],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestry=identity",
+                "displacement=large",
+                "interaction=pointer-drag",
+                "rendering-mode=plain"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestry": "identity",
+                "displacement": "small",
+                "interaction": "keyboard-nudge",
+                "rendering-mode": "plain"
+              },
+              "caseKey": "74f9de09a3c788ef758497fb24d5f4d83b967eed718e7b833e1b0a794ad9e042",
+              "obligationIds": ["ancestry-flat", "interaction-keyboard", "mode-ordinary"],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestry=identity",
+                "displacement=small",
+                "interaction=keyboard-nudge",
+                "rendering-mode=plain"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestry": "transformed-container",
+                "displacement": "typical",
+                "interaction": "pointer-drag",
+                "rendering-mode": "warp-circle"
+              },
+              "caseKey": "c4799f47d47495effa50d751f85a403f34be906d5c369652d2f1fd26a817b0f8",
+              "obligationIds": [
+                "ancestry-transformed",
+                "interaction-pointer",
+                "mode-warped",
+                "risk-warped-nested"
+              ],
+              "origin": "mandatory",
+              "releaseBasis": "declared-release-scenario",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestry=transformed-container",
+                "displacement=typical",
+                "interaction=pointer-drag",
+                "rendering-mode=warp-circle"
+              ],
+              "scenarioId": "drag-warped-nested"
+            },
+            {
+              "assignments": {
+                "ancestry": "identity",
+                "displacement": "typical",
+                "interaction": "keyboard-nudge",
+                "rendering-mode": "plain"
+              },
+              "caseKey": "cc27226d457ac8793c04684e1d17e667ea57d54a8383383d173652dc65af38c9",
+              "obligationIds": ["ancestry-flat", "interaction-keyboard", "mode-ordinary"],
+              "origin": "residual",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestry=identity",
+                "displacement=typical",
+                "interaction=keyboard-nudge",
+                "rendering-mode=plain"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestry": "nested-layout",
+                "displacement": "large",
+                "interaction": "pointer-drag",
+                "rendering-mode": "plain"
+              },
+              "caseKey": "dcd198f400080b22489921877ed0f6060b0674a6afd2cc137b64c360fc63d893",
+              "obligationIds": [
+                "ancestry-nested",
+                "boundary-displacement-large",
+                "interaction-pointer",
+                "mode-ordinary"
+              ],
+              "origin": "partition",
+              "releaseBasis": "non-scenario-release-assignment",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestry=nested-layout",
+                "displacement=large",
+                "interaction=pointer-drag",
+                "rendering-mode=plain"
+              ],
+              "scenarioId": null
+            },
+            {
+              "assignments": {
+                "ancestry": "identity",
+                "displacement": "typical",
+                "interaction": "pointer-drag",
+                "rendering-mode": "plain"
+              },
+              "caseKey": "de59e7afebc2b966d83e1cc144c0b1243b75eecdda5976a75c907a367a3cb6dd",
+              "obligationIds": [
+                "ancestry-flat",
+                "baseline-drag-ordinary",
+                "interaction-pointer",
+                "mode-ordinary"
+              ],
+              "origin": "baseline",
+              "releaseBasis": "declared-release-scenario",
+              "releaseEligible": true,
+              "representativeIds": [
+                "ancestry=identity",
+                "displacement=typical",
+                "interaction=pointer-drag",
+                "rendering-mode=plain"
+              ],
+              "scenarioId": "drag-ordinary"
+            }
+          ],
+          "coverageModelFingerprint": "861479f449030adfc7d09b25d452ed3d65cde512da29f291761cd17239274d0f",
+          "inputFingerprint": "8ecd23658e297abb4477c70155a7eda9dd3286b4900328e373832ba6e8476cda",
+          "obligationMappings": [
+            {
+              "caseKeys": [
+                "28ca032f172607385a5780b59168f5b3c2dca2547d99dacd2c6da3f0d69b8b2c",
+                "31119fddcd4f8fdae6c62d460242fefa2dd74e4dd547a6f620f1bd963c1f3077",
+                "3326266386c0f04deb61870c24e827b43b1900646f3f092c809540b39ebc87a5",
+                "74f9de09a3c788ef758497fb24d5f4d83b967eed718e7b833e1b0a794ad9e042",
+                "cc27226d457ac8793c04684e1d17e667ea57d54a8383383d173652dc65af38c9",
+                "de59e7afebc2b966d83e1cc144c0b1243b75eecdda5976a75c907a367a3cb6dd"
+              ],
+              "kind": "partition",
+              "obligationId": "ancestry-flat",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": ["dcd198f400080b22489921877ed0f6060b0674a6afd2cc137b64c360fc63d893"],
+              "kind": "partition",
+              "obligationId": "ancestry-nested",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "1c3b10a90a97d56b3497a98a573d2d98bd37ac1a4a2fa2441b21330ffe68de88",
+                "c4799f47d47495effa50d751f85a403f34be906d5c369652d2f1fd26a817b0f8"
+              ],
+              "kind": "partition",
+              "obligationId": "ancestry-transformed",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": ["de59e7afebc2b966d83e1cc144c0b1243b75eecdda5976a75c907a367a3cb6dd"],
+              "kind": "baseline",
+              "obligationId": "baseline-drag-ordinary",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "1c3b10a90a97d56b3497a98a573d2d98bd37ac1a4a2fa2441b21330ffe68de88",
+                "28ca032f172607385a5780b59168f5b3c2dca2547d99dacd2c6da3f0d69b8b2c",
+                "3326266386c0f04deb61870c24e827b43b1900646f3f092c809540b39ebc87a5",
+                "dcd198f400080b22489921877ed0f6060b0674a6afd2cc137b64c360fc63d893"
+              ],
+              "kind": "boundary",
+              "obligationId": "boundary-displacement-large",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "74f9de09a3c788ef758497fb24d5f4d83b967eed718e7b833e1b0a794ad9e042",
+                "cc27226d457ac8793c04684e1d17e667ea57d54a8383383d173652dc65af38c9"
+              ],
+              "kind": "interaction",
+              "obligationId": "interaction-keyboard",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "1c3b10a90a97d56b3497a98a573d2d98bd37ac1a4a2fa2441b21330ffe68de88",
+                "28ca032f172607385a5780b59168f5b3c2dca2547d99dacd2c6da3f0d69b8b2c",
+                "31119fddcd4f8fdae6c62d460242fefa2dd74e4dd547a6f620f1bd963c1f3077",
+                "3326266386c0f04deb61870c24e827b43b1900646f3f092c809540b39ebc87a5",
+                "c4799f47d47495effa50d751f85a403f34be906d5c369652d2f1fd26a817b0f8",
+                "dcd198f400080b22489921877ed0f6060b0674a6afd2cc137b64c360fc63d893",
+                "de59e7afebc2b966d83e1cc144c0b1243b75eecdda5976a75c907a367a3cb6dd"
+              ],
+              "kind": "interaction",
+              "obligationId": "interaction-pointer",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "1c3b10a90a97d56b3497a98a573d2d98bd37ac1a4a2fa2441b21330ffe68de88",
+                "31119fddcd4f8fdae6c62d460242fefa2dd74e4dd547a6f620f1bd963c1f3077",
+                "3326266386c0f04deb61870c24e827b43b1900646f3f092c809540b39ebc87a5",
+                "74f9de09a3c788ef758497fb24d5f4d83b967eed718e7b833e1b0a794ad9e042",
+                "cc27226d457ac8793c04684e1d17e667ea57d54a8383383d173652dc65af38c9",
+                "dcd198f400080b22489921877ed0f6060b0674a6afd2cc137b64c360fc63d893",
+                "de59e7afebc2b966d83e1cc144c0b1243b75eecdda5976a75c907a367a3cb6dd"
+              ],
+              "kind": "partition",
+              "obligationId": "mode-ordinary",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": [
+                "28ca032f172607385a5780b59168f5b3c2dca2547d99dacd2c6da3f0d69b8b2c",
+                "c4799f47d47495effa50d751f85a403f34be906d5c369652d2f1fd26a817b0f8"
+              ],
+              "kind": "partition",
+              "obligationId": "mode-warped",
+              "requiredFor": "release",
+              "satisfied": true
+            },
+            {
+              "caseKeys": ["c4799f47d47495effa50d751f85a403f34be906d5c369652d2f1fd26a817b0f8"],
+              "kind": "risk",
+              "obligationId": "risk-warped-nested",
+              "requiredFor": "release",
+              "satisfied": true
+            }
+          ],
+          "policyVersion": "coverage-selection/v1",
+          "profile": "release",
+          "schemaVersion": 1,
+          "seed": null,
+          "tupleCoverage": {
+            "pairwise": {
+              "covered": 5,
+              "factors": ["displacement", "interaction"],
+              "required": 5,
+              "strength": 2,
+              "submodelId": null,
+              "uncovered": []
+            },
+            "submodels": []
+          },
+          "uncoveredObligations": [],
+          "warnings": []
+        },
+        "subjectId": "layer/text"
+      }
+    ],
+    "coverageCatalogueFingerprint": "430fc1903de428da0352771b7d24ccacdf3c4371273c5a0f5186249f1e5bbbf5",
+    "entries": [
+      {
+        "capability": "frontendSerializeRestore",
+        "caseId": "c19b842f8b1018cca03db845673acba86e750be755e5d76e2a7ef3f25701ad86",
+        "caseKey": "648211a50ee9b368775f22eb96bcd7cc3cbeb103eb3f5f28a9524cc3a3f1a6ec",
+        "cell": {
+          "browserChannel": "bundled",
+          "browserKind": "chromium",
+          "cellId": "chromium-desktop-1440x1000",
+          "classification": "required-credit",
+          "colorScheme": "light",
+          "deviceScaleFactor": 1,
+          "geolocation": null,
+          "locale": "en-US",
+          "permissions": [],
+          "playwrightVersion": "1.59.1",
+          "reducedMotion": "no-preference",
+          "storageState": null,
+          "timezoneId": "UTC",
+          "viewport": { "height": 1000, "width": 1440 }
+        },
+        "entryId": "cddacddbea78bcc47f3a68bdacb404496d232d26c77d187ba6fdeba8a75c2569",
+        "executionProfileIdentity": "c1c8240615cc52740c0ef82b5ac5e4c81c1951cb6a21744c4b16e7edda8f5750",
+        "materializationFingerprint": "b5317feacc8a09b5d232a78c6250a1df4e5de032f370de132e306f52fd8bb4f1",
+        "obligationIds": ["normalization-raw-semantic", "risk-raw-semantic", "subject-mix-mixed"],
+        "planFingerprint": "269ccf9aff67c044416fb5ec2ed82f507e14bbe8e3ba3b03bbe6b8184d1ad6f1",
+        "request": {
+          "evidenceDepth": "standard",
+          "intent": {
+            "capability": "frontendSerializeRestore",
+            "expected": {},
+            "operations": [{ "discriminant": "serialize.roundtrip", "parameters": {} }],
+            "preState": {},
+            "resources": [],
+            "scenario": "serialize-raw-semantic",
+            "subjectId": "artwork/editor",
+            "variant": null
+          },
+          "profile": "release",
+          "provenance": "manifest",
+          "schemaVersion": 1
+        },
+        "requestDigest": "e85e67b9e13d017c7e0bca1aec12ffabbb9b7cb4de50707ad26e5d32d05fbbfc",
+        "scenarioId": "serialize-raw-semantic",
+        "subjectId": "artwork/editor",
+        "templateId": "artwork-editor-serialize-restore-mixed-raw"
+      },
+      {
+        "capability": "frontendSerializeRestore",
+        "caseId": "b0f3d39b062182ec96e4ab97b1202dbc89b16a892acc34ee39d22a39cb23af67",
+        "caseKey": "a5b19d688203eb0c69ca14898425f62dd8ed5e22e2d7e6cd33f5662861105dd7",
+        "cell": {
+          "browserChannel": "bundled",
+          "browserKind": "chromium",
+          "cellId": "chromium-desktop-1440x1000",
+          "classification": "required-credit",
+          "colorScheme": "light",
+          "deviceScaleFactor": 1,
+          "geolocation": null,
+          "locale": "en-US",
+          "permissions": [],
+          "playwrightVersion": "1.59.1",
+          "reducedMotion": "no-preference",
+          "storageState": null,
+          "timezoneId": "UTC",
+          "viewport": { "height": 1000, "width": 1440 }
+        },
+        "entryId": "64e71c2a7d930f5d79b42c4a88c0b3cce5d50532a4eb970110d377e948801215",
+        "executionProfileIdentity": "c1c8240615cc52740c0ef82b5ac5e4c81c1951cb6a21744c4b16e7edda8f5750",
+        "materializationFingerprint": "98ad2995199692565a4bc33dc3880e76d6bf5b0fa5a5388e2c63fa8c0ec342cd",
+        "obligationIds": [
+          "baseline-serialize-roundtrip",
+          "normalization-normalized",
+          "subject-mix-single"
+        ],
+        "planFingerprint": "798801eba87d9d24e9ccb88503801d3753915efb5b6ecb0a73777c95ca4bf6f9",
+        "request": {
+          "evidenceDepth": "standard",
+          "intent": {
+            "capability": "frontendSerializeRestore",
+            "expected": {},
+            "operations": [{ "discriminant": "serialize.roundtrip", "parameters": {} }],
+            "preState": {},
+            "resources": [],
+            "scenario": "serialize-roundtrip",
+            "subjectId": "artwork/editor",
+            "variant": null
+          },
+          "profile": "release",
+          "provenance": "manifest",
+          "schemaVersion": 1
+        },
+        "requestDigest": "ab4e6f0fe1a0ddf6a37166b78c944d2438d51023a434272af3279f2ebbfe1bd9",
+        "scenarioId": "serialize-roundtrip",
+        "subjectId": "artwork/editor",
+        "templateId": "artwork-editor-serialize-restore-normalized"
+      },
+      {
+        "capability": "history",
+        "caseId": "76eadd5ad7b6c06eee55db07e455e45f0b1567fb7af6443319d7aacb5c6d9262",
+        "caseKey": "a0592e55b96496ad4885edee149da17009ae9077f620a86111c792c96b1fba2d",
+        "cell": {
+          "browserChannel": "bundled",
+          "browserKind": "chromium",
+          "cellId": "chromium-desktop-1440x1000",
+          "classification": "required-credit",
+          "colorScheme": "light",
+          "deviceScaleFactor": 1,
+          "geolocation": null,
+          "locale": "en-US",
+          "permissions": [],
+          "playwrightVersion": "1.59.1",
+          "reducedMotion": "no-preference",
+          "storageState": null,
+          "timezoneId": "UTC",
+          "viewport": { "height": 1000, "width": 1440 }
+        },
+        "entryId": "be05b2d7bf9bfc6993c85a26c8ad2f5aa4c44d585e2b6ab5085bed989ef453fe",
+        "executionProfileIdentity": "c1c8240615cc52740c0ef82b5ac5e4c81c1951cb6a21744c4b16e7edda8f5750",
+        "materializationFingerprint": "46d651a40357d8978fa7b85dca3429092feb763f892d21f108cdcafe273c320a",
+        "obligationIds": ["baseline-undo-redo-text", "direction-release", "subject-class-text"],
+        "planFingerprint": "d8a6b317900730171188fdceaf7b825cf17e793cde1b3de86d6ca6b2e95cc7dc",
+        "request": {
+          "evidenceDepth": "standard",
+          "intent": {
+            "capability": "history",
+            "expected": {},
+            "operations": [{ "discriminant": "history.undo", "parameters": {} }],
+            "preState": {},
+            "resources": [],
+            "scenario": "undo-redo-text",
+            "subjectId": "artwork/editor",
+            "variant": null
+          },
+          "profile": "release",
+          "provenance": "manifest",
+          "schemaVersion": 1
+        },
+        "requestDigest": "d4882d42b845d85548c2fc9d8f4777c5a7eff1ad94e12b1ee53d30bb25b6f4f7",
+        "scenarioId": "undo-redo-text",
+        "subjectId": "artwork/editor",
+        "templateId": "artwork-editor-history-undo-redo"
+      },
+      {
+        "capability": "move",
+        "caseId": "69d91a528e7ceab705be5a92093b89d477c43b2e4fb785502996ceb5cb9f730a",
+        "caseKey": "a8e6a3acb432d1970facd265b5c5ae4d965e2c438b343a6addb1ee695d401d50",
+        "cell": {
+          "browserChannel": "bundled",
+          "browserKind": "chromium",
+          "cellId": "chromium-desktop-1440x1000",
+          "classification": "required-credit",
+          "colorScheme": "light",
+          "deviceScaleFactor": 1,
+          "geolocation": null,
+          "locale": "en-US",
+          "permissions": [],
+          "playwrightVersion": "1.59.1",
+          "reducedMotion": "no-preference",
+          "storageState": null,
+          "timezoneId": "UTC",
+          "viewport": { "height": 1000, "width": 1440 }
+        },
+        "entryId": "a4b6441d2031a7082333a91ad2fd0c97f0c2e2e711b473bf5c66be9ab7487519",
+        "executionProfileIdentity": "c1c8240615cc52740c0ef82b5ac5e4c81c1951cb6a21744c4b16e7edda8f5750",
+        "materializationFingerprint": "e677cfed5c36b3bc5d9af3da4502b7b1e214a7b5d333da9b23b43476a81dddef",
+        "obligationIds": ["ancestry-rotated", "child-class-object", "risk-nested-rotated"],
+        "planFingerprint": "3241c27ae71e3671b0d6cdcaf305123b387380880f876383fca7d3ddcbd9205c",
+        "request": {
+          "evidenceDepth": "standard",
+          "intent": {
+            "capability": "move",
+            "expected": { "minimumDelta": { "x": 40, "y": 20 } },
+            "operations": [{ "discriminant": "move.by", "parameters": { "dx": 72, "dy": 36 } }],
+            "preState": {},
+            "resources": [],
+            "scenario": "move-nested-rotated",
+            "subjectId": "container/object",
+            "variant": null
+          },
+          "profile": "release",
+          "provenance": "manifest",
+          "schemaVersion": 1
+        },
+        "requestDigest": "54717913092075cb1ed961aecabf9e93ccca2e8e81c0ca08c001450c3c5a6400",
+        "scenarioId": "move-nested-rotated",
+        "subjectId": "container/object",
+        "templateId": "container-object-move-nested-rotated"
+      },
+      {
+        "capability": "create",
+        "caseId": "243cb9c1d7edc26e64d5afcfda221d28bd59dfdc68a20d123d6fc781fe512f84",
+        "caseKey": "bc435076f376bb67dc96a07f5f7e53897c5f37088248b1df9f54d3f8f5e06c9b",
+        "cell": {
+          "browserChannel": "bundled",
+          "browserKind": "chromium",
+          "cellId": "chromium-desktop-1440x1000",
+          "classification": "required-credit",
+          "colorScheme": "light",
+          "deviceScaleFactor": 1,
+          "geolocation": null,
+          "locale": "en-US",
+          "permissions": [],
+          "playwrightVersion": "1.59.1",
+          "reducedMotion": "no-preference",
+          "storageState": null,
+          "timezoneId": "UTC",
+          "viewport": { "height": 1000, "width": 1440 }
+        },
+        "entryId": "dfd55a47504b6e690245da8fcffc5b9165ca82b7c162a7eb515f9670486ca844",
+        "executionProfileIdentity": "c1c8240615cc52740c0ef82b5ac5e4c81c1951cb6a21744c4b16e7edda8f5750",
+        "materializationFingerprint": "a68acaac8fa46578f89202cae78126ce4bd1bb911cdde92379501e39ba2b576c",
+        "obligationIds": ["baseline-create-crossword", "grid-size-medium", "seed-mode-same"],
+        "planFingerprint": "804c874be43c18b8c2666522495718ec2a58ff0c4f90483ea70453a277711162",
+        "request": {
+          "evidenceDepth": "standard",
+          "intent": {
+            "capability": "create",
+            "expected": {},
+            "operations": [{ "discriminant": "create.generated", "parameters": {} }],
+            "preState": {},
+            "resources": [],
+            "scenario": "create-crossword",
+            "subjectId": "layer/crossword",
+            "variant": null
+          },
+          "profile": "release",
+          "provenance": "manifest",
+          "schemaVersion": 1
+        },
+        "requestDigest": "bc1b40f79cf964d4b0df7d43460d2864d35dccf69dbe05d8a0c08a75707bf955",
+        "scenarioId": "create-crossword",
+        "subjectId": "layer/crossword",
+        "templateId": "layer-crossword-create"
+      },
+      {
+        "capability": "changeProperties",
+        "caseId": "7f8aee1166fc1e111f9178e7ed38a2d83669e15653f4616e0c284899e59f55c9",
+        "caseKey": "9c106b6c9326ab0d4d95c23dbdfac82c850a6a2cfabf60ccd8f82bce18ac6a6b",
+        "cell": {
+          "browserChannel": "bundled",
+          "browserKind": "chromium",
+          "cellId": "chromium-desktop-1440x1000",
+          "classification": "required-credit",
+          "colorScheme": "light",
+          "deviceScaleFactor": 1,
+          "geolocation": null,
+          "locale": "en-US",
+          "permissions": [],
+          "playwrightVersion": "1.59.1",
+          "reducedMotion": "no-preference",
+          "storageState": null,
+          "timezoneId": "UTC",
+          "viewport": { "height": 1000, "width": 1440 }
+        },
+        "entryId": "a1785d09ebbe5377b9c80d2f8dd5274a26350749c90087d30d4c9a580d5fa8b0",
+        "executionProfileIdentity": "c1c8240615cc52740c0ef82b5ac5e4c81c1951cb6a21744c4b16e7edda8f5750",
+        "materializationFingerprint": "f650c5def85b31ccc4d470d3580ed50cc2fc1958dcac93dd28fdb213ed6e5845",
+        "obligationIds": [
+          "baseline-replace-image",
+          "containment-editor",
+          "fit-contain",
+          "state-current"
+        ],
+        "planFingerprint": "0e6a22756698898b069858ae918bb8c38efbbaad4af8d029dac860527d4d34f9",
+        "request": {
+          "evidenceDepth": "standard",
+          "intent": {
+            "capability": "changeProperties",
+            "expected": {
+              "imageFrame": { "height": 240, "rotation": 0, "width": 320, "x": 90, "y": 110 }
+            },
+            "operations": [{ "discriminant": "changeProperties.apply", "parameters": {} }],
+            "preState": { "containment": "editor", "fit": "contain", "imageState": "current-a" },
+            "resources": [],
+            "scenario": "replace-image",
+            "subjectId": "layer/image",
+            "variant": "static"
+          },
+          "profile": "release",
+          "provenance": "manifest",
+          "schemaVersion": 1
+        },
+        "requestDigest": "128aadec3b35fab4c907476edf99b11032e788afb3b54afa58c8680f79b06efb",
+        "scenarioId": "replace-image",
+        "subjectId": "layer/image",
+        "templateId": "layer-image-upload-replace"
+      },
+      {
+        "capability": "move",
+        "caseId": "bb3c9f9349a70a968dec453e18c9602faef15fcee4c4ba1bca035dc1dff54274",
+        "caseKey": "c4799f47d47495effa50d751f85a403f34be906d5c369652d2f1fd26a817b0f8",
+        "cell": {
+          "browserChannel": "bundled",
+          "browserKind": "chromium",
+          "cellId": "chromium-desktop-1440x1000",
+          "classification": "required-credit",
+          "colorScheme": "light",
+          "deviceScaleFactor": 1,
+          "geolocation": null,
+          "locale": "en-US",
+          "permissions": [],
+          "playwrightVersion": "1.59.1",
+          "reducedMotion": "no-preference",
+          "storageState": null,
+          "timezoneId": "UTC",
+          "viewport": { "height": 1000, "width": 1440 }
+        },
+        "entryId": "3b244208ea3d8f1e373d63fb8611fcbc9e7680822423a92a987d9aab052ef3b0",
+        "executionProfileIdentity": "c1c8240615cc52740c0ef82b5ac5e4c81c1951cb6a21744c4b16e7edda8f5750",
+        "materializationFingerprint": "78372bc710e51e9506ed0967e5972f10ec653d3f84dece3ec88bc7fbaa0b24ba",
+        "obligationIds": [
+          "ancestry-transformed",
+          "interaction-pointer",
+          "mode-warped",
+          "risk-warped-nested"
+        ],
+        "planFingerprint": "31bf3e4a725d1b4218076223fc8cd9814ed10b09dd93b92a89b40b634fa05154",
+        "request": {
+          "evidenceDepth": "standard",
+          "intent": {
+            "capability": "move",
+            "expected": { "minimumDelta": { "x": 40, "y": 20 } },
+            "operations": [{ "discriminant": "move.by", "parameters": { "dx": 80, "dy": 40 } }],
+            "preState": { "x": 125, "y": 125 },
+            "resources": [],
+            "scenario": "drag-warped-nested",
+            "subjectId": "layer/text",
+            "variant": "warp-circle"
+          },
+          "profile": "release",
+          "provenance": "manifest",
+          "schemaVersion": 1
+        },
+        "requestDigest": "00842073c677cadc7cff40ef9eafce0f5b8b0b2bb7465a848e24866a28385a3e",
+        "scenarioId": "drag-warped-nested",
+        "subjectId": "layer/text",
+        "templateId": "layer-text-move-drag-warped-nested"
+      },
+      {
+        "capability": "move",
+        "caseId": "506afaa6864d5230947582e74bf7d38ef65fa1bada1a2b888edbb28680714096",
+        "caseKey": "de59e7afebc2b966d83e1cc144c0b1243b75eecdda5976a75c907a367a3cb6dd",
+        "cell": {
+          "browserChannel": "bundled",
+          "browserKind": "chromium",
+          "cellId": "chromium-desktop-1440x1000",
+          "classification": "required-credit",
+          "colorScheme": "light",
+          "deviceScaleFactor": 1,
+          "geolocation": null,
+          "locale": "en-US",
+          "permissions": [],
+          "playwrightVersion": "1.59.1",
+          "reducedMotion": "no-preference",
+          "storageState": null,
+          "timezoneId": "UTC",
+          "viewport": { "height": 1000, "width": 1440 }
+        },
+        "entryId": "9b9f80738bc7ba115ba5c173f943293c6e386897e37e0ab893dcb995824bc469",
+        "executionProfileIdentity": "c1c8240615cc52740c0ef82b5ac5e4c81c1951cb6a21744c4b16e7edda8f5750",
+        "materializationFingerprint": "dcea52524dbc361321f748ffe8b5d27d6ef2b8d8fc6308e4b539231b83b0b868",
+        "obligationIds": [
+          "ancestry-flat",
+          "baseline-drag-ordinary",
+          "interaction-pointer",
+          "mode-ordinary"
+        ],
+        "planFingerprint": "0c1d35d8248c9e1c2766f7c6e4836af2f853b30887e38a43f4a233641a570f55",
+        "request": {
+          "evidenceDepth": "standard",
+          "intent": {
+            "capability": "move",
+            "expected": { "minimumDelta": { "x": 40, "y": 20 } },
+            "operations": [{ "discriminant": "move.by", "parameters": { "dx": 80, "dy": 40 } }],
+            "preState": { "x": 10, "y": 10 },
+            "resources": [],
+            "scenario": "drag-ordinary",
+            "subjectId": "layer/text",
+            "variant": "plain"
+          },
+          "profile": "release",
+          "provenance": "manifest",
+          "schemaVersion": 1
+        },
+        "requestDigest": "60a097e6187843e62639ad2d24a90e3cf4282ba305a61763796d5286577aaef1",
+        "scenarioId": "drag-ordinary",
+        "subjectId": "layer/text",
+        "templateId": "layer-text-move-drag-ordinary"
+      }
+    ],
+    "environmentCatalogueFingerprint": "21f041256791fcd2afc2805df94fd354e81099b87fabe7b44dab9d3a8f604482",
+    "exclusions": [
+      {
+        "assignments": { "normalization": "norm-normalized", "subject-mix": "mix-mixed" },
+        "capability": "frontendSerializeRestore",
+        "caseKey": "118980df8a5ad5ace41cf8c21105c40c5b951ded0970d1c4dcfbfc2e8da97b80",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "artwork/editor"
+      },
+      {
+        "assignments": { "normalization": "norm-raw-semantic", "subject-mix": "mix-single-text" },
+        "capability": "frontendSerializeRestore",
+        "caseKey": "d00f8ab96bcbc8894b39215b1f79f5333b6395ff901c3fb221e06a79867fab5f",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "artwork/editor"
+      },
+      {
+        "assignments": { "direction": "direction-undo", "subject-class": "class-image" },
+        "capability": "history",
+        "caseKey": "09f120d84689c53222a151ced1b58d178b6c2da70044175673b4c1399db398cb",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "artwork/editor"
+      },
+      {
+        "assignments": { "direction": "direction-redo", "subject-class": "class-text" },
+        "capability": "history",
+        "caseKey": "3729fc69a271115cbe2683657f60d7e1d653aff2b5985ace25270a67fdad0c7a",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "artwork/editor"
+      },
+      {
+        "assignments": { "direction": "direction-redo", "subject-class": "class-crossword" },
+        "capability": "history",
+        "caseKey": "3ca8d86e867bd51f82935c083a1fd525638f1902d8fb11888c60a1c2ade50c88",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "artwork/editor"
+      },
+      {
+        "assignments": { "direction": "direction-undo", "subject-class": "class-text" },
+        "capability": "history",
+        "caseKey": "4ed528273d36196459c071f1ceab339f30f203ca2689d1f22e23e67c774754d3",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "artwork/editor"
+      },
+      {
+        "assignments": { "direction": "direction-undo-redo", "subject-class": "class-crossword" },
+        "capability": "history",
+        "caseKey": "5ed1a3d4c3256f409750e105b421130cb1238df2db3878090732c5fa95e10498",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "TEMPLATE_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": "history-crossword",
+        "subjectId": "artwork/editor"
+      },
+      {
+        "assignments": { "direction": "direction-undo", "subject-class": "class-crossword" },
+        "capability": "history",
+        "caseKey": "792616e0e5ab0838d7d0efeef3c15a725912c46f2b8cf0ea7d8a74f619e1b23f",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "artwork/editor"
+      },
+      {
+        "assignments": { "direction": "direction-undo-redo", "subject-class": "class-image" },
+        "capability": "history",
+        "caseKey": "8ac65acf5cf5672c8d5701bade419731fe978a482eeebc85d2450e4139335653",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "TEMPLATE_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": "history-image",
+        "subjectId": "artwork/editor"
+      },
+      {
+        "assignments": { "direction": "direction-redo", "subject-class": "class-image" },
+        "capability": "history",
+        "caseKey": "8cbcd22d4939fcd52e8c98cee7381c97f5d3e24772a0444ee8b1b2d840b8fffe",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "artwork/editor"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-scaled",
+          "depth": "depth-two",
+          "destination": "destination-layout"
+        },
+        "capability": "changeContainment",
+        "caseKey": "108612f39cb71286c92373bd8b625e6582711bd687f3f7f238f5789ad7ea0b6b",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-scaled",
+          "depth": "depth-max",
+          "destination": "destination-object"
+        },
+        "capability": "changeContainment",
+        "caseKey": "1b40e6445323d9bfbdb2098d723fe7d9094127dd9ca5c456d926a46fed3ef5fe",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-rotated",
+          "depth": "depth-one",
+          "destination": "destination-object"
+        },
+        "capability": "changeContainment",
+        "caseKey": "1b467d630a3fa14111b62c38c050eee52c5021c2ae01e5890856f5097c9cdd78",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-identity",
+          "depth": "depth-one",
+          "destination": "destination-layout"
+        },
+        "capability": "changeContainment",
+        "caseKey": "3ca9f36d97b39e0793c33f4ad9e6a318766d0ac09699217b4b96068b12d6495d",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-rotated",
+          "depth": "depth-two",
+          "destination": "destination-layout"
+        },
+        "capability": "changeContainment",
+        "caseKey": "4081606a4a6db89400dcde1779d91bd90b2add72157cd955005c7aec50558b3b",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-rotated",
+          "depth": "depth-two",
+          "destination": "destination-object"
+        },
+        "capability": "changeContainment",
+        "caseKey": "5a830bf9325959cec1b88b545737a78018360d9e3333906f019aae4118f977bd",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-identity",
+          "depth": "depth-max",
+          "destination": "destination-object"
+        },
+        "capability": "changeContainment",
+        "caseKey": "6939855df19b35073afd9be358ef9526ce055d095aab794902ba83de99af576e",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-rotated",
+          "depth": "depth-one",
+          "destination": "destination-layout"
+        },
+        "capability": "changeContainment",
+        "caseKey": "6a0adb0407b7076178d7373eb38af9b578c50405d397402847bd1a0367708368",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-identity",
+          "depth": "depth-one",
+          "destination": "destination-object"
+        },
+        "capability": "changeContainment",
+        "caseKey": "6c15c9ca58c5e5d2c9429bb665e6ea4c49ec14c8d32156eed0f2ffb356450f59",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "TEMPLATE_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": "contain-child",
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-scaled",
+          "depth": "depth-max",
+          "destination": "destination-layout"
+        },
+        "capability": "changeContainment",
+        "caseKey": "777ada4a05df8e511cf48489c2953d21caf58de0aad8573d75e244e9b44ee99c",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-identity",
+          "depth": "depth-two",
+          "destination": "destination-layout"
+        },
+        "capability": "changeContainment",
+        "caseKey": "7dac2c88379a7990d986854a8e0dfe37bd9084b7f94cdb0b8c5be35974cd5745",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-scaled",
+          "depth": "depth-one",
+          "destination": "destination-object"
+        },
+        "capability": "changeContainment",
+        "caseKey": "9b2c31f967626c39c6b529ee28835f8eb2cb92964187999c9546e6a1a029414c",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-scaled",
+          "depth": "depth-one",
+          "destination": "destination-layout"
+        },
+        "capability": "changeContainment",
+        "caseKey": "a504530a114a4f7d71ea00dd7c2baeb66887f797575ff2c0de8cf150f684405b",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-identity",
+          "depth": "depth-max",
+          "destination": "destination-layout"
+        },
+        "capability": "changeContainment",
+        "caseKey": "ca6a501e2de0371997543589541935818f5f7d1014ec1d2d0d75eb3b061c425b",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "TEMPLATE_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": "contain-max-depth",
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-identity",
+          "depth": "depth-two",
+          "destination": "destination-object"
+        },
+        "capability": "changeContainment",
+        "caseKey": "e71e46c63639a92a2552c8836c2204c5f715c8e4df9277c5716025e30fdddde0",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": {
+          "ancestor-transform": "transform-scaled",
+          "depth": "depth-two",
+          "destination": "destination-object"
+        },
+        "capability": "changeContainment",
+        "caseKey": "efa1b040c0c06b983d461a4d40caaca0d174eb49c1d2f378643c1c97a7ea4c04",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": { "ancestry": "ancestry-identity", "child-class": "child-layer" },
+        "capability": "move",
+        "caseKey": "13ba425bf9721cb0c71d14b290883ec6ae0788ad5c2c172390f837eeb3b5cf13",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "TEMPLATE_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": "move-child",
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": { "ancestry": "ancestry-scaled", "child-class": "child-object" },
+        "capability": "move",
+        "caseKey": "1fb36296bfb700d1695f8d0163bc24330286ed7eda8624dfa94ec5cab46f1ee1",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": { "ancestry": "ancestry-identity", "child-class": "child-object" },
+        "capability": "move",
+        "caseKey": "377faa5c9a03ca89790e8fb00e125e4c6cf3dd16fdc435352ed6aaa83032c0e1",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": { "ancestry": "ancestry-rotated", "child-class": "child-layer" },
+        "capability": "move",
+        "caseKey": "48a454521d73b410d2f3ace46347f5fb723bfd2fbfd8c1508dba0b7f61c16962",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": { "ancestry": "ancestry-scaled", "child-class": "child-layer" },
+        "capability": "move",
+        "caseKey": "7032d0bcda40dbff2e7edc7c12bbfa9bd1c04c8442a4e39085d7d37665d80120",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "container/object"
+      },
+      {
+        "assignments": { "grid-size": "size-small", "seed-mode": "seed-same" },
+        "capability": "create",
+        "caseKey": "0af1f337778f6b13c0684a285109de00ccaf528d8b1eda6839b7923c51c87988",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "layer/crossword"
+      },
+      {
+        "assignments": { "grid-size": "size-small", "seed-mode": "seed-different" },
+        "capability": "create",
+        "caseKey": "806d63fc63e00a0de2a1d291b4f51f3d92b1ea5b45eb2eb03aa803d235a89ebf",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "layer/crossword"
+      },
+      {
+        "assignments": { "grid-size": "size-large", "seed-mode": "seed-different" },
+        "capability": "create",
+        "caseKey": "91fc2d7bb5dd9b6c0331ca521042877b851fd47272752e6c89583bb40a9b52dc",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "layer/crossword"
+      },
+      {
+        "assignments": { "grid-size": "size-medium", "seed-mode": "seed-different" },
+        "capability": "create",
+        "caseKey": "d777e11f275fd75e0d4f7ea4ab1ee5efb45d0f675e8d834f581773421251ca49",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "TEMPLATE_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": "create-crossword-different-seed",
+        "subjectId": "layer/crossword"
+      },
+      {
+        "assignments": { "grid-size": "size-large", "seed-mode": "seed-same" },
+        "capability": "create",
+        "caseKey": "e5e8dc2b32d78b084df467be5aacc4dffe0c4b5e189399c881405daee1b3d610",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "layer/crossword"
+      },
+      {
+        "assignments": {
+          "containment": "containment-editor",
+          "fit": "fit-cover",
+          "resource-state": "state-current-a"
+        },
+        "capability": "changeProperties",
+        "caseKey": "68894dddbaa79eb93188db567751b7a7879ad0489d52ea3e3a54f29cd0d95fa7",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "layer/image"
+      },
+      {
+        "assignments": {
+          "containment": "containment-nested-object",
+          "fit": "fit-cover",
+          "resource-state": "state-current-a"
+        },
+        "capability": "changeProperties",
+        "caseKey": "ab150cb3c7072fb2fb4e77f878d64c65ddbb170666258fb5c86b94e1f58e5ddb",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "layer/image"
+      },
+      {
+        "assignments": {
+          "containment": "containment-nested-object",
+          "fit": "fit-contain",
+          "resource-state": "state-current-a"
+        },
+        "capability": "changeProperties",
+        "caseKey": "d49505614a6bc3d865506f3d45b4d8cc74d14b27c60b4266d78501df473e55dd",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "layer/image"
+      },
+      {
+        "assignments": {
+          "containment": "containment-editor",
+          "fit": "fit-contain",
+          "resource-state": "state-pending-b"
+        },
+        "capability": "changeProperties",
+        "caseKey": "f681d2894b2d3c72fa36f714056ea39dd285e7ce5f16fba197f9cc9e27c5696e",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "TEMPLATE_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": "replace-pending-control",
+        "subjectId": "layer/image"
+      },
+      {
+        "assignments": {
+          "ancestry": "rotated-ancestor",
+          "displacement": "large",
+          "interaction": "pointer-drag",
+          "rendering-mode": "plain"
+        },
+        "capability": "move",
+        "caseKey": "1c3b10a90a97d56b3497a98a573d2d98bd37ac1a4a2fa2441b21330ffe68de88",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "layer/text"
+      },
+      {
+        "assignments": {
+          "ancestry": "identity",
+          "displacement": "large",
+          "interaction": "pointer-drag",
+          "rendering-mode": "warp-circle"
+        },
+        "capability": "move",
+        "caseKey": "28ca032f172607385a5780b59168f5b3c2dca2547d99dacd2c6da3f0d69b8b2c",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "layer/text"
+      },
+      {
+        "assignments": {
+          "ancestry": "identity",
+          "displacement": "small",
+          "interaction": "pointer-drag",
+          "rendering-mode": "plain"
+        },
+        "capability": "move",
+        "caseKey": "31119fddcd4f8fdae6c62d460242fefa2dd74e4dd547a6f620f1bd963c1f3077",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "layer/text"
+      },
+      {
+        "assignments": {
+          "ancestry": "identity",
+          "displacement": "large",
+          "interaction": "pointer-drag",
+          "rendering-mode": "plain"
+        },
+        "capability": "move",
+        "caseKey": "3326266386c0f04deb61870c24e827b43b1900646f3f092c809540b39ebc87a5",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "layer/text"
+      },
+      {
+        "assignments": {
+          "ancestry": "identity",
+          "displacement": "small",
+          "interaction": "keyboard-nudge",
+          "rendering-mode": "plain"
+        },
+        "capability": "move",
+        "caseKey": "74f9de09a3c788ef758497fb24d5f4d83b967eed718e7b833e1b0a794ad9e042",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "layer/text"
+      },
+      {
+        "assignments": {
+          "ancestry": "identity",
+          "displacement": "typical",
+          "interaction": "keyboard-nudge",
+          "rendering-mode": "plain"
+        },
+        "capability": "move",
+        "caseKey": "cc27226d457ac8793c04684e1d17e667ea57d54a8383383d173652dc65af38c9",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "layer/text"
+      },
+      {
+        "assignments": {
+          "ancestry": "nested-layout",
+          "displacement": "large",
+          "interaction": "pointer-drag",
+          "rendering-mode": "plain"
+        },
+        "capability": "move",
+        "caseKey": "dcd198f400080b22489921877ed0f6060b0674a6afd2cc137b64c360fc63d893",
+        "cellId": "chromium-desktop-1440x1000",
+        "code": "SCENARIO_UNAVAILABLE",
+        "plannerCodes": [],
+        "scenarioId": null,
+        "subjectId": "layer/text"
+      }
+    ],
+    "registryGaps": [],
+    "requestTemplateCatalogueFingerprint": "bbe06887be0c2e25cae8ce0ad77f62f2ce2110bd7b907d1b84a01e45edfc3079",
+    "requiredCell": {
+      "browserChannel": "bundled",
+      "browserKind": "chromium",
+      "cellId": "chromium-desktop-1440x1000",
+      "classification": "required-credit",
+      "colorScheme": "light",
+      "deviceScaleFactor": 1,
+      "geolocation": null,
+      "locale": "en-US",
+      "permissions": [],
+      "playwrightVersion": "1.59.1",
+      "reducedMotion": "no-preference",
+      "storageState": null,
+      "timezoneId": "UTC",
+      "viewport": { "height": 1000, "width": 1440 }
+    },
+    "schemaVersion": 1,
+    "selectionPolicyVersion": "coverage-selection/v1"
+  },
+  "contentFingerprint": "4217bb7ecdabf6bde9f702bb71a4ebd1ed87077cf88ba443c44053c6f0f0323c",
+  "manifestId": "96efe5d3f3d67a911afa4d6085cff03236d6865b3c5370b2789adb7af1743e58",
+  "schemaVersion": 1,
+  "state": "GENERATED_DRAFT"
+}

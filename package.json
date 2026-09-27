@@ -1,0 +1,42 @@
+{
+  "name": "makeit-artwork-verifier",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Standalone MakeIt Artwork Editor Diagnostic correctness toolkit (private).",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20.11 <25"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "bin": {
+    "verify-artwork": "./bin/verify-artwork.mjs"
+  },
+  "scripts": {
+    "cli": "node bin/verify-artwork.mjs",
+    "test": "vitest run --config vitest.portable.config.ts",
+    "test:contract": "vitest run --config vitest.portable.config.ts tests/portable/contract.test.ts tests/foundation/cli-envelope.test.ts tests/foundation/p8a-contracts.test.ts tests/foundation/tracer-contracts.test.ts tests/foundation/outcomes.test.ts",
+    "test:refusal": "vitest run --config vitest.portable.config.ts tests/portable/refusal.test.ts",
+    "test:fe-hosted": "vitest run --config vitest.fe-hosted.config.ts",
+    "test:browser": "vitest run --config vitest.browser.config.ts",
+    "typecheck": "tsc --noEmit -p tsconfig.portable.json",
+    "verify:transfer": "node scripts/verify-transfer.mjs"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.59.1",
+    "tsx": "^4.23.13"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "jsdom": "^29.1.1",
+    "typescript": "^5",
+    "vite-plugin-svgr": "^5.2.0",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^3.2.6"
+  }
+}

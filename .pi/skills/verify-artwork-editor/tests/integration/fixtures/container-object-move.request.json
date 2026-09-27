@@ -1,0 +1,29 @@
+{
+  "schemaVersion": 1,
+  "profile": "diagnostic",
+  "provenance": "diagnostic-request",
+  "evidenceDepth": "deep",
+  "intent": {
+    "subjectId": "container/object",
+    "capability": "move",
+    "variant": null,
+    "scenario": "move-nested-rotated",
+    "preState": {},
+    "operations": [
+      {
+        "discriminant": "move.by",
+        "parameters": {
+          "dx": 72,
+          "dy": 36
+        }
+      }
+    ],
+    "expected": {
+      "minimumDelta": {
+        "x": 40,
+        "y": 20
+      }
+    },
+    "resources": []
+  }
+}

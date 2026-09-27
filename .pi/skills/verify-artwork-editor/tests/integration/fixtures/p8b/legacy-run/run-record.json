@@ -1,0 +1,14 @@
+{
+  "schemaVersion": 1,
+  "label": "legacy-v1",
+  "runId": "fixture-legacy-run-20260101T000000Z-000001",
+  "caseId": "production-absence",
+  "recordedAt": "2026-01-01T00:00:00.000Z",
+  "passed": true,
+  "checks": [
+    {
+      "checkId": "production.absence",
+      "passed": true
+    }
+  ]
+}

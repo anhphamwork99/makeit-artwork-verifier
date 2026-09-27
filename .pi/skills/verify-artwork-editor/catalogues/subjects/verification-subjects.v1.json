@@ -1,0 +1,612 @@
+{
+  "schemaVersion": 1,
+  "familyDefaults": {
+    "layer": {
+      "version": 1,
+      "adapter": {
+        "adapterId": "default",
+        "compatibilityVersion": 1
+      },
+      "allowedParents": [
+        "artwork/editor",
+        "container/layout",
+        "container/object",
+        "selection/current"
+      ],
+      "allowedReferences": ["artwork/editor", "container/layout", "container/object"],
+      "allowedChildren": []
+    },
+    "container": {
+      "version": 1,
+      "adapter": {
+        "adapterId": "default",
+        "compatibilityVersion": 1
+      },
+      "allowedParents": ["artwork/editor", "container/object"],
+      "allowedReferences": ["artwork/editor", "container/layout", "container/object"],
+      "allowedChildren": [
+        "container/layout",
+        "container/object",
+        "layer/crossword",
+        "layer/image",
+        "layer/starmap",
+        "layer/text",
+        "layer/vector"
+      ]
+    },
+    "selection": {
+      "version": 1,
+      "adapter": {
+        "adapterId": "default",
+        "compatibilityVersion": 1
+      },
+      "allowedParents": ["artwork/editor"],
+      "allowedReferences": [
+        "container/layout",
+        "container/object",
+        "layer/crossword",
+        "layer/image",
+        "layer/starmap",
+        "layer/text",
+        "layer/vector"
+      ],
+      "allowedChildren": []
+    },
+    "artwork": {
+      "version": 1,
+      "adapter": {
+        "adapterId": "default",
+        "compatibilityVersion": 1
+      },
+      "allowedParents": [],
+      "allowedReferences": [],
+      "allowedChildren": ["container/layout", "container/object", "selection/current"]
+    }
+  },
+  "declarations": [
+    {
+      "subjectId": "artwork/editor",
+      "label": "Artwork Editor",
+      "family": "artwork",
+      "origin": "verification-native",
+      "applicationKind": null,
+      "variants": [],
+      "adapter": null,
+      "allowedParents": [],
+      "allowedReferences": [],
+      "allowedChildren": null,
+      "capabilityBindings": [
+        {
+          "capability": "create",
+          "workflowId": "shared.create",
+          "variantIndependent": true,
+          "checks": ["artwork.created"]
+        },
+        {
+          "capability": "history",
+          "workflowId": "shared.history",
+          "variantIndependent": true,
+          "checks": ["history.depth"]
+        },
+        {
+          "capability": "frontendSerializeRestore",
+          "workflowId": "shared.serialize",
+          "variantIndependent": true,
+          "checks": ["serialize.roundtrip"]
+        }
+      ]
+    },
+    {
+      "subjectId": "container/layout",
+      "label": "Layout",
+      "family": "container",
+      "origin": "application-backed",
+      "applicationKind": "layout",
+      "variants": [],
+      "adapter": null,
+      "allowedParents": null,
+      "allowedReferences": null,
+      "allowedChildren": null,
+      "capabilityBindings": [
+        {
+          "capability": "select",
+          "workflowId": "shared.select",
+          "variantIndependent": true,
+          "checks": ["selection.count"]
+        },
+        {
+          "capability": "move",
+          "workflowId": "shared.move",
+          "variantIndependent": true,
+          "checks": ["geometry.delta"]
+        },
+        {
+          "capability": "resize",
+          "workflowId": "shared.resize",
+          "variantIndependent": true,
+          "checks": ["geometry.size"]
+        },
+        {
+          "capability": "reorder",
+          "workflowId": "shared.reorder",
+          "variantIndependent": true,
+          "checks": ["order.changed"]
+        },
+        {
+          "capability": "changeContainment",
+          "workflowId": "shared.containment",
+          "variantIndependent": true,
+          "checks": ["containment.changed"]
+        },
+        {
+          "capability": "history",
+          "workflowId": "shared.history",
+          "variantIndependent": true,
+          "checks": ["history.depth"]
+        },
+        {
+          "capability": "frontendSerializeRestore",
+          "workflowId": "shared.serialize",
+          "variantIndependent": true,
+          "checks": ["serialize.roundtrip"]
+        }
+      ]
+    },
+    {
+      "subjectId": "container/object",
+      "label": "Object",
+      "family": "container",
+      "origin": "application-backed",
+      "applicationKind": "object",
+      "variants": ["group", "object"],
+      "adapter": {
+        "adapterId": "object-specialized",
+        "compatibilityVersion": 2
+      },
+      "allowedParents": null,
+      "allowedReferences": null,
+      "allowedChildren": null,
+      "capabilityBindings": [
+        {
+          "capability": "select",
+          "workflowId": "shared.select",
+          "variantIndependent": true,
+          "checks": ["selection.count"]
+        },
+        {
+          "capability": "move",
+          "workflowId": "object.move",
+          "variantIndependent": false,
+          "checks": ["geometry.delta"]
+        },
+        {
+          "capability": "resize",
+          "workflowId": "object.resize",
+          "variantIndependent": false,
+          "checks": ["geometry.size"]
+        },
+        {
+          "capability": "rotate",
+          "workflowId": "shared.rotate",
+          "variantIndependent": true,
+          "checks": ["geometry.rotation"]
+        },
+        {
+          "capability": "reorder",
+          "workflowId": "shared.reorder",
+          "variantIndependent": true,
+          "checks": ["order.changed"]
+        },
+        {
+          "capability": "changeContainment",
+          "workflowId": "object.containment",
+          "variantIndependent": false,
+          "checks": ["containment.changed"]
+        },
+        {
+          "capability": "history",
+          "workflowId": "shared.history",
+          "variantIndependent": true,
+          "checks": ["history.depth"]
+        },
+        {
+          "capability": "frontendSerializeRestore",
+          "workflowId": "shared.serialize",
+          "variantIndependent": true,
+          "checks": ["serialize.roundtrip"]
+        }
+      ]
+    },
+    {
+      "subjectId": "layer/crossword",
+      "label": "Crossword Layer",
+      "family": "layer",
+      "origin": "application-backed",
+      "applicationKind": "crossword",
+      "variants": [],
+      "adapter": {
+        "adapterId": "generated-specialized",
+        "compatibilityVersion": 2
+      },
+      "allowedParents": null,
+      "allowedReferences": null,
+      "allowedChildren": null,
+      "capabilityBindings": [
+        {
+          "capability": "create",
+          "workflowId": "crossword.create-default",
+          "variantIndependent": true,
+          "checks": [
+            "crossword.created",
+            "crossword.different-seed-sensitive",
+            "crossword.raster-current",
+            "crossword.same-seed-repeatable",
+            "crossword.seed-derived",
+            "crossword.semantic-valid"
+          ]
+        },
+        {
+          "capability": "select",
+          "workflowId": "shared.select",
+          "variantIndependent": true,
+          "checks": ["selection.count"]
+        },
+        {
+          "capability": "move",
+          "workflowId": "shared.move",
+          "variantIndependent": true,
+          "checks": ["geometry.delta"]
+        },
+        {
+          "capability": "resize",
+          "workflowId": "shared.resize",
+          "variantIndependent": true,
+          "checks": ["geometry.size"]
+        },
+        {
+          "capability": "rotate",
+          "workflowId": "shared.rotate",
+          "variantIndependent": true,
+          "checks": ["geometry.rotation"]
+        },
+        {
+          "capability": "changeProperties",
+          "workflowId": "shared.changeProperties",
+          "variantIndependent": true,
+          "checks": ["properties.applied"]
+        },
+        {
+          "capability": "history",
+          "workflowId": "shared.history",
+          "variantIndependent": true,
+          "checks": ["history.depth"]
+        },
+        {
+          "capability": "frontendSerializeRestore",
+          "workflowId": "shared.serialize",
+          "variantIndependent": true,
+          "checks": ["serialize.roundtrip"]
+        }
+      ]
+    },
+    {
+      "subjectId": "layer/image",
+      "label": "Image Layer",
+      "family": "layer",
+      "origin": "application-backed",
+      "applicationKind": "image",
+      "variants": ["dynamic", "static"],
+      "adapter": {
+        "adapterId": "image-specialized",
+        "compatibilityVersion": 2
+      },
+      "allowedParents": null,
+      "allowedReferences": null,
+      "allowedChildren": null,
+      "capabilityBindings": [
+        {
+          "capability": "create",
+          "workflowId": "shared.create",
+          "variantIndependent": true,
+          "checks": ["layer.created"]
+        },
+        {
+          "capability": "select",
+          "workflowId": "shared.select",
+          "variantIndependent": true,
+          "checks": ["selection.count"]
+        },
+        {
+          "capability": "move",
+          "workflowId": "shared.move",
+          "variantIndependent": true,
+          "checks": ["geometry.delta"]
+        },
+        {
+          "capability": "resize",
+          "workflowId": "shared.resize",
+          "variantIndependent": true,
+          "checks": ["geometry.size"]
+        },
+        {
+          "capability": "rotate",
+          "workflowId": "shared.rotate",
+          "variantIndependent": true,
+          "checks": ["geometry.rotation"]
+        },
+        {
+          "capability": "changeProperties",
+          "workflowId": "image.upload-replace",
+          "variantIndependent": true,
+          "checks": [
+            "image.content-distinct",
+            "image.frame-stable",
+            "image.raster-current",
+            "image.semantic-transition",
+            "image.structural-visual"
+          ]
+        },
+        {
+          "capability": "reorder",
+          "workflowId": "shared.reorder",
+          "variantIndependent": true,
+          "checks": ["order.changed"]
+        },
+        {
+          "capability": "changeContainment",
+          "workflowId": "shared.containment",
+          "variantIndependent": true,
+          "checks": ["containment.changed"]
+        },
+        {
+          "capability": "history",
+          "workflowId": "shared.history",
+          "variantIndependent": true,
+          "checks": ["history.depth"]
+        },
+        {
+          "capability": "frontendSerializeRestore",
+          "workflowId": "shared.serialize",
+          "variantIndependent": true,
+          "checks": ["serialize.roundtrip"]
+        }
+      ]
+    },
+    {
+      "subjectId": "layer/starmap",
+      "label": "Star Map Layer",
+      "family": "layer",
+      "origin": "application-backed",
+      "applicationKind": "starmap",
+      "variants": [],
+      "adapter": {
+        "adapterId": "generated-specialized",
+        "compatibilityVersion": 2
+      },
+      "allowedParents": null,
+      "allowedReferences": null,
+      "allowedChildren": null,
+      "capabilityBindings": [
+        {
+          "capability": "create",
+          "workflowId": "shared.create",
+          "variantIndependent": true,
+          "checks": ["layer.created"]
+        },
+        {
+          "capability": "select",
+          "workflowId": "shared.select",
+          "variantIndependent": true,
+          "checks": ["selection.count"]
+        },
+        {
+          "capability": "move",
+          "workflowId": "shared.move",
+          "variantIndependent": true,
+          "checks": ["geometry.delta"]
+        },
+        {
+          "capability": "resize",
+          "workflowId": "shared.resize",
+          "variantIndependent": true,
+          "checks": ["geometry.size"]
+        },
+        {
+          "capability": "rotate",
+          "workflowId": "shared.rotate",
+          "variantIndependent": true,
+          "checks": ["geometry.rotation"]
+        },
+        {
+          "capability": "changeProperties",
+          "workflowId": "shared.changeProperties",
+          "variantIndependent": true,
+          "checks": ["properties.applied"]
+        },
+        {
+          "capability": "history",
+          "workflowId": "shared.history",
+          "variantIndependent": true,
+          "checks": ["history.depth"]
+        },
+        {
+          "capability": "frontendSerializeRestore",
+          "workflowId": "shared.serialize",
+          "variantIndependent": true,
+          "checks": ["serialize.roundtrip"]
+        }
+      ]
+    },
+    {
+      "subjectId": "layer/text",
+      "label": "Text Layer",
+      "family": "layer",
+      "origin": "application-backed",
+      "applicationKind": "text",
+      "variants": ["plain", "warp-circle", "warp-distort", "warp-wave", "warp-wrap"],
+      "adapter": {
+        "adapterId": "text-specialized",
+        "compatibilityVersion": 3
+      },
+      "allowedParents": null,
+      "allowedReferences": null,
+      "allowedChildren": null,
+      "capabilityBindings": [
+        {
+          "capability": "create",
+          "workflowId": "shared.create",
+          "variantIndependent": true,
+          "checks": ["layer.created"]
+        },
+        {
+          "capability": "select",
+          "workflowId": "shared.select",
+          "variantIndependent": true,
+          "checks": ["selection.count"]
+        },
+        {
+          "capability": "move",
+          "workflowId": "shared.move",
+          "variantIndependent": true,
+          "checks": ["geometry.delta"]
+        },
+        {
+          "capability": "resize",
+          "workflowId": "shared.resize",
+          "variantIndependent": true,
+          "checks": ["geometry.size"]
+        },
+        {
+          "capability": "rotate",
+          "workflowId": "shared.rotate",
+          "variantIndependent": true,
+          "checks": ["geometry.rotation"]
+        },
+        {
+          "capability": "editContent",
+          "workflowId": "text.editContent",
+          "variantIndependent": false,
+          "checks": ["text.content"]
+        },
+        {
+          "capability": "changeProperties",
+          "workflowId": "shared.changeProperties",
+          "variantIndependent": true,
+          "checks": ["properties.applied"]
+        },
+        {
+          "capability": "reorder",
+          "workflowId": "shared.reorder",
+          "variantIndependent": true,
+          "checks": ["order.changed"]
+        },
+        {
+          "capability": "changeContainment",
+          "workflowId": "shared.containment",
+          "variantIndependent": true,
+          "checks": ["containment.changed"]
+        },
+        {
+          "capability": "history",
+          "workflowId": "shared.history",
+          "variantIndependent": true,
+          "checks": ["history.depth"]
+        },
+        {
+          "capability": "frontendSerializeRestore",
+          "workflowId": "shared.serialize",
+          "variantIndependent": true,
+          "checks": ["serialize.roundtrip"]
+        }
+      ]
+    },
+    {
+      "subjectId": "layer/vector",
+      "label": "Vector Layer",
+      "family": "layer",
+      "origin": "application-backed",
+      "applicationKind": "vector",
+      "variants": ["monochrome", "solid"],
+      "adapter": null,
+      "allowedParents": null,
+      "allowedReferences": null,
+      "allowedChildren": null,
+      "capabilityBindings": [
+        {
+          "capability": "create",
+          "workflowId": "shared.create",
+          "variantIndependent": true,
+          "checks": ["layer.created"]
+        },
+        {
+          "capability": "select",
+          "workflowId": "shared.select",
+          "variantIndependent": true,
+          "checks": ["selection.count"]
+        },
+        {
+          "capability": "move",
+          "workflowId": "shared.move",
+          "variantIndependent": true,
+          "checks": ["geometry.delta"]
+        },
+        {
+          "capability": "resize",
+          "workflowId": "shared.resize",
+          "variantIndependent": true,
+          "checks": ["geometry.size"]
+        },
+        {
+          "capability": "rotate",
+          "workflowId": "shared.rotate",
+          "variantIndependent": true,
+          "checks": ["geometry.rotation"]
+        },
+        {
+          "capability": "changeProperties",
+          "workflowId": "shared.changeProperties",
+          "variantIndependent": true,
+          "checks": ["properties.applied"]
+        },
+        {
+          "capability": "history",
+          "workflowId": "shared.history",
+          "variantIndependent": true,
+          "checks": ["history.depth"]
+        },
+        {
+          "capability": "frontendSerializeRestore",
+          "workflowId": "shared.serialize",
+          "variantIndependent": true,
+          "checks": ["serialize.roundtrip"]
+        }
+      ]
+    },
+    {
+      "subjectId": "selection/current",
+      "label": "Current Selection",
+      "family": "selection",
+      "origin": "verification-native",
+      "applicationKind": null,
+      "variants": ["multiple", "single"],
+      "adapter": null,
+      "allowedParents": null,
+      "allowedReferences": null,
+      "allowedChildren": null,
+      "capabilityBindings": [
+        {
+          "capability": "select",
+          "workflowId": "shared.select",
+          "variantIndependent": true,
+          "checks": ["selection.count"]
+        },
+        {
+          "capability": "history",
+          "workflowId": "shared.history",
+          "variantIndependent": false,
+          "checks": ["history.depth"]
+        }
+      ]
+    }
+  ]
+}
