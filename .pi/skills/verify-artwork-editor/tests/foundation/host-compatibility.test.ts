@@ -16,6 +16,45 @@ const compatible = Object.freeze({
 });
 
 describe('FE host compatibility preflight', () => {
+  it('rejects a missing descriptor', () => {
+    expect(assessHostCompatibility(undefined, ['shared.move'])).toMatchObject({
+      ok: false,
+      code: 'HOST_COMPATIBILITY_DESCRIPTOR_INVALID',
+    });
+  });
+
+  it('rejects an unsupported descriptor schema', () => {
+    expect(
+      assessHostCompatibility(
+        { schemaVersion: 2, bridgeVersion: 7, capabilities: {} },
+        ['shared.move'],
+      ),
+    ).toMatchObject({
+      ok: false,
+      code: 'HOST_COMPATIBILITY_DESCRIPTOR_INVALID',
+      context: {
+        expectedSchemaVersion: '1',
+        observedSchemaVersion: '2',
+      },
+    });
+  });
+
+  it('rejects a malformed capability map', () => {
+    expect(
+      assessHostCompatibility(
+        {
+          schemaVersion: 1,
+          bridgeVersion: 7,
+          capabilities: { 'image-upload.public-control': 1 },
+        },
+        ['image.upload-replace'],
+      ),
+    ).toMatchObject({
+      ok: false,
+      code: 'HOST_COMPATIBILITY_DESCRIPTOR_INVALID',
+    });
+  });
+
   it('derives only the capabilities used by selected workflows', () => {
     expect(
       requiredHostCapabilitiesForWorkflows([
