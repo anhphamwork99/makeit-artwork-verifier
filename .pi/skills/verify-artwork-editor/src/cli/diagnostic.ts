@@ -1264,7 +1264,11 @@ export async function prepareDiagnosticRun(
       // Only a run that never entered the family executor (a launch failure or a
       // thrown runtime error) is an external pre-authority failure. A reached
       // executor that returned no observation (a genuine pre-behavior setup
-      // refusal) is not.
+      // refusal) is not. A post-launch environment failure (for example an
+      // unavailable browser) is deliberately left on this path too: the
+      // orchestration external-pre-authority branch is reserved for failures
+      // decided before the owned server launch and would otherwise report
+      // `launchAttempted: false` for a run whose server was demonstrably ready.
       externalFailure: behavior === null,
       operational: {
         provenance: operationalBase.provenance,

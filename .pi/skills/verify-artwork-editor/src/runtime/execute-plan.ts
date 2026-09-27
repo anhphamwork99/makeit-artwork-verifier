@@ -58,7 +58,9 @@ interface LegacyCompositeCheck {
   readonly passed: boolean;
 }
 import type { Outcome } from '../contracts/discriminants';
+import { isBrowserUnavailableError } from '../browser/browser-unavailable';
 import { classifyOutcome } from './outcomes';
+import { captureLocalRuntimeDiagnostic } from './local-diagnostics';
 import {
   bindFinalActionCycleIdentity,
   runActionCycle,
@@ -1398,13 +1400,21 @@ export async function executePlan(input: ExecutePlanInput): Promise<ExecutePlanR
     });
   } catch (error) {
     environmentInvalid = true;
+    // Browser-precondition failures carry a path-free public message and keep
+    // the exact machine-local stack for a local-only diagnostic sink. Every
+    // other thrown drive error keeps its established handling and captures its
+    // raw stack locally as well.
+    const browserUnavailable = isBrowserUnavailableError(error);
+    const diagnosticDetail = browserUnavailable
+      ? error.message
+      : `Diagnostic drive runtime failed: ${(error as Error).message}`;
     diagnostics.push(
-      createDiagnostic(
-        'RUNTIME_LAUNCH_FAILED',
-        `Diagnostic drive runtime failed: ${(error as Error).message}`,
-      ),
+      createDiagnostic(browserUnavailable ? 'BROWSER_UNAVAILABLE' : 'RUNTIME_LAUNCH_FAILED', diagnosticDetail),
     );
-    detail = `Diagnostic drive runtime failed: ${(error as Error).message}`;
+    detail = diagnosticDetail;
+    captureLocalRuntimeDiagnostic(error, {
+      rawStack: browserUnavailable ? error.rawStack : null,
+    });
   } finally {
     if (session) {
       browserClose = await closeBrowserSession(session);

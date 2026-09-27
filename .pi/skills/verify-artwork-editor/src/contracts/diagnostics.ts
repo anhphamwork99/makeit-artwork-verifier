@@ -101,6 +101,12 @@ export const DIAGNOSTIC_SEVERITY = {
   BRIDGE_WAITER_UNBOUNDED: 'blocking',
   BRIDGE_MUTATION_DETECTED: 'blocking',
   BROWSER_CLEANUP_FAILED: 'blocking',
+  // ADR 0118 prerequisite boundary. The required browser could not be launched
+  // in this environment (typically a Playwright browser revision that was never
+  // downloaded). It is an environment prerequisite failure — the harness could
+  // not establish trustworthy authority — never a product `BUG`. The public
+  // detail is derived only from safe facts, never the raw machine-local path.
+  BROWSER_UNAVAILABLE: 'blocking',
   CLEANUP_INCOMPLETE: 'blocking',
   CLEANUP_IO_FAILED: 'blocking',
   CLEANUP_OWNERSHIP_AMBIGUOUS: 'blocking',

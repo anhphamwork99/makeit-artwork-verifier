@@ -2,6 +2,7 @@ import { chromium, type Browser, type BrowserContext, type Page } from '@playwri
 
 import type { EnvironmentCell } from '../contracts/runtime';
 import { validateWallClockBaseline } from '../contracts/wall-clock';
+import { browserUnavailableFromLaunchError } from './browser-unavailable';
 
 // The honest fixed-wall-clock contract lives in `contracts/wall-clock` so the
 // launcher and the generated-Crossword clock profile share one interpretation.
@@ -66,7 +67,16 @@ export async function openFreshPage(options: OpenPageOptions): Promise<BrowserSe
   if (baseline !== null && !baseline.ok) {
     throw new Error(`Invalid wall-clock baseline: ${baseline.detail}`);
   }
-  const browser = await chromium.launch({ headless: true });
+  // A Playwright launch failure (most commonly a browser revision that was
+  // never downloaded into this environment) throws an error whose message
+  // embeds a machine-local absolute path. Re-throw a typed, path-free failure
+  // so the public result stays meaningful without leaking the private path.
+  let browser: Browser;
+  try {
+    browser = await chromium.launch({ headless: true });
+  } catch (error) {
+    throw browserUnavailableFromLaunchError(error, environment);
+  }
   const context = await browser.newContext({
     viewport: { ...environment.viewport },
     deviceScaleFactor: environment.deviceScaleFactor,
