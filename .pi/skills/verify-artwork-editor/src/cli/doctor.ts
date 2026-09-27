@@ -92,6 +92,8 @@ export interface DoctorCliDetails {
 
 export interface RunDoctorCommandInput {
   runId?: string;
+  /** Explicit application checkout that owns the Next.js runtime and bridge. */
+  appRoot?: string;
   readinessDeadlineMs?: number;
   /** Diagnostic override only; production always removes the owned distDir. */
   keepDistDir?: boolean;
@@ -138,7 +140,7 @@ export async function runDoctorCommand(
 ): Promise<CliResult<DoctorCliDetails>> {
   const runId = input.runId ?? generateRunId();
 
-  const allocationResult = await allocateRun({ runId });
+  const allocationResult = await allocateRun({ runId, appRoot: input.appRoot });
   if (!allocationResult.ok) {
     const failureIsEnvironment =
       allocationFailureCliStatus(allocationResult.reason) === 'ENVIRONMENT_FAILURE';

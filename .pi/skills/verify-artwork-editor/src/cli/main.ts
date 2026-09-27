@@ -145,7 +145,7 @@ async function runCliInvocations(argv: readonly string[], options: RunCliOptions
           'Commands:',
           '  validate --all',
           '  plan --case <request.json> --out <dir>',
-          '  doctor [--run-id <id>] [--readiness-timeout-ms <n>] [--keep-dist-dir]',
+          '  doctor [--app-root <path>] [--run-id <id>] [--readiness-timeout-ms <n>] [--keep-dist-dir]',
           '  diagnostic --case <request.json> --app-root <path> [--run-id <id>] [--port <n>] [--keep-dist-dir]',
           '  diagnostic --suite <suite-id> --app-root <path> [--run-id <suite-execution-id>]',
           '  cleanup --run-id <id> --app-root <path>',
@@ -164,7 +164,7 @@ async function runCliInvocations(argv: readonly string[], options: RunCliOptions
           '  budget inspect --approved <approval-id>',
           '  retention audit',
           'Flags:',
-          '  --app-root <path>  Explicit application checkout that owns the product-meaning provider; required by diagnostic and validated before allocation.',
+          '  --app-root <path>  Explicit application checkout that owns the Next.js runtime and product-meaning provider; required by diagnostic and used by doctor when supplied.',
           '  --version          Print the toolkit name and version.',
           '  --help             Print this schema-versioned command surface.',
         ].join('\n'),
@@ -234,8 +234,9 @@ async function runCliInvocations(argv: readonly string[], options: RunCliOptions
       const { runPlan } = await import('./plan');
       return emitCliResult(runPlan({ casePath, outDir }));
     }
-    case 'doctor': {
-      const runId = parsed.flags.get('run-id');
+      case 'doctor': {
+        const runId = parsed.flags.get('run-id');
+        const appRoot = parsed.flags.get('app-root');
       const deadlineRaw = parsed.flags.get('readiness-timeout-ms');
       const readinessDeadlineMs = deadlineRaw === undefined ? undefined : Number(deadlineRaw);
       if (readinessDeadlineMs !== undefined && !Number.isFinite(readinessDeadlineMs)) {
@@ -243,9 +244,10 @@ async function runCliInvocations(argv: readonly string[], options: RunCliOptions
       }
       const { runDoctorCommand } = await import('./doctor');
       return emitCliResult(
-        await runDoctorCommand({
-          runId,
-          readinessDeadlineMs,
+          await runDoctorCommand({
+            runId,
+            appRoot,
+            readinessDeadlineMs,
           keepDistDir: parsed.booleans.has('keep-dist-dir'),
         }),
       );
