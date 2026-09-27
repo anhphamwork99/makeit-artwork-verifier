@@ -1,4 +1,13 @@
-import { existsSync, readFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  realpathSync,
+  rmSync,
+  symlinkSync,
+} from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -19,7 +28,7 @@ import {
   productMeaningProviderEntryPath,
   resolveAppRoot,
 } from '../../src/runtime/product-meaning-provider';
-import { resolveRepoRoot, resolveSkillRoot } from '../../src/runtime/paths';
+import { isVerifiableRepositoryRoot, resolveRepoRoot, resolveSkillRoot } from '../../src/runtime/paths';
 import { TOOLKIT_NAME, TOOLKIT_VERSION } from '../../src/version';
 
 /**
@@ -202,6 +211,51 @@ describe('[ADR 0118] resolveAppRoot validates the explicit app root', () => {
     expect(productMeaningProviderEntryPath('/explicit/app/root')).toBe(
       path.join('/explicit/app/root', 'src', 'lib', 'artwork', 'verification', 'productMeaningProvider.mjs'),
     );
+  });
+});
+
+/**
+ * ADR 0119 — the app root is canonical identity, not a path spelling.
+ *
+ * `realpathSync` is the only accepted identity: a symlinked root canonicalizes
+ * to its real directory (so allocation binds the true checkout), and a recorded
+ * root that is not its own canonical path is refused. The filesystem root is
+ * never a valid application root.
+ */
+describe('[ADR 0119] resolveAppRoot canonicalizes and refuses non-identity roots', () => {
+  it('canonicalizes a symlinked app root to its real directory', () => {
+    const base = realpathSync(mkdtempSync(path.join(os.tmpdir(), 'vt-contract-root-')));
+    const realRoot = path.join(base, 'real-root');
+    mkdirSync(realRoot);
+    const link = path.join(base, 'link-root');
+    symlinkSync(realRoot, link, 'dir');
+
+    const resolved = resolveAppRoot(link);
+    expect(resolved.ok).toBe(true);
+    if (resolved.ok) {
+      expect(resolved.appRoot).toBe(realRoot);
+      expect(resolved.appRoot).not.toBe(link);
+    }
+    rmSync(base, { recursive: true, force: true });
+  });
+
+  it('refuses the filesystem root as an app root', () => {
+    const resolved = resolveAppRoot(path.parse(process.cwd()).root);
+    expect(resolved.ok).toBe(false);
+    if (!resolved.ok) expect(resolved.code).toBe('APP_ROOT_INVALID');
+  });
+
+  it('accepts only a canonical recorded root and refuses a symlink root', () => {
+    const base = realpathSync(mkdtempSync(path.join(os.tmpdir(), 'vt-contract-canon-')));
+    const realRoot = path.join(base, 'real-root');
+    mkdirSync(realRoot);
+    const link = path.join(base, 'link-root');
+    symlinkSync(realRoot, link, 'dir');
+
+    expect(isVerifiableRepositoryRoot(realRoot)).toBe(true);
+    expect(isVerifiableRepositoryRoot(link)).toBe(false);
+    expect(isVerifiableRepositoryRoot(path.parse(process.cwd()).root)).toBe(false);
+    rmSync(base, { recursive: true, force: true });
   });
 });
 

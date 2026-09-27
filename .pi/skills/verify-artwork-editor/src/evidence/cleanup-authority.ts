@@ -1,6 +1,5 @@
-import path from 'node:path';
-
 import type { RunOwnershipRecord, RunOwnershipState } from '../contracts/runtime';
+import { toolkitRelativeSkillRoot } from '../runtime/paths';
 import {
   buildEstablishedOwnership,
   ownershipRecordFingerprint,
@@ -41,10 +40,15 @@ export interface CleanupAuthoritySnapshot {
 export function captureCleanupAuthoritySnapshot(
   record: RunOwnershipRecord,
 ): CleanupAuthoritySnapshot {
-  const skillRootRelativePath = path
-    .relative(record.repoRoot, record.skillRoot)
-    .split(path.sep)
-    .join('/');
+  // The public `skill-root` role is repo-relative to the *toolkit* repository
+  // that owns `.pi/skills/verify-artwork-editor`, not to the application root the
+  // run owns. `record.repoRoot` is the app checkout for an explicit app-root
+  // run, so deriving this from `record.repoRoot` would leak a `../..` path and
+  // fail the closed public projection. Evidence/skill identity stays
+  // toolkit-owned regardless of which application was verified, so the value is
+  // derived from the recorded skill root itself (which is verified to equal the
+  // toolkit's own skill root before this snapshot is captured).
+  const skillRootRelativePath = toolkitRelativeSkillRoot(record.skillRoot);
   const publicOwnership = buildEstablishedOwnership(
     record,
     record.state,

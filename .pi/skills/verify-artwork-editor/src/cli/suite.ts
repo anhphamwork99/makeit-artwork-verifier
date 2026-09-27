@@ -31,6 +31,7 @@ import {
 import { prepareDiagnosticRun, type DiagnosticCliDetails } from './diagnostic';
 import { resolveExecutionSupport } from '../planner/execution-support';
 import { collectAppRevision, lockfileDigest } from '../runtime/environment-facts';
+import { resolveAppRoot } from '../runtime/product-meaning-provider';
 import { generateRunId } from '../runtime/run-id';
 import { isSafeRunId, resolveRepoRoot, resolveSkillRoot } from '../runtime/paths';
 import { resolveWorkflowSteps } from '../workflows/steps';
@@ -101,7 +102,9 @@ export interface RunDiagnosticSuiteInput {
   runId?: string;
   /**
    * Explicit, validated application root forwarded unchanged to every suite
-   * child (ADR 0118). Each child refuses before allocation without it.
+   * child (ADR 0118). Each child refuses before allocation without it, and the
+   * suite aggregate binds the same application revision/lockfile identity. An
+   * unusable supplied root refuses the whole suite before the first child.
    */
   appRoot?: string;
   /** Test seam: the in-process per-child execution preparer. */
@@ -387,7 +390,27 @@ export async function runDiagnosticSuiteCommand(
     });
   }
 
-  const validation = validateSuite(loaded, input.appRoot);
+  const resolvedAppRoot = input.appRoot === undefined ? null : resolveAppRoot(input.appRoot);
+  if (resolvedAppRoot !== null && !resolvedAppRoot.ok) {
+    const detail = `Suite application root is not usable for preflight: ${resolvedAppRoot.detail}`;
+    return buildCliResult<DiagnosticSuiteCliDetails>({
+      command: 'diagnostic',
+      subcommand: loaded.suite.suiteId,
+      status: 'HARNESS_BLOCKED',
+      detail,
+      launchAttempted: false,
+      details: unlaunchedDetails(loaded, suiteExecutionId),
+      diagnostics: [
+        createDiagnostic('PRODUCT_MEANING_PROVIDER_UNAVAILABLE', detail, {
+          context: { appRootCode: resolvedAppRoot.code },
+        }),
+      ],
+    });
+  }
+  const appRootForRuns =
+    resolvedAppRoot !== null && resolvedAppRoot.ok ? resolvedAppRoot.appRoot : undefined;
+
+  const validation = validateSuite(loaded, appRootForRuns);
   if (!validation.ok) {
     const detail = `Representative suite "${loaded.suite.suiteId}" failed pre-launch validation; no child was launched.`;
     return buildCliResult<DiagnosticSuiteCliDetails>({
@@ -455,7 +478,7 @@ export async function runDiagnosticSuiteCommand(
         casePath: child.casePath,
         runId: child.runId,
         suiteLineage: child.suiteLineage,
-        ...(input.appRoot === undefined ? {} : { appRoot: input.appRoot }),
+        ...(appRootForRuns === undefined ? {} : { appRoot: appRootForRuns }),
       }));
 
   const suiteStartedAt = monotonicNow();
@@ -547,7 +570,10 @@ export async function runDiagnosticSuiteCommand(
     );
   }
 
-  const repoRoot = resolveRepoRoot();
+  // The suite candidate identity is the same explicit application root the
+  // children ran against, so a representative result and its aggregate cannot
+  // name different candidates. Evidence remains toolkit-owned.
+  const repoRoot = appRootForRuns ?? resolveRepoRoot();
   const appRevision = collectAppRevision(repoRoot);
   const aggregate: FinalSuiteAggregateContext = {
     suiteExecutionId,

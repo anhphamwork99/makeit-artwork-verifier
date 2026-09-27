@@ -119,11 +119,19 @@ export interface EnvironmentFactMismatch {
 
 export interface RunAllocation {
   runId: string;
+  /**
+   * Absolute root of the repository the run owns: the explicit, validated
+   * application checkout (`--app-root`) for an app-root run, or this toolkit's
+   * own repository for a legacy caller. The owned launch cwd, the Next
+   * `distDir`, the shared-config snapshot, and the recorded app revision all
+   * bind to this root. It is never inferred from the toolkit location.
+   */
   repoRoot: string;
+  /** Absolute toolkit skill root; owns catalogues, fixtures and evidence. */
   skillRoot: string;
   /** Repo-relative owned Next output path: `.next/verify-runs/<run-id>`. */
   repoRelativeDistDir: string;
-  /** Absolute owned Next output path. */
+  /** Absolute owned Next output path, derived from `repoRoot`. */
   distDir: string;
   /** Absolute owned scratch root; the cross-process allocation lease. */
   scratchRoot: string;

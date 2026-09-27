@@ -14,6 +14,7 @@ import {
 import { OWNED_CONFIG_FILES } from '../runtime/config-snapshot';
 import {
   isSafeRunId,
+  isVerifiableRepositoryRoot,
   repoRelativeDistDir,
   resolveRepoRoot,
   resolveSkillRoot,
@@ -45,8 +46,11 @@ export function evidenceRootFor(runId: string): string {
   return path.join(resolveSkillRoot(), 'evidence', 'runs', runId);
 }
 
-export function expectedDistDirFor(runId: string): string {
-  return path.join(resolveRepoRoot(), repoRelativeDistDir(runId));
+export function expectedDistDirFor(
+  runId: string,
+  repositoryRoot: string = resolveRepoRoot(),
+): string {
+  return path.join(repositoryRoot, repoRelativeDistDir(runId));
 }
 
 export function isProcessAlive(pid: number): boolean {
@@ -148,20 +152,66 @@ export function repoConfigSnapshotProblem(record: {
 }
 
 /**
- * Verifies that a persisted record only ever describes resources this toolkit
- * derived for the same repository and run id. Cleanup refuses anything else.
+ * Structural verification of the recorded owned-repository (application) root
+ * and its derived Next output path (ADR 0119).
+ *
+ * `record.repoRoot` is read back from attacker-influenceable scratch state, so
+ * it is accepted only when:
+ *
+ *  - it is an absolute, normalized, existing directory (`isVerifiableRepositoryRoot`);
+ *  - it is exactly the independently supplied `expectedAppRoot` (the validated,
+ *    canonical application checkout the operator selected for this run, or the
+ *    toolkit repository root for a legacy internal caller); and
+ *  - the recorded `distDir` is exactly derived from that root and the run id.
+ *
+ * A product-meaning provider is a preflight compatibility test, not cleanup
+ * authority: a provider-bearing foreign checkout that the record was edited to
+ * name must still be refused because it is not the expected root. Evidence and
+ * the skill remain toolkit-owned and are verified independently.
  */
-export function ownershipRecordIsVerifiable(record: RunOwnershipRecord | null): boolean {
+export function repositoryRootProblem(
+  record: {
+    runId: string;
+    repoRoot: string;
+    distDir: string;
+  },
+  expectedAppRoot: string,
+): string | null {
+  if (!isVerifiableRepositoryRoot(record.repoRoot)) {
+    return 'recorded repository root is not a verifiable absolute application directory';
+  }
+  if (record.repoRoot !== expectedAppRoot) {
+    return 'recorded repository root is not the expected application root supplied for this run';
+  }
+  if (record.distDir !== expectedDistDirFor(record.runId, record.repoRoot)) {
+    return 'recorded distDir is not derived from the recorded repository root';
+  }
+  return null;
+}
+
+/**
+ * Verifies that a persisted record only ever describes resources this toolkit
+ * derived for the same run and the independently supplied application root.
+ * Cleanup refuses anything else.
+ *
+ * `expectedAppRoot` is the validated, canonical root supplied by the caller
+ * boundary (the explicit `--app-root` for Diagnostic/public recovery, or the
+ * toolkit repository root for a legacy internal caller). It is never inferred
+ * from the record or from a mutable global.
+ */
+export function ownershipRecordIsVerifiable(
+  record: RunOwnershipRecord | null,
+  expectedAppRoot: string = resolveRepoRoot(),
+): boolean {
   if (!record) return false;
   if (record.owner !== 'verify-artwork-editor') return false;
   if (!isSafeRunId(record.runId)) return false;
   if (record.schemaVersion !== RUN_OWNERSHIP_RECORD_SCHEMA_VERSION) return false;
-  if (record.repoRoot !== resolveRepoRoot()) return false;
   if (record.skillRoot !== resolveSkillRoot()) return false;
   if (record.scratchRoot !== scratchRootFor(record.runId)) return false;
   if (record.evidenceRoot !== evidenceRootFor(record.runId)) return false;
   if (record.repoRelativeDistDir !== repoRelativeDistDir(record.runId)) return false;
-  if (record.distDir !== expectedDistDirFor(record.runId)) return false;
+  if (repositoryRootProblem(record, expectedAppRoot) !== null) return false;
   // The process fields are attacker-writable scratch state: a record whose
   // pid/process group/owned command is malformed can never authorize cleanup.
   if (ownershipProcessFieldsProblem(record) !== null) return false;
@@ -177,9 +227,10 @@ export function ownershipRecordIsVerifiable(record: RunOwnershipRecord | null): 
 export function admitCase(
   runId: string,
   caseId: string,
+  expectedAppRoot: string = resolveRepoRoot(),
 ): { ok: true; record: RunOwnershipRecord } | RunAllocationFailure {
   const record = readOwnershipRecord(runId);
-  if (!ownershipRecordIsVerifiable(record)) {
+  if (!ownershipRecordIsVerifiable(record, expectedAppRoot)) {
     return {
       ok: false,
       reason: 'OWNERSHIP_UNKNOWN',
@@ -202,9 +253,12 @@ export function releaseCase(runId: string): void {
 }
 
 /** True when a persisted record claims this run and its process group is alive. */
-export function runIsLiveOwned(runId: string): boolean {
+export function runIsLiveOwned(
+  runId: string,
+  expectedAppRoot: string = resolveRepoRoot(),
+): boolean {
   const record = readOwnershipRecord(runId);
-  if (!ownershipRecordIsVerifiable(record)) return false;
+  if (!ownershipRecordIsVerifiable(record, expectedAppRoot)) return false;
   if (record?.state !== 'launched') return false;
   return record.processGroupId !== null && isProcessGroupAlive(record.processGroupId);
 }

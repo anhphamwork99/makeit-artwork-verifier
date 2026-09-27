@@ -646,6 +646,18 @@ describe('WP5 Slice 5-C R13 — ownership projection honest union', () => {
     // Provenance only: the exact record preimage is reproducible.
     expect(canonicalize(record).length).toBeGreaterThan(0);
   });
+
+  it('projects the toolkit-relative skill root as a closed constant, never a traversal', () => {
+    // An explicit app-root run owns a different checkout than the toolkit, but the
+    // public `skill-root` role must stay toolkit-relative. Deriving it from the
+    // app root would leak a `../..` traversal and fail the closed projection.
+    const appRootRecord = ownershipRecord({ repoRoot: '/some/fe-checkout' });
+    const snapshot = captureCleanupAuthoritySnapshot(appRootRecord);
+    expect(snapshot.publicOwnership.resources.skillRoot.relativePath).toBe(
+      '.pi/skills/verify-artwork-editor',
+    );
+    expect(JSON.stringify(snapshot.publicOwnership)).not.toContain('..');
+  });
 });
 
 describe('WP5 Slice 5-C R13 — allowlisted cleanup projection', () => {

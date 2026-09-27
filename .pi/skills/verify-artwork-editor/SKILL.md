@@ -55,7 +55,7 @@ pnpm cli -- validate --all
 pnpm cli -- diagnostic --case <request.json> --app-root <FE-checkout>
 pnpm cli -- diagnostic --suite representative --app-root <FE-checkout>
 pnpm cli -- evidence verify --run <run-id>
-pnpm cli -- cleanup --run-id <run-id>
+pnpm cli -- cleanup --run-id <run-id> --app-root <FE-checkout>
 ```
 
 `qualify`, `release`, `budget`, and `retention` are deferred and fail closed with
@@ -205,11 +205,14 @@ evidence directory.
 To clean a previously interrupted owned run, use the current CLI surface:
 
 ```sh
-pnpm cli -- cleanup --run-id $RUN_ID
+pnpm cli -- cleanup --run-id $RUN_ID --app-root $APP_ROOT
 ```
 
-Cleanup is exact-id and fail-closed: an unknown or colliding run is refused.
-Never kill by process name, broad port sweep, or shared development-server port.
+Cleanup is exact-id and exact-root, fail-closed: `--app-root` is mandatory and
+must be the same validated checkout the run was allocated against. A missing
+root is a usage error; a wrong or tampered root is refused with no kill,
+restore or deletion. Never kill by process name, broad port sweep, or shared
+development-server port.
 </cleanup>
 
 <cold-agent>

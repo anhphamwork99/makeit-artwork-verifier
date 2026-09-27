@@ -158,9 +158,9 @@ export async function runDoctorCommand(
 
   const allocation = allocationResult.allocation;
   const diagnostics: DiagnosticRecord[] = [];
-  const admission = admitCase(runId, 'doctor');
+  const admission = admitCase(runId, 'doctor', allocation.repoRoot);
   if (!admission.ok) {
-    await cleanupRun(runId);
+    await cleanupRun(runId, { expectedAppRoot: allocation.repoRoot });
     return buildCliResult<DoctorCliDetails>({
       command: 'doctor',
       status: 'HARNESS_BLOCKED',
@@ -296,6 +296,7 @@ export async function runDoctorCommand(
   let cleanup: CleanupResult;
   try {
     cleanup = await cleanupRun(runId, {
+      expectedAppRoot: allocation.repoRoot,
       removeDistDir: input.keepDistDir === true ? false : true,
       browserCleanup,
       onAuthoritySnapshot: (snapshot) => {

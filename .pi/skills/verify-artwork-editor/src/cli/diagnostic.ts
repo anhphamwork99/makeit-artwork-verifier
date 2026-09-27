@@ -18,7 +18,7 @@ import {
   deriveResourceManifestFingerprint,
   deriveWorkflowStepCatalogueFingerprint,
 } from '../catalogue/fingerprint';
-import { cleanupRun } from '../cleanup/cleanup';
+import { cleanupRun, noOwnedLeaseCleanup } from '../cleanup/cleanup';
 import { createDiagnostic, type DiagnosticRecord } from '../contracts/diagnostics';
 import type {
   AllocationFailureReason,
@@ -613,8 +613,13 @@ function refused(input: {
   readonly detail: string;
   readonly diagnostics: readonly DiagnosticRecord[];
   readonly details: DiagnosticCliDetails;
+  /**
+   * Additional private roots (for example the explicit app root) whose exact
+   * value must never appear verbatim in the refusal detail or diagnostics.
+   */
+  readonly forbiddenPaths?: readonly string[];
 }): DiagnosticPreparation {
-  const forbiddenPaths = publicDiagnosticForbiddenPaths();
+  const forbiddenPaths = publicDiagnosticForbiddenPaths(input.forbiddenPaths ?? []);
   return {
     ok: false,
     status: input.status,
@@ -634,6 +639,24 @@ function productMeaningProviderDiagnosticCode(
 ): DiagnosticRecord['code'] {
   if (code === 'PROVIDER_INCOMPATIBLE') return 'PRODUCT_MEANING_PROVIDER_INCOMPATIBLE';
   return 'PRODUCT_MEANING_PROVIDER_UNAVAILABLE';
+}
+
+/**
+ * Maps a same-run admission refusal onto its exact diagnostic code. An unknown
+ * or malformed ownership record is a distinct refusal from a genuinely active
+ * same-run case, so the two are never collapsed into one misleading code.
+ */
+function admissionFailureDiagnosticCode(
+  reason: AllocationFailureReason,
+): DiagnosticRecord['code'] {
+  switch (reason) {
+    case 'SAME_RUN_CASE_ACTIVE':
+      return 'SAME_RUN_CASE_ACTIVE';
+    case 'OWNERSHIP_RECORD_INVALID':
+      return 'RUN_OWNERSHIP_RECORD_INVALID';
+    default:
+      return 'RUN_OWNERSHIP_UNKNOWN';
+  }
 }
 
 function loadRequest(
@@ -940,6 +963,9 @@ export async function prepareDiagnosticRun(
             context: { appRootCode: providerResult.code },
           }),
         ],
+        // A provider-load failure detail names the exact app root; it must never
+        // be echoed verbatim outside the private boundary.
+        forbiddenPaths: [path.resolve((appRoot as string).trim())],
         details: detailsForPlanning(runId, planning, {
           environmentCellId: candidate.environmentCell.cellId,
         }),
@@ -968,10 +994,22 @@ export async function prepareDiagnosticRun(
     environmentCellId: candidate.identity.cellId,
   });
   if (!allocationResult.ok) {
-    const cleanup = await cleanupRun(runId);
-    diagnostics.push(...cleanup.diagnostics);
+    // ADR 0119: a failed allocation never established this invocation's own
+    // lease (allocation rolls back its port reservation and scratch directory),
+    // and the run id may be occupied by another invocation. Automatic cleanup
+    // after an allocation failure could therefore destroy a foreign owner's
+    // resources, so recovery is only the explicit
+    // `cleanup --run-id <id> --app-root <trusted root>` command.
+    const cleanup = noOwnedLeaseCleanup(
+      runId,
+      'OWNERSHIP_UNKNOWN',
+      `Allocation failed (${allocationResult.reason}) before this invocation owned a lease; no cleanup was attempted. ${allocationResult.detail}`,
+    );
     const status = allocationFailureCliStatus(allocationResult.reason);
-    const repoRoot = resolveRepoRoot();
+    // The run's owned repository is the validated application root, so the
+    // reported revision/lockfile identity is the application's, never the
+    // toolkit's. Evidence and the skill root remain toolkit-owned.
+    const repoRoot = meaningProviderRef.appRoot;
     const appRevision = collectAppRevision(repoRoot);
     const forbiddenPaths = [repoRoot, resolveSkillRoot(), os.tmpdir()];
     const ownership = buildNotEstablishedOwnership({
@@ -1040,15 +1078,17 @@ export async function prepareDiagnosticRun(
   }
 
   const allocation = allocationResult.allocation;
-  const admission = admitCase(runId, planning.caseId);
+  const admission = admitCase(runId, planning.caseId, meaningProviderRef.appRoot);
   if (!admission.ok) {
-    const cleanup = await cleanupRun(runId);
+    const cleanup = await cleanupRun(runId, { expectedAppRoot: meaningProviderRef.appRoot });
     diagnostics.push(...cleanup.diagnostics);
     return refused({
       status: 'HARNESS_BLOCKED',
       detail: admission.detail,
       diagnostics: [
-        createDiagnostic('SAME_RUN_CASE_ACTIVE', admission.detail, { context: { runId } }),
+        createDiagnostic(admissionFailureDiagnosticCode(admission.reason), admission.detail, {
+          context: { runId, reason: admission.reason },
+        }),
       ],
       details: detailsForPlanning(runId, planning, {
         allocation: allocationProjection(allocation),
@@ -1076,7 +1116,7 @@ export async function prepareDiagnosticRun(
     } catch (error) {
       const detail = `Resource manifest is invalid: ${(error as Error).message}`;
       releaseCase(runId);
-      const cleanup = await cleanupRun(runId);
+      const cleanup = await cleanupRun(runId, { expectedAppRoot: meaningProviderRef.appRoot });
       return refused({
         status: 'HARNESS_BLOCKED',
         detail,
@@ -1094,7 +1134,7 @@ export async function prepareDiagnosticRun(
       if (findResource(manifest, ref.logicalId, ref.version) === null) {
         const detail = `Fixture declares resource role "${ref.role}" → "${ref.logicalId}@${ref.version}" which the manifest does not declare.`;
         releaseCase(runId);
-        const cleanup = await cleanupRun(runId);
+        const cleanup = await cleanupRun(runId, { expectedAppRoot: meaningProviderRef.appRoot });
         return refused({
           status: 'HARNESS_BLOCKED',
           detail,
@@ -1173,6 +1213,7 @@ export async function prepareDiagnosticRun(
   let cleanup: CleanupResult;
   try {
     cleanup = await cleanupRun(runId, {
+      expectedAppRoot: meaningProviderRef.appRoot,
       removeDistDir: input.keepDistDir !== true,
       browserCleanup,
       onAuthoritySnapshot: (snapshot) => {

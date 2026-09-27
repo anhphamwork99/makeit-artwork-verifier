@@ -56,9 +56,9 @@ pnpm cli -- validate --all
 pnpm cli -- diagnostic --case <request.json> --app-root <FE-checkout>
 pnpm cli -- diagnostic --suite representative --app-root <FE-checkout>
 
-# Evidence readback and cleanup (exact-id, fail-closed)
+# Evidence readback and cleanup (exact-id, exact-root, fail-closed)
 pnpm cli -- evidence verify --run <run-id>
-pnpm cli -- cleanup --run-id <run-id>
+pnpm cli -- cleanup --run-id <run-id> --app-root <FE-checkout>
 ```
 
 `qualify`, `release`, `budget`, and `retention` commands print on the deferred

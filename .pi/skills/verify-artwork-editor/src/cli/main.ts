@@ -148,7 +148,7 @@ async function runCliInvocations(argv: readonly string[], options: RunCliOptions
           '  doctor [--run-id <id>] [--readiness-timeout-ms <n>] [--keep-dist-dir]',
           '  diagnostic --case <request.json> --app-root <path> [--run-id <id>] [--port <n>] [--keep-dist-dir]',
           '  diagnostic --suite <suite-id> --app-root <path> [--run-id <suite-execution-id>]',
-          '  cleanup --run-id <id>',
+          '  cleanup --run-id <id> --app-root <path>',
           '  production-absence [--run-id <id>] [--build-timeout-ms <n>] [--start-timeout-ms <n>]',
           '  evidence verify --run <run-or-suite-execution-id>',
           '  manifest generate --profile release',
@@ -312,11 +312,21 @@ async function runCliInvocations(argv: readonly string[], options: RunCliOptions
     }
     case 'cleanup': {
       const runId = parsed.flags.get('run-id');
-      if (runId === undefined) {
-        return emitCliResult(usage('cleanup', 'cleanup requires `--run-id <run-id>`.'));
+      const appRoot = parsed.flags.get('app-root');
+      if (
+        runId === undefined ||
+        appRoot === undefined ||
+        appRoot.trim().length === 0
+      ) {
+        return emitCliResult(
+          usage(
+            'cleanup',
+            'cleanup requires `--run-id <run-id>` and `--app-root <trusted application checkout>`.',
+          ),
+        );
       }
       const { runCleanupCommand } = await import('./cleanup');
-      return emitCliResult(await runCleanupCommand(runId));
+      return emitCliResult(await runCleanupCommand(runId, appRoot));
     }
     case 'production-absence': {
       if (subcommand !== null) {

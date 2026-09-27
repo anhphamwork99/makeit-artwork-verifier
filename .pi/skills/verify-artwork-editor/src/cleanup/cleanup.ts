@@ -22,6 +22,7 @@ import {
   type CleanupAuthoritySnapshot,
 } from '../evidence/cleanup-authority';
 import { restoreRepoConfig } from '../runtime/config-snapshot';
+import { resolveRepoRoot } from '../runtime/paths';
 import { terminateProcessGroup, waitForPortClosed } from '../runtime/process-group';
 
 /**
@@ -52,6 +53,14 @@ function emptyVerification(): CleanupVerification {
 }
 
 export interface CleanupRunOptions {
+  /**
+   * The independently supplied, validated canonical application root this
+   * cleanup is authorized to act on (ADR 0119). A record whose `repoRoot` is
+   * not exactly this value is refused without any destructive action. Public
+   * recovery always supplies the explicit `--app-root`; the toolkit repository
+   * root is the explicit legacy internal-caller binding.
+   */
+  expectedAppRoot?: string;
   /** Diagnostic/test override; production always removes the owned build output. */
   removeDistDir?: boolean;
   /** Test/diagnostic override: remove one owned path. Defaults to recursive rm. */
@@ -94,21 +103,36 @@ function refusal(
   };
 }
 
+/**
+ * A non-destructive cleanup result for a run whose allocation never established
+ * this invocation's own lease (ADR 0119). The run id may be occupied by another
+ * invocation, so no kill, restore or deletion is attempted; recovery is the
+ * explicit `cleanup --run-id <id> --app-root <trusted root>` command.
+ */
+export function noOwnedLeaseCleanup(
+  runId: string,
+  refusedReason: NonNullable<CleanupResult['refusedReason']>,
+  detail: string,
+): CleanupResult {
+  return refusal(runId, refusedReason, detail);
+}
+
 export async function cleanupRun(
   runId: string,
   options: CleanupRunOptions = {},
 ): Promise<CleanupResult> {
+  const expectedAppRoot = options.expectedAppRoot ?? resolveRepoRoot();
   // The run's held port reservation is released by every cleanup path, whether
   // or not ownership can be established, so a refused cleanup never leaks it.
   await releaseRunPortReservation(runId);
 
   const record = readOwnershipRecord(runId);
 
-  if (!ownershipRecordIsVerifiable(record) || record?.runId !== runId) {
+  if (!ownershipRecordIsVerifiable(record, expectedAppRoot) || record?.runId !== runId) {
     const detail =
       record === null
         ? `No owned verification state exists for run id ${runId}. Refusing to kill or delete anything.`
-        : `Owned state for run id ${runId} is not verifiable as this toolkit's own resource. Refusing to kill or delete anything.`;
+        : `Owned state for run id ${runId} is not verifiable against the expected application root. Refusing to kill or delete anything.`;
     return refusal(
       runId,
       record === null ? 'OWNERSHIP_UNKNOWN' : 'OWNERSHIP_RECORD_INVALID',
@@ -117,7 +141,10 @@ export async function cleanupRun(
   }
 
   const active = record as NonNullable<typeof record>;
-  const distDir = expectedDistDirFor(runId);
+  // The distDir is derived from the record's own verified application root (and
+  // asserted again below) rather than from a toolkit-default root, so cleanup of
+  // an explicit app-root run targets the app checkout the run actually owns.
+  const distDir = expectedDistDirFor(runId, active.repoRoot);
   const scratchRoot = scratchRootFor(runId);
 
   // The record already proved these derived paths match; assert again so a

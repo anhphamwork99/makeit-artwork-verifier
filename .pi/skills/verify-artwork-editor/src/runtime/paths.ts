@@ -1,3 +1,4 @@
+import { existsSync, realpathSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -35,4 +36,53 @@ export function isSafeRunId(value: unknown): value is string {
 
 export function repoRelativeDistDir(runId: string): string {
   return `${VERIFY_DIST_DIR_ROOT}/${runId}`;
+}
+
+/**
+ * The closed public `skill-root` role value, derived independently of any
+ * application root.
+ *
+ * A skill root is always `<toolkit repository root>/.pi/skills/verify-artwork-editor`,
+ * so its toolkit-relative projection is computed from the skill root itself
+ * (three levels down from its owning repository) rather than from the app root
+ * the run owns. Deriving this from an explicit application `repoRoot` would leak
+ * a `../..` traversal for an app-root run and fail the closed public projection.
+ */
+export function toolkitRelativeSkillRoot(skillRoot: string): string {
+  const toolkitRepositoryRoot = path.resolve(skillRoot, '..', '..', '..');
+  return path.relative(toolkitRepositoryRoot, skillRoot).split(path.sep).join('/');
+}
+
+/**
+ * Structural safety of a recorded owned-repository (application) root.
+ *
+ * The app root is an attacker-influenceable value read back from writable
+ * scratch state, so ownership verification accepts only an absolute,
+ * lexically-normalized path that is neither the filesystem root nor an empty
+ * value, is an existing directory, and is already its own canonical path
+ * (`realpathSync(value) === value`). A symlink (or any path through one) can be
+ * retargeted after allocation, so it is not a stable identity and fails closed
+ * (ADR 0119). The value is always supplied explicitly by the caller/allocation;
+ * it is never a mutable global, an environment default, or inferred from the
+ * toolkit location.
+ */
+export function isVerifiableRepositoryRoot(value: unknown): value is string {
+  if (typeof value !== 'string' || value.length === 0) return false;
+  if (!path.isAbsolute(value)) return false;
+  if (path.normalize(value) !== value) return false;
+  if (value === path.parse(value).root) return false;
+  let canonical: string;
+  try {
+    canonical = realpathSync(value);
+  } catch {
+    return false;
+  }
+  if (canonical !== value) return false;
+  let isDirectory = false;
+  try {
+    isDirectory = existsSync(value) && statSync(value).isDirectory();
+  } catch {
+    isDirectory = false;
+  }
+  return isDirectory;
 }

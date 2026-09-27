@@ -1,4 +1,4 @@
-import { existsSync, statSync } from 'node:fs';
+import { existsSync, realpathSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -22,6 +22,7 @@ import {
 export type ProductMeaningProviderFailureCode =
   | 'APP_ROOT_MISSING'
   | 'APP_ROOT_UNRESOLVED'
+  | 'APP_ROOT_INVALID'
   | 'APP_ROOT_NOT_DIRECTORY'
   | 'PROVIDER_ENTRY_MISSING'
   | 'PROVIDER_LOAD_FAILED'
@@ -54,10 +55,15 @@ export type AppRootResolution =
   | { readonly ok: false; readonly code: ProductMeaningProviderFailureCode; readonly detail: string };
 
 /**
- * Resolves and validates an explicit application root. The value must be a
- * non-empty path that exists and is a directory; it is resolved to an absolute
- * path so every downstream identity (allocation, launch cwd, provider entry)
- * binds to the same root.
+ * Resolves and validates an explicit application root.
+ *
+ * The value must be a non-empty path that exists and is a directory, and it is
+ * canonicalized with `realpathSync` so every downstream identity (allocation,
+ * launch cwd, provider entry, cleanup authority) binds to the same real root.
+ * A symlink is not an identity: it can be retargeted after allocation, so the
+ * real path — never the lexical spelling — is the accepted root (ADR 0119).
+ * If the real path cannot be established the root fails closed; there is no
+ * fallback to the lexical path and no absolute path is echoed in the refusal.
  */
 export function resolveAppRoot(appRoot: string | undefined): AppRootResolution {
   if (typeof appRoot !== 'string' || appRoot.trim().length === 0) {
@@ -75,9 +81,26 @@ export function resolveAppRoot(appRoot: string | undefined): AppRootResolution {
       detail: `The supplied --app-root does not exist: ${absolute}`,
     };
   }
+  let canonical: string;
+  try {
+    canonical = realpathSync(absolute);
+  } catch {
+    return {
+      ok: false,
+      code: 'APP_ROOT_UNRESOLVED',
+      detail: 'The supplied --app-root could not be resolved to a real directory.',
+    };
+  }
+  if (canonical === path.parse(canonical).root) {
+    return {
+      ok: false,
+      code: 'APP_ROOT_INVALID',
+      detail: 'The filesystem root is not a valid application root.',
+    };
+  }
   let isDirectory = false;
   try {
-    isDirectory = statSync(absolute).isDirectory();
+    isDirectory = statSync(canonical).isDirectory();
   } catch {
     isDirectory = false;
   }
@@ -85,10 +108,10 @@ export function resolveAppRoot(appRoot: string | undefined): AppRootResolution {
     return {
       ok: false,
       code: 'APP_ROOT_NOT_DIRECTORY',
-      detail: `The supplied --app-root is not a directory: ${absolute}`,
+      detail: 'The supplied --app-root is not a directory.',
     };
   }
-  return { ok: true, appRoot: absolute };
+  return { ok: true, appRoot: canonical };
 }
 
 export function productMeaningProviderEntryPath(appRoot: string): string {

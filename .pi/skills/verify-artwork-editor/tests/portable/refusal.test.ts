@@ -1,17 +1,42 @@
-import { existsSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  realpathSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
-import { evidenceRootFor } from '../../src/allocation/lease';
+import { allocateRun } from '../../src/allocation/allocate';
+import {
+  expectedDistDirFor,
+  evidenceRootFor,
+  ownershipRecordIsVerifiable,
+  ownershipRecordPathFor,
+  readOwnershipRecord,
+  repositoryRootProblem,
+  scratchRootFor,
+  updateOwnershipRecord,
+} from '../../src/allocation/lease';
+import { releaseAllRunPortReservations } from '../../src/allocation/port-reservation';
+import { cleanupRun } from '../../src/cleanup/cleanup';
 import { runDiagnosticCommand, type DiagnosticCliDetails } from '../../src/cli/diagnostic';
+import type { CleanupCliDetails } from '../../src/cli/cleanup';
 import { runCli } from '../../src/cli/main';
 import { runWithCliStdout } from '../../src/cli/output';
 import type { CaseRequest } from '../../src/contracts/case-model';
-import type { CliResult } from '../../src/contracts/runtime';
+import type { CliResult, RunOwnershipRecord } from '../../src/contracts/runtime';
+import { RUN_OWNERSHIP_RECORD_SCHEMA_VERSION } from '../../src/contracts/schema-versions';
 import { resolveExecutionSupport } from '../../src/planner/execution-support';
-import { resolveSkillRoot } from '../../src/runtime/paths';
+import { productMeaningProviderEntryPath } from '../../src/runtime/product-meaning-provider';
+import { generateRunId } from '../../src/runtime/run-id';
+import { resolveRepoRoot, resolveSkillRoot } from '../../src/runtime/paths';
 
 /**
  * Portable pre-allocation refusal matrix (ADR 0118, WP2 C3/C4).
@@ -315,5 +340,326 @@ describe('[ADR 0118] CLI-level Diagnostic refusals preserve status and exit code
     expect(envelope.status).toBe('HARNESS_BLOCKED');
     expect(codes(envelope)).toContain('PRODUCT_MEANING_PROVIDER_UNAVAILABLE');
     expectPreallocationRefusal(envelope, runId);
+  });
+});
+
+/**
+ * ADR 0119 — cleanup authority is the independently supplied canonical app root.
+ *
+ * `record.repoRoot` and its derived `distDir` are read back from
+ * attacker-influenceable scratch state, so they are accepted only when the
+ * record's root is exactly the root the caller independently validated. A
+ * product-meaning provider file is a preflight compatibility test, never cleanup
+ * authority. Every refusal below is non-destructive: no kill, restore or delete.
+ */
+const APP_ROOT = APP_ROOT_COMPATIBLE;
+const FOREIGN_PROVIDER_ROOT = APP_ROOT_INCOMPATIBLE_SCHEMA;
+const trackedRunIds: string[] = [];
+
+function trackRun(runId: string): string {
+  trackedRunIds.push(runId);
+  return runId;
+}
+
+afterEach(async () => {
+  await releaseAllRunPortReservations();
+  for (const runId of trackedRunIds.splice(0)) {
+    rmSync(scratchRootFor(runId), { recursive: true, force: true });
+    rmSync(evidenceRootFor(runId), { recursive: true, force: true });
+    rmSync(expectedDistDirFor(runId, APP_ROOT), { recursive: true, force: true });
+    rmSync(expectedDistDirFor(runId, FOREIGN_PROVIDER_ROOT), { recursive: true, force: true });
+  }
+});
+
+function verifiableRecord(runId: string, repoRoot: string): RunOwnershipRecord {
+  return {
+    schemaVersion: RUN_OWNERSHIP_RECORD_SCHEMA_VERSION,
+    owner: 'verify-artwork-editor',
+    state: 'allocated',
+    createdAt: '2026-01-01T00:00:00.000Z',
+    updatedAt: '2026-01-01T00:00:00.000Z',
+    processPid: null,
+    processGroupId: null,
+    ownedCommand: null,
+    serverLogPath: path.join(evidenceRootFor(runId), 'server.log'),
+    repoConfigSnapshot: null,
+    activeCase: null,
+    runId,
+    repoRoot,
+    skillRoot: resolveSkillRoot(),
+    repoRelativeDistDir: `.next/verify-runs/${runId}`,
+    distDir: expectedDistDirFor(runId, repoRoot),
+    scratchRoot: scratchRootFor(runId),
+    evidenceRoot: evidenceRootFor(runId),
+    routeNamespace: `verify:${runId}:routes`,
+    storageNamespace: `verify:${runId}:storage`,
+    port: 55958,
+    baseUrl: 'http://127.0.0.1:55958',
+    environmentCellId: 'chromium-desktop-1440x1000',
+  };
+}
+
+describe('[ADR 0119] exact app-root ownership binding', () => {
+  it('accepts a record only for its exact validated root, never a provider-bearing foreign root', () => {
+    const runId = 'vt-bind-authority';
+    const bound = verifiableRecord(runId, APP_ROOT);
+
+    expect(ownershipRecordIsVerifiable(bound, APP_ROOT)).toBe(true);
+    expect(ownershipRecordIsVerifiable(bound, FOREIGN_PROVIDER_ROOT)).toBe(false);
+    expect(ownershipRecordIsVerifiable(bound, resolveRepoRoot())).toBe(false);
+
+    // A coherently tampered record: repoRoot *and* its derived distDir both point
+    // at a different provider-bearing checkout. The provider file plus a matching
+    // derived distDir must not authorize cleanup of a root the caller never named.
+    const foreign = verifiableRecord(runId, FOREIGN_PROVIDER_ROOT);
+    expect(existsSync(productMeaningProviderEntryPath(FOREIGN_PROVIDER_ROOT))).toBe(true);
+    expect(repositoryRootProblem(foreign, FOREIGN_PROVIDER_ROOT)).toBeNull();
+    expect(ownershipRecordIsVerifiable(foreign, APP_ROOT)).toBe(false);
+    expect(repositoryRootProblem(foreign, APP_ROOT)).not.toBeNull();
+  });
+
+  it('refuses a record whose distDir is not derived from its own verified root', () => {
+    const runId = 'vt-bind-dist';
+    const record = verifiableRecord(runId, APP_ROOT);
+    const tampered = {
+      ...record,
+      distDir: expectedDistDirFor(runId, FOREIGN_PROVIDER_ROOT),
+    };
+    expect(ownershipRecordIsVerifiable(tampered, APP_ROOT)).toBe(false);
+    expect(repositoryRootProblem(tampered, APP_ROOT)).not.toBeNull();
+  });
+
+  it('cleans an allocated-but-unlaunched run only with its exact validated root', async () => {
+    const runId = trackRun(generateRunId());
+    const allocated = await allocateRun({ runId, appRoot: APP_ROOT });
+    expect(allocated.ok).toBe(true);
+    expect(existsSync(scratchRootFor(runId))).toBe(true);
+
+    const cleanup = await cleanupRun(runId, { expectedAppRoot: APP_ROOT });
+    expect(cleanup.attempted).toBe(true);
+    expect(cleanup.complete).toBe(true);
+    expect(cleanup.verification.processDead).toBe(true);
+    expect(cleanup.verification.scratchRemoved).toBe(true);
+    expect(existsSync(scratchRootFor(runId))).toBe(false);
+  });
+
+  it('refuses a tampered foreign-root record without killing or deleting anything', async () => {
+    const runId = trackRun(generateRunId());
+    const allocated = await allocateRun({ runId, appRoot: APP_ROOT });
+    expect(allocated.ok).toBe(true);
+
+    // The record is edited to name a different, existing provider-bearing root
+    // with a coherent derived distDir. Cleanup with the bound root must refuse.
+    const foreignDist = expectedDistDirFor(runId, FOREIGN_PROVIDER_ROOT);
+    mkdirSync(foreignDist, { recursive: true });
+    const marker = path.join(foreignDist, 'keep.txt');
+    writeFileSync(marker, 'keep\n');
+    updateOwnershipRecord(runId, { repoRoot: FOREIGN_PROVIDER_ROOT, distDir: foreignDist });
+
+    const cleanup = await cleanupRun(runId, { expectedAppRoot: APP_ROOT });
+    expect(cleanup.attempted).toBe(false);
+    expect(cleanup.complete).toBe(false);
+    expect(cleanup.refusedReason).toBe('OWNERSHIP_RECORD_INVALID');
+    expect(existsSync(marker)).toBe(true);
+    expect(existsSync(ownershipRecordPathFor(runId))).toBe(true);
+    expect(existsSync(scratchRootFor(runId))).toBe(true);
+  });
+
+  it('preserves an incumbent lease when a second allocation collides, without cleaning it', async () => {
+    const runId = trackRun(generateRunId());
+    const first = await allocateRun({ runId, appRoot: APP_ROOT });
+    expect(first.ok).toBe(true);
+    const incumbent = readOwnershipRecord(runId);
+    expect(incumbent).not.toBeNull();
+
+    const second = await allocateRun({ runId, appRoot: APP_ROOT });
+    expect(second.ok).toBe(false);
+    if (!second.ok) expect(second.reason).toBe('SCRATCH_ROOT_OCCUPIED');
+    // No cleanup ran: the incumbent record and its scratch lease are untouched.
+    expect(readOwnershipRecord(runId)).toEqual(incumbent);
+    expect(existsSync(scratchRootFor(runId))).toBe(true);
+
+    const cleanup = await cleanupRun(runId, { expectedAppRoot: APP_ROOT });
+    expect(cleanup.complete).toBe(true);
+  });
+
+  it('does not auto-clean the incumbent owner after a Diagnostic allocation collision', async () => {
+    const runId = trackRun(generateRunId());
+    const incumbent = await allocateRun({ runId, appRoot: APP_ROOT });
+    expect(incumbent.ok).toBe(true);
+    const before = readOwnershipRecord(runId);
+
+    const result = await runDiagnosticCommand({
+      casePath: supportedCasePath(),
+      appRoot: APP_ROOT,
+      runId,
+    });
+
+    // The collision is a pre-authority, pre-launch refusal with no product verdict.
+    expect(result.status).toBe('ENVIRONMENT_FAILURE');
+    expect(result.launchAttempted).toBe(false);
+    expect(result.details?.allocation).toBeNull();
+    // Reaching the execution pre-authority path (not a provider/fixture refusal)
+    // proves the run got as far as the allocation attempt, where it collided.
+    const refusal = result.diagnostics.find((entry) => entry.code === 'RUNTIME_LAUNCH_FAILED');
+    expect(refusal?.context.issueCode).toBe('EXTERNAL_PREAUTHORITY_FAILURE');
+    // A failed allocation never cleans: the incumbent lease survives exactly.
+    expect(readOwnershipRecord(runId)).toEqual(before);
+    expect(existsSync(scratchRootFor(runId))).toBe(true);
+
+    const cleanup = await cleanupRun(runId, { expectedAppRoot: APP_ROOT });
+    expect(cleanup.complete).toBe(true);
+  });
+});
+
+describe('[ADR 0119] public cleanup requires an explicit trusted app root', () => {
+  it('refuses cleanup without --app-root as USAGE/exit 64', async () => {
+    const envelope = await captureCli(['cleanup', '--run-id', 'vt-cli-cleanup-no-root']);
+    expect(envelope.exitCode).toBe(64);
+    expect(envelope.status).toBe('USAGE');
+    expect(codes(envelope)).toContain('CLI_USAGE_INVALID');
+  });
+
+  it('refuses a wrong root without destructive action, then cleans with the exact root', async () => {
+    const runId = trackRun(generateRunId());
+    const allocated = await allocateRun({ runId, appRoot: APP_ROOT });
+    expect(allocated.ok).toBe(true);
+
+    const wrong = await captureCli<CleanupCliDetails>([
+      'cleanup',
+      '--run-id',
+      runId,
+      '--app-root',
+      FOREIGN_PROVIDER_ROOT,
+    ]);
+    expect(wrong.status).toBe('HARNESS_BLOCKED');
+    expect(wrong.details?.cleanup.refusedReason).toBe('OWNERSHIP_RECORD_INVALID');
+    expect(existsSync(scratchRootFor(runId))).toBe(true);
+
+    const right = await captureCli<CleanupCliDetails>([
+      'cleanup',
+      '--run-id',
+      runId,
+      '--app-root',
+      APP_ROOT,
+    ]);
+    expect(right.status).toBe('PASS');
+    expect(right.exitCode).toBe(0);
+    expect(right.details?.cleanup.complete).toBe(true);
+    expect(existsSync(scratchRootFor(runId))).toBe(false);
+  });
+});
+
+/**
+ * ADR 0119 — symlink/path-identity ambiguity fails closed.
+ *
+ * The app root is an identity, not a string: a symlinked `--app-root` must be
+ * canonicalized to its real directory before it is recorded as ownership
+ * authority, and a recorded root that is not its own canonical path must be
+ * refused. Without this, retargeting a symlink after allocation could redirect
+ * cleanup to a different checkout than the one the run actually owned.
+ */
+function makeTempRoots(...names: readonly string[]): { base: string; roots: string[] } {
+  // `os.tmpdir()` is itself a symlink on some platforms; canonicalize so the
+  // synthetic roots are their own real paths and the test asserts identity.
+  const base = realpathSync(mkdtempSync(path.join(os.tmpdir(), 'vt-symlink-root-')));
+  const roots = names.map((name) => {
+    const dir = path.join(base, name);
+    mkdirSync(dir);
+    return dir;
+  });
+  return { base, roots };
+}
+
+describe('[ADR 0119] symlink app roots fail closed', () => {
+  it('records the canonical root for a symlinked app root and cleans via that true root', async () => {
+    const { base, roots } = makeTempRoots('real-app');
+    const realRoot = roots[0] as string;
+    const link = path.join(base, 'alias');
+    symlinkSync(realRoot, link, 'dir');
+
+    const runId = trackRun(generateRunId());
+    const allocated = await allocateRun({ runId, appRoot: link });
+    expect(allocated.ok).toBe(true);
+
+    // Authority records the true root, never the symlinked spelling.
+    const record = readOwnershipRecord(runId);
+    expect(record?.repoRoot).toBe(realRoot);
+    expect(record?.repoRoot).not.toBe(link);
+
+    const cleanup = await cleanupRun(runId, { expectedAppRoot: realRoot });
+    expect(cleanup.complete).toBe(true);
+    expect(existsSync(scratchRootFor(runId))).toBe(false);
+    rmSync(base, { recursive: true, force: true });
+  });
+
+  it('refuses cleanup through a retargeted symlink but cleans via the true root', async () => {
+    const { base, roots } = makeTempRoots('root-a', 'root-b');
+    const [rootA, rootB] = roots as [string, string];
+    const link = path.join(base, 'alias');
+    symlinkSync(rootA, link, 'dir');
+
+    const runId = trackRun(generateRunId());
+    const allocated = await allocateRun({ runId, appRoot: link });
+    expect(allocated.ok).toBe(true);
+    expect(readOwnershipRecord(runId)?.repoRoot).toBe(rootA);
+
+    // Retarget the same symlink to another valid root.
+    rmSync(link, { force: true });
+    symlinkSync(rootB, link, 'dir');
+
+    // The public recovery path canonicalizes the symlink it is given, so it now
+    // names root-b and must refuse the record that owns root-a, non-destructively.
+    const refused = await captureCli<CleanupCliDetails>([
+      'cleanup',
+      '--run-id',
+      runId,
+      '--app-root',
+      link,
+    ]);
+    expect(refused.status).toBe('HARNESS_BLOCKED');
+    expect(refused.details?.cleanup.attempted).toBe(false);
+    expect(refused.details?.cleanup.refusedReason).toBe('OWNERSHIP_RECORD_INVALID');
+    expect(existsSync(scratchRootFor(runId))).toBe(true);
+    expect(existsSync(ownershipRecordPathFor(runId))).toBe(true);
+
+    // The true original root still cleans exactly its own resources.
+    const cleaned = await captureCli<CleanupCliDetails>([
+      'cleanup',
+      '--run-id',
+      runId,
+      '--app-root',
+      rootA,
+    ]);
+    expect(cleaned.status).toBe('PASS');
+    expect(cleaned.details?.cleanup.complete).toBe(true);
+    expect(existsSync(scratchRootFor(runId))).toBe(false);
+    rmSync(base, { recursive: true, force: true });
+  });
+
+  it('refuses a manually forged record whose repoRoot is a symlink', async () => {
+    const { base, roots } = makeTempRoots('real');
+    const realRoot = roots[0] as string;
+    const link = path.join(base, 'link');
+    symlinkSync(realRoot, link, 'dir');
+
+    const runId = trackRun(generateRunId());
+    const allocated = await allocateRun({ runId, appRoot: realRoot });
+    expect(allocated.ok).toBe(true);
+
+    // A forged record names the symlink (not its canonical target) with a
+    // coherently derived distDir; the symlink is not a verifiable identity.
+    updateOwnershipRecord(runId, {
+      repoRoot: link,
+      distDir: path.join(link, `.next/verify-runs/${runId}`),
+    });
+
+    const cleanup = await cleanupRun(runId, { expectedAppRoot: realRoot });
+    expect(cleanup.attempted).toBe(false);
+    expect(cleanup.complete).toBe(false);
+    expect(cleanup.refusedReason).toBe('OWNERSHIP_RECORD_INVALID');
+    expect(existsSync(scratchRootFor(runId))).toBe(true);
+    expect(existsSync(ownershipRecordPathFor(runId))).toBe(true);
+    rmSync(base, { recursive: true, force: true });
   });
 });

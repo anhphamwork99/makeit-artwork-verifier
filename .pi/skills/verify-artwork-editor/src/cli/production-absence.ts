@@ -201,9 +201,9 @@ export async function runProductionAbsenceCommand(
 
   const allocation = allocationResult.allocation;
   const diagnostics: DiagnosticRecord[] = [];
-  const admission = admitCase(runId, 'production-absence');
+  const admission = admitCase(runId, 'production-absence', allocation.repoRoot);
   if (!admission.ok) {
-    await cleanupRun(runId);
+    await cleanupRun(runId, { expectedAppRoot: allocation.repoRoot });
     return buildCliResult<ProductionAbsenceCliDetails>({
       command: 'production-absence',
       status: 'HARNESS_BLOCKED',
@@ -375,6 +375,7 @@ export async function runProductionAbsenceCommand(
   let cleanup: CleanupResult;
   try {
     cleanup = await cleanupRun(runId, {
+      expectedAppRoot: allocation.repoRoot,
       removeDistDir: input.keepDistDir === true ? false : true,
       browserCleanup,
       onAuthoritySnapshot: (snapshot) => {

@@ -136,12 +136,15 @@ such and cannot be promoted to current-source proof.
 Cleanup is **exact-id and fail-closed**:
 
 ```sh
-pnpm cli -- cleanup --run-id <run-id>
+pnpm cli -- cleanup --run-id <run-id> --app-root <FE-checkout>
 ```
 
 It may terminate only the recorded process group, close only the recorded port,
-remove only the recorded dist/scratch resources, and preserve evidence. An
-unknown or colliding run is refused. If cleanup verification fails, retain the
+remove only the recorded dist/scratch resources, and preserve evidence. The
+`--app-root` is mandatory and must be the exact validated checkout the run was
+allocated against; a missing root is a usage error and a wrong or tampered root
+is refused with no kill, restore or deletion. An unknown or colliding run is
+refused. If cleanup verification fails, retain the
 evidence and treat the run as non-PASS until the ownership issue is resolved.
 
 ## Transfer boundary

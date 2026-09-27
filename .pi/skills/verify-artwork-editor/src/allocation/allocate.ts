@@ -15,6 +15,7 @@ import {
   resolveRepoRoot,
   resolveSkillRoot,
 } from '../runtime/paths';
+import { resolveAppRoot } from '../runtime/product-meaning-provider';
 import {
   evidenceRootFor,
   expectedDistDirFor,
@@ -48,10 +49,12 @@ export interface AllocateRunInput {
   environmentCellId?: string;
   /**
    * Explicit, validated application root (ADR 0118). When supplied it becomes
-   * the allocation's `repoRoot`, so the owned Next.js launch runs against the
-   * supplied application rather than the toolkit checkout. Diagnostic preflight
-   * always supplies it; other callers that predate the standalone toolkit keep
-   * the legacy repository-root resolution.
+   * the allocation's `repoRoot` and the base for the owned Next.js `distDir`, so
+   * the owned launch runs against the supplied application rather than the
+   * toolkit checkout. Diagnostic preflight always supplies it; other callers
+   * that predate the standalone toolkit keep the legacy repository-root
+   * resolution. An unverifiable root fails closed before any resource is
+   * reserved.
    */
   appRoot?: string;
   /** Test/diagnostic override: reserve exactly this loopback port. */
@@ -96,6 +99,25 @@ export function isPortFree(port: number): Promise<boolean> {
   });
 }
 
+/**
+ * Resolve the run's owned application repository root from the explicit input.
+ *
+ * The app root is never inferred from the toolkit/skill location and an
+ * unusable explicit root fails closed before any catalogue, port, or filesystem
+ * lease is touched. Absent input preserves the legacy toolkit-root behavior for
+ * callers that predate the standalone app-root contract.
+ */
+function resolveAllocationRepositoryRoot(
+  appRoot: string | undefined,
+): { ok: true; root: string } | { ok: false; detail: string } {
+  if (appRoot === undefined) {
+    return { ok: true, root: resolveRepoRoot() };
+  }
+  const resolved = resolveAppRoot(appRoot);
+  if (!resolved.ok) return { ok: false, detail: resolved.detail };
+  return { ok: true, root: resolved.appRoot };
+}
+
 export async function allocateRun(
   input: AllocateRunInput,
   reservePort: PortReserver = reserveLoopbackPort,
@@ -109,11 +131,14 @@ export async function allocateRun(
     };
   }
 
-  const repoRoot = input.appRoot ?? resolveRepoRoot();
+  const repoRoot = resolveAllocationRepositoryRoot(input.appRoot);
+  if (!repoRoot.ok) {
+    return { ok: false, reason: 'APP_ROOT_INVALID', detail: repoRoot.detail };
+  }
   const skillRoot = resolveSkillRoot();
   const scratchRoot = scratchRootFor(runId);
   const evidenceRoot = evidenceRootFor(runId);
-  const distDir = expectedDistDirFor(runId);
+  const distDir = expectedDistDirFor(runId, repoRoot.root);
   const relativeDistDir = repoRelativeDistDir(runId);
 
   let environmentCellId: string;
@@ -141,7 +166,7 @@ export async function allocateRun(
   // A live owner of this exact run id must be cleaned up, never attached to.
   const existing = readOwnershipRecord(runId);
   const liveOwned =
-    ownershipRecordIsVerifiable(existing) &&
+    ownershipRecordIsVerifiable(existing, repoRoot.root) &&
     existing?.state === 'launched' &&
     existing.processGroupId !== null &&
     isProcessGroupAlive(existing.processGroupId);
@@ -227,7 +252,7 @@ export async function allocateRun(
   const now = new Date().toISOString();
   const allocation: RunAllocation = {
     runId,
-    repoRoot,
+    repoRoot: repoRoot.root,
     skillRoot,
     repoRelativeDistDir: relativeDistDir,
     distDir,
