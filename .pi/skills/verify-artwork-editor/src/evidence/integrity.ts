@@ -308,6 +308,12 @@ export interface EvidenceVerifyCurrentTreeContext {
 export interface EvidenceVerifyEnvironment {
   /** Absolute evidence base directory. Local only; never enters a report. */
   readonly evidenceBaseDir: string;
+  /**
+   * A configured-but-unusable evidence base (`MAKEIT_ARTWORK_EVIDENCE_ROOT`).
+   * When present the verifier fails closed through the ordinary root-resolution
+   * path before any filesystem access; the value is never echoed in a report.
+   */
+  readonly rootConfigProblem?: string;
   readonly fs: EvidenceVerifyFsAdapter;
   /**
    * Explicit declaration of the adapter's no-follow guarantee. When it is
@@ -1480,6 +1486,20 @@ export function verifyEvidenceRoot(
   // read, so fail closed before touching the filesystem at all.
   const capability = env.noFollowCapability ?? { support: 'supported' as const };
   if (capability.support !== 'supported') {
+    return failureReport(
+      'run',
+      requestedId,
+      'VERIFY_ROOT_UNREADABLE',
+      'ROOT_RESOLUTION',
+      'ROOT_RESOLUTION',
+      'no-transaction',
+    );
+  }
+
+  // A configured adapter-owned evidence root that is not a usable absolute,
+  // normalized, symlink-free existing directory fails closed exactly like an
+  // unreadable root: no filesystem access, no report value derived from it.
+  if (env.rootConfigProblem !== undefined) {
     return failureReport(
       'run',
       requestedId,

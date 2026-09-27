@@ -76,6 +76,7 @@ import {
   resolveEnvironmentCell,
 } from '../runtime/environment';
 import { resolveRepoRoot, resolveSkillRoot } from '../runtime/paths';
+import { evidenceBaseDir, resolveEvidenceRoot } from '../runtime/evidence-root';
 import {
   loadProductMeaningProvider,
   type ProductMeaningProviderFailureCode,
@@ -570,7 +571,7 @@ function details(input: Partial<DiagnosticCliDetails>): DiagnosticCliDetails {
 }
 
 function publicDiagnosticForbiddenPaths(extra: readonly string[] = []): string[] {
-  return [resolveRepoRoot(), resolveSkillRoot(), os.tmpdir(), ...extra];
+  return [resolveRepoRoot(), resolveSkillRoot(), os.tmpdir(), evidenceBaseDir(), ...extra];
 }
 
 /** The operational facts one prepared Diagnostic run hands to the final façade. */
@@ -696,6 +697,21 @@ export async function prepareDiagnosticRun(
 ): Promise<DiagnosticPreparation> {
   const runId = input.runId ?? generateRunId();
   const diagnostics: DiagnosticRecord[] = [];
+
+  // The optional adapter-owned evidence root is validated before any plan,
+  // allocation, launch, or evidence write. An invalid/relative/symlink value is
+  // a harness refusal with `launchAttempted: false` and no artifact; an unset
+  // variable preserves the toolkit default.
+  const evidenceResolution = resolveEvidenceRoot();
+  if (!evidenceResolution.ok) {
+    const detail = `Diagnostic evidence root is not usable: ${evidenceResolution.problem}`;
+    return refused({
+      status: 'HARNESS_BLOCKED',
+      detail,
+      diagnostics: [createDiagnostic('EVIDENCE_ROOT_ENV_INVALID', detail)],
+      details: details({ runId }),
+    });
+  }
 
   // The app root is a mandatory, explicit CLI input for the Diagnostic surface
   // (ADR 0118). It is never inferred from the toolkit/skill location, so an

@@ -95,6 +95,7 @@ const AUTHORIZED_SKILL_ADDITIONS = [
   'src/contracts/product-meaning-provider.ts',
   'src/runtime/crossword-source.ts',
   'src/runtime/product-meaning-provider.ts',
+  'src/runtime/evidence-root.ts',
   'src/browser/browser-unavailable.ts',
   'src/runtime/local-diagnostics.ts',
   'tests/foundation/browser-unavailable-outcome.test.ts',
@@ -102,6 +103,7 @@ const AUTHORIZED_SKILL_ADDITIONS = [
   'src/version.ts',
   'tests/portable/contract.test.ts',
   'tests/portable/crossword-source-root.test.ts',
+  'tests/portable/evidence-root.test.ts',
   'tests/portable/refusal.test.ts',
   'tests/portable/fixtures/',
 ];

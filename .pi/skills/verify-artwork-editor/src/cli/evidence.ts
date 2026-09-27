@@ -1,5 +1,4 @@
 import os from 'node:os';
-import path from 'node:path';
 
 import {
   parseEvidenceVerifyArguments,
@@ -15,6 +14,11 @@ import {
   type EvidenceVerifyFsAdapter,
 } from '../evidence/integrity';
 import { resolveRepoRoot, resolveSkillRoot } from '../runtime/paths';
+import {
+  defaultEvidenceBaseDir,
+  evidenceBaseDir,
+  resolveEvidenceRoot,
+} from '../runtime/evidence-root';
 import { buildCliResult, usageDiagnostic } from './output';
 
 /**
@@ -50,12 +54,8 @@ export interface EvidenceVerifyCommandOptions {
   readonly forbiddenRoots?: readonly string[];
 }
 
-function productionEvidenceBaseDir(): string {
-  return path.join(resolveSkillRoot(), 'evidence');
-}
-
 function productionForbiddenRoots(): readonly string[] {
-  return [resolveRepoRoot(), resolveSkillRoot(), os.tmpdir()];
+  return [resolveRepoRoot(), resolveSkillRoot(), os.tmpdir(), evidenceBaseDir()];
 }
 
 /**
@@ -63,12 +63,26 @@ function productionForbiddenRoots(): readonly string[] {
  * no-follow Node adapter and the default current-tree provider recomputes the
  * governed repository identities through the accepted read-only collector. Both
  * are injectable for tests; no injection can add a write or cleanup edge.
+ *
+ * The adapter-owned evidence base is resolved once here. With no explicit test
+ * seam, an invalid `MAKEIT_ARTWORK_EVIDENCE_ROOT` fails closed through the
+ * verifier's root-resolution path instead of silently reading another root.
  */
 function buildEvidenceVerifyEnvironment(
   options: EvidenceVerifyCommandOptions,
 ): EvidenceVerifyEnvironment {
+  let baseDir: string;
+  let rootConfigProblem: string | undefined;
+  if (options.evidenceBaseDir !== undefined) {
+    baseDir = options.evidenceBaseDir;
+  } else {
+    const resolution = resolveEvidenceRoot();
+    baseDir = resolution.ok ? resolution.baseDir : defaultEvidenceBaseDir();
+    if (!resolution.ok) rootConfigProblem = resolution.problem;
+  }
   const env: EvidenceVerifyEnvironment = {
-    evidenceBaseDir: options.evidenceBaseDir ?? productionEvidenceBaseDir(),
+    evidenceBaseDir: baseDir,
+    ...(rootConfigProblem === undefined ? {} : { rootConfigProblem }),
     fs: options.fs ?? createNodeEvidenceVerifyFsAdapter(),
     forbiddenRoots: options.forbiddenRoots ?? productionForbiddenRoots(),
     currentTree: options.currentTree ?? createCurrentTreeProvenanceProvider(),

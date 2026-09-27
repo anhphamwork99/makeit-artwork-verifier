@@ -32,6 +32,12 @@ import { prepareDiagnosticRun, type DiagnosticCliDetails } from './diagnostic';
 import { resolveExecutionSupport } from '../planner/execution-support';
 import { collectAppRevision, lockfileDigest } from '../runtime/environment-facts';
 import { resolveAppRoot } from '../runtime/product-meaning-provider';
+import {
+  evidenceBaseDir,
+  evidenceSuiteRoot,
+  evidenceSuiteRootRelativePath,
+  resolveEvidenceRoot,
+} from '../runtime/evidence-root';
 import { generateRunId } from '../runtime/run-id';
 import { isSafeRunId, resolveRepoRoot, resolveSkillRoot } from '../runtime/paths';
 import { resolveWorkflowSteps } from '../workflows/steps';
@@ -133,7 +139,7 @@ interface ValidatedSuiteMember {
 }
 
 function suiteEvidenceRoot(suiteExecutionId: string): string {
-  return path.join(resolveSkillRoot(), 'evidence', 'suites', suiteExecutionId);
+  return evidenceSuiteRoot(evidenceBaseDir(), suiteExecutionId);
 }
 
 function isWithinRoot(candidate: string, root: string): boolean {
@@ -390,6 +396,24 @@ export async function runDiagnosticSuiteCommand(
     });
   }
 
+  // The optional adapter-owned evidence root is validated before any child can
+  // allocate or write: an invalid/relative/symlink value refuses the whole suite
+  // as HARNESS_BLOCKED before the first child and before any evidence artifact.
+  // An unset variable preserves the toolkit default exactly.
+  const evidenceResolution = resolveEvidenceRoot();
+  if (!evidenceResolution.ok) {
+    const detail = `Suite evidence root is not usable: ${evidenceResolution.problem}`;
+    return buildCliResult<DiagnosticSuiteCliDetails>({
+      command: 'diagnostic',
+      subcommand: loaded.suite.suiteId,
+      status: 'HARNESS_BLOCKED',
+      detail,
+      launchAttempted: false,
+      details: unlaunchedDetails(loaded, suiteExecutionId),
+      diagnostics: [createDiagnostic('EVIDENCE_ROOT_ENV_INVALID', detail)],
+    });
+  }
+
   const resolvedAppRoot = input.appRoot === undefined ? null : resolveAppRoot(input.appRoot);
   if (resolvedAppRoot !== null && !resolvedAppRoot.ok) {
     const detail = `Suite application root is not usable for preflight: ${resolvedAppRoot.detail}`;
@@ -602,7 +626,10 @@ export async function runDiagnosticSuiteCommand(
     interrupted,
     stoppedOnCleanup: stoppedEarly,
     aggregate,
-    suiteDurable: { evidenceRoot, forbiddenPaths: [repoRoot, resolveSkillRoot(), os.tmpdir()] },
+    suiteDurable: {
+      evidenceRoot,
+      forbiddenPaths: [repoRoot, resolveSkillRoot(), os.tmpdir(), evidenceBaseDir()],
+    },
   });
 
   // A child summary preserves that child's own delivered verdict verbatim; the
@@ -657,7 +684,10 @@ export async function runDiagnosticSuiteCommand(
       stoppedEarly,
       stopReason,
       interrupted,
-      suiteRecordPath: outcome.suite.durable.wrote ? outcome.suite.durable.path : null,
+      // Public output never carries the absolute adapter-owned evidence path.
+      suiteRecordPath: outcome.suite.durable.wrote
+        ? evidenceSuiteRootRelativePath(suiteExecutionId)
+        : null,
       durationMs: suiteEndedAt - suiteStartedAt,
     },
     diagnostics: [...childDiagnostics, ...outcome.cli.diagnostics],

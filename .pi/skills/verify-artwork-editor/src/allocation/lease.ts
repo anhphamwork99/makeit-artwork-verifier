@@ -19,6 +19,7 @@ import {
   resolveRepoRoot,
   resolveSkillRoot,
 } from '../runtime/paths';
+import { evidenceBaseDir, evidenceRunRoot } from '../runtime/evidence-root';
 import { ownershipProcessFieldsProblem } from './process-identity';
 
 /**
@@ -43,7 +44,7 @@ export function ownershipRecordPathFor(runId: string): string {
 }
 
 export function evidenceRootFor(runId: string): string {
-  return path.join(resolveSkillRoot(), 'evidence', 'runs', runId);
+  return evidenceRunRoot(evidenceBaseDir(), runId);
 }
 
 export function expectedDistDirFor(

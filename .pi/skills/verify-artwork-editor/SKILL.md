@@ -98,9 +98,10 @@ Refusals stay distinct from product defects:
 Reaching a live application requires separate, authorized private access to the
 `FE-build` checkout. This toolkit does not vendor, copy, or infer product source.
 
-**Current limitation:** the `FE-build` provider export is not implemented yet,
-so a live `diagnostic`/`doctor` run cannot currently be claimed from this
-toolkit. `plan`, `validate`, help, and the portable tests remain fully usable.
+The FE-owned provider export is implemented and the detached toolkit has passed
+the named representative browser suite against an authorized checkout. The
+FE convenience wrapper remains separate integration work; use the toolkit-root
+commands until that wrapper is installed.
 </app-root>
 
 <diagnostic>
@@ -163,9 +164,15 @@ unless a future feature file explicitly documents another production boundary.
 </drive>
 
 <evidence>
-Each Diagnostic run receives a durable directory:
+Each Diagnostic run receives a durable directory. Direct toolkit use defaults to:
 
 `.pi/skills/verify-artwork-editor/evidence/runs/$RUN_ID/`
+
+An installed FE adapter may set `MAKEIT_ARTWORK_EVIDENCE_ROOT` to an existing,
+canonical absolute evidence base; then runs and suites live below its `runs/`
+and `suites/` children. Keep the identical value for run, recovery cleanup, and
+`evidence verify`. Direct users should leave it unset. Invalid, relative, or
+symlinked values fail closed before evidence I/O.
 
 It contains:
 
@@ -220,8 +227,8 @@ The documented correctness profile is Diagnostic correctness with a closed
 outcome and separate coverage. Read `references/cold-agent.md` before
 interpreting a run, and use
 `pnpm cli -- evidence verify --run $RUN_ID` to independently verify the durable
-record after cleanup. Treat a toolkit-only checkout as unable to produce a live
-`PASS`: the FE provider export and wrapper are WP3 work.
+record after cleanup. A toolkit checkout with authorized FE access can produce a scoped live `PASS`;
+the FE convenience wrapper is separate integration work.
 </cold-agent>
 
 <transfer-boundary>

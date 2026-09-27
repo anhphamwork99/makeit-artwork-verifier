@@ -1229,6 +1229,22 @@ export {
   resolveSkillRoot,
 } from './runtime/paths';
 export {
+  EVIDENCE_ROOT_ENV,
+  defaultEvidenceBaseDir,
+  evidenceBaseDir,
+  evidenceRunRoot,
+  evidenceRunRootRelativePath,
+  evidenceSuiteRoot,
+  evidenceSuiteRootRelativePath,
+  explicitEvidenceRootProblem,
+  resolveEvidenceRoot,
+} from './runtime/evidence-root';
+export type {
+  EvidenceRootOrigin,
+  EvidenceRootResolution,
+  ResolvedEvidenceRoot,
+} from './runtime/evidence-root';
+export {
   PRODUCT_MEANING_PROVIDER_ENTRY_RELATIVE_PATH,
   PRODUCT_MEANING_PROVIDER_EXPORT_NAME,
   PRODUCT_MEANING_PROVIDER_PROFILE_ID,

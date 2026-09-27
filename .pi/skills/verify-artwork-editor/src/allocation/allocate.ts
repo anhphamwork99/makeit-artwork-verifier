@@ -15,6 +15,7 @@ import {
   resolveRepoRoot,
   resolveSkillRoot,
 } from '../runtime/paths';
+import { resolveEvidenceRoot } from '../runtime/evidence-root';
 import { resolveAppRoot } from '../runtime/product-meaning-provider';
 import {
   evidenceRootFor,
@@ -129,6 +130,15 @@ export async function allocateRun(
       reason: 'RUN_ID_INVALID',
       detail: `Run id must be a single safe path segment: ${JSON.stringify(runId)}`,
     };
+  }
+
+  // The optional adapter-owned evidence root is validated before any resource
+  // is reserved or created: an invalid/relative/symlink value refuses as
+  // `EVIDENCE_ROOT_INVALID` (HARNESS_BLOCKED) with no port, scratch lease, build
+  // output, or evidence artifact. An unset variable keeps the toolkit default.
+  const evidenceResolution = resolveEvidenceRoot();
+  if (!evidenceResolution.ok) {
+    return { ok: false, reason: 'EVIDENCE_ROOT_INVALID', detail: evidenceResolution.problem };
   }
 
   const repoRoot = resolveAllocationRepositoryRoot(input.appRoot);

@@ -120,9 +120,12 @@ partial/incomplete or unavailable; they must not be inferred as tested.
 
 ## Evidence and cleanup
 
-Each run preserves `run-record.json` under
-`.pi/skills/verify-artwork-editor/evidence/runs/<run-id>/` after cleanup. Read it
-without mutation through:
+Each direct-toolkit run preserves `run-record.json` under
+`.pi/skills/verify-artwork-editor/evidence/runs/<run-id>/` after cleanup. An FE
+adapter may instead set `MAKEIT_ARTWORK_EVIDENCE_ROOT` to an existing canonical
+absolute evidence base; keep the same value for the run, recovery cleanup, and
+readback. Relative, missing, or symlinked configured roots fail closed. Read the
+record without mutation through:
 
 ```sh
 pnpm cli -- evidence verify --run <run-id>

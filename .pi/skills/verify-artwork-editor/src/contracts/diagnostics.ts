@@ -213,6 +213,11 @@ export const DIAGNOSTIC_SEVERITY = {
   PRODUCT_TRANSITION_NOT_OBSERVED: 'warning',
   DIST_DIR_ENV_INVALID: 'blocking',
   DOCTOR_INSTANCE_MISMATCH: 'blocking',
+  // The optional adapter-owned evidence root (`MAKEIT_ARTWORK_EVIDENCE_ROOT`)
+  // is set to a value that is not a usable absolute, normalized, symlink-free
+  // existing directory. It refuses before any evidence is read or written; it
+  // is never a product `BUG` and never an `ENVIRONMENT_FAILURE`.
+  EVIDENCE_ROOT_ENV_INVALID: 'blocking',
   ENVIRONMENT_CATALOGUE_INVALID: 'blocking',
   ENVIRONMENT_CELL_MISMATCH: 'blocking',
   ENVIRONMENT_CELL_UNKNOWN: 'blocking',

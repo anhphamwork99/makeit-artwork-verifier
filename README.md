@@ -94,11 +94,18 @@ An absent, non-directory, malformed, or incompatible root/provider refuses as
 Reaching the real product requires **separate, authorized private access** to
 the `FE-build` checkout; this repository does not vendor product source.
 
-> **Current limitation (WP3):** the `FE-build` provider export and the
-> `pnpm verify:artwork` adapter wrapper are not implemented yet, so no live or
-> browser-parity run can be claimed from this toolkit today. The
-> `diagnostic`/`doctor` code paths are preflight-complete but unproven against a
-> live application.
+The FE-owned provider export is implemented and the detached toolkit has passed
+the named eight-case representative browser suite against an authorized FE
+checkout. The `pnpm verify:artwork` convenience adapter remains a separate FE
+integration step; toolkit-root commands above are authoritative until it lands.
+
+When an application adapter installs this repository as a dependency, it may set
+`MAKEIT_ARTWORK_EVIDENCE_ROOT` to an existing canonical absolute directory so
+run and suite evidence survives dependency reinstalls. Direct toolkit users
+should leave it unset; the default remains
+`.pi/skills/verify-artwork-editor/evidence/`. The same value must be present for
+the run, recovery cleanup, and `evidence verify`. Invalid, relative, or symlinked
+values fail closed before evidence is written.
 
 ## Local verification
 
