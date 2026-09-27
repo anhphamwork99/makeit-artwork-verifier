@@ -234,9 +234,9 @@ async function runCliInvocations(argv: readonly string[], options: RunCliOptions
       const { runPlan } = await import('./plan');
       return emitCliResult(runPlan({ casePath, outDir }));
     }
-      case 'doctor': {
-        const runId = parsed.flags.get('run-id');
-        const appRoot = parsed.flags.get('app-root');
+    case 'doctor': {
+      const runId = parsed.flags.get('run-id');
+      const appRoot = parsed.flags.get('app-root');
       const deadlineRaw = parsed.flags.get('readiness-timeout-ms');
       const readinessDeadlineMs = deadlineRaw === undefined ? undefined : Number(deadlineRaw);
       if (readinessDeadlineMs !== undefined && !Number.isFinite(readinessDeadlineMs)) {
@@ -244,10 +244,10 @@ async function runCliInvocations(argv: readonly string[], options: RunCliOptions
       }
       const { runDoctorCommand } = await import('./doctor');
       return emitCliResult(
-          await runDoctorCommand({
-            runId,
-            appRoot,
-            readinessDeadlineMs,
+        await runDoctorCommand({
+          runId,
+          appRoot,
+          readinessDeadlineMs,
           keepDistDir: parsed.booleans.has('keep-dist-dir'),
         }),
       );
@@ -315,11 +315,7 @@ async function runCliInvocations(argv: readonly string[], options: RunCliOptions
     case 'cleanup': {
       const runId = parsed.flags.get('run-id');
       const appRoot = parsed.flags.get('app-root');
-      if (
-        runId === undefined ||
-        appRoot === undefined ||
-        appRoot.trim().length === 0
-      ) {
+      if (runId === undefined || appRoot === undefined || appRoot.trim().length === 0) {
         return emitCliResult(
           usage(
             'cleanup',
