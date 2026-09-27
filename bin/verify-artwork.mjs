@@ -2,6 +2,7 @@
 import { spawnSync } from 'node:child_process';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { createRequire } from 'node:module';
 
 /**
  * Thin, path-relative launcher for the standalone toolkit CLI.
@@ -15,7 +16,8 @@ import { fileURLToPath } from 'node:url';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const toolkitRoot = path.resolve(here, '..');
 const skillRoot = path.join(toolkitRoot, '.pi', 'skills', 'verify-artwork-editor');
-const tsxCli = path.join(toolkitRoot, 'node_modules', 'tsx', 'dist', 'cli.mjs');
+const require = createRequire(import.meta.url);
+const tsxCli = require.resolve('tsx/cli');
 const entry = path.join(skillRoot, 'src', 'cli', 'main.ts');
 
 const result = spawnSync(process.execPath, [tsxCli, entry, ...process.argv.slice(2)], {
