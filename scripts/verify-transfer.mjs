@@ -37,7 +37,7 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_ROOT = path.resolve(HERE, '..');
 
 const SKILL_RELATIVE = '.pi/skills/verify-artwork-editor';
-const MANIFEST_RELATIVE = '.planning/source-manifest.sha256';
+const MANIFEST_RELATIVE = 'provenance/source-manifest.sha256';
 
 /** Paths that must never be part of the transferred inventory. */
 const FORBIDDEN_PATH_SEGMENTS = new Set([
@@ -81,6 +81,7 @@ const AUTHORIZED_ROOT_ADDITIONS = [
   'vitest.fe-hosted.config.ts',
   'bin/',
   'scripts/',
+  'provenance/',
   'README.md',
   'CONTRIBUTING.md',
   'SECURITY.md',
