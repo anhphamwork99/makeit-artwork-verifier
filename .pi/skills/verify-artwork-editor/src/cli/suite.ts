@@ -12,6 +12,7 @@ import {
   type LoadedDiagnosticSuite,
 } from '../catalogue/suite';
 import { createDiagnostic, type DiagnosticRecord } from '../contracts/diagnostics';
+import { assessHostCompatibility } from '../contracts/host-compatibility';
 import type { CliStatus, Outcome } from '../contracts/discriminants';
 import type { CliResult } from '../contracts/runtime';
 import {
@@ -31,7 +32,11 @@ import {
 import { prepareDiagnosticRun, type DiagnosticCliDetails } from './diagnostic';
 import { resolveExecutionSupport } from '../planner/execution-support';
 import { collectAppRevision, lockfileDigest } from '../runtime/environment-facts';
-import { resolveAppRoot } from '../runtime/product-meaning-provider';
+import {
+  loadProductMeaningProvider,
+  resolveAppRoot,
+  type ProductMeaningProviderFailureCode,
+} from '../runtime/product-meaning-provider';
 import {
   evidenceBaseDir,
   evidenceSuiteRoot,
@@ -136,6 +141,14 @@ interface ValidatedSuiteMember {
   declaration: DiagnosticSuiteCaseV1;
   relativePath: string;
   absolutePath: string;
+  workflowId: string;
+}
+
+function productMeaningProviderDiagnosticCode(
+  code: ProductMeaningProviderFailureCode,
+): DiagnosticRecord['code'] {
+  if (code === 'PROVIDER_INCOMPATIBLE') return 'PRODUCT_MEANING_PROVIDER_INCOMPATIBLE';
+  return 'PRODUCT_MEANING_PROVIDER_UNAVAILABLE';
 }
 
 function suiteEvidenceRoot(suiteExecutionId: string): string {
@@ -350,6 +363,7 @@ function validateSuite(
       declaration: entry.declaration,
       relativePath: entry.relativePath,
       absolutePath: entry.absolutePath,
+      workflowId: route.workflowId,
     });
   }
   return { ok: true, members };
@@ -414,8 +428,22 @@ export async function runDiagnosticSuiteCommand(
     });
   }
 
-  const resolvedAppRoot = input.appRoot === undefined ? null : resolveAppRoot(input.appRoot);
-  if (resolvedAppRoot !== null && !resolvedAppRoot.ok) {
+  if (typeof input.appRoot !== 'string' || input.appRoot.trim().length === 0) {
+    const detail =
+      'diagnostic --suite requires an explicit `--app-root <path>` naming the application checkout.';
+    return buildCliResult<DiagnosticSuiteCliDetails>({
+      command: 'diagnostic',
+      subcommand: loaded.suite.suiteId,
+      status: 'USAGE',
+      detail,
+      launchAttempted: false,
+      details: unlaunchedDetails(loaded, suiteExecutionId),
+      diagnostics: [createDiagnostic('CLI_USAGE_INVALID', detail)],
+    });
+  }
+
+  const resolvedAppRoot = resolveAppRoot(input.appRoot);
+  if (!resolvedAppRoot.ok) {
     const detail = `Suite application root is not usable for preflight: ${resolvedAppRoot.detail}`;
     return buildCliResult<DiagnosticSuiteCliDetails>({
       command: 'diagnostic',
@@ -431,8 +459,7 @@ export async function runDiagnosticSuiteCommand(
       ],
     });
   }
-  const appRootForRuns =
-    resolvedAppRoot !== null && resolvedAppRoot.ok ? resolvedAppRoot.appRoot : undefined;
+  const appRootForRuns = resolvedAppRoot.appRoot;
 
   const validation = validateSuite(loaded, appRootForRuns);
   if (!validation.ok) {
@@ -448,6 +475,47 @@ export async function runDiagnosticSuiteCommand(
         : {}),
       details: unlaunchedDetails(loaded, suiteExecutionId),
       diagnostics: validation.diagnostics,
+    });
+  }
+
+  // Whole-suite host compatibility is established once before child 1. This
+  // prevents a mixed partial run where earlier members emit evidence and a later
+  // member discovers that the current FE host cannot satisfy its workflow.
+  const providerResult = await loadProductMeaningProvider(appRootForRuns);
+  if (!providerResult.ok) {
+    const code = productMeaningProviderDiagnosticCode(providerResult.code);
+    const detail = 'Suite product-meaning provider preflight failed.';
+    return buildCliResult<DiagnosticSuiteCliDetails>({
+      command: 'diagnostic',
+      subcommand: loaded.suite.suiteId,
+      status: 'HARNESS_BLOCKED',
+      detail,
+      launchAttempted: false,
+      details: unlaunchedDetails(loaded, suiteExecutionId),
+      diagnostics: [
+        createDiagnostic(code, detail, {
+          context: { appRootCode: providerResult.code },
+        }),
+      ],
+    });
+  }
+  const hostCompatibility = assessHostCompatibility(
+    providerResult.ref.provider.hostCompatibility,
+    validation.members.map((member) => member.workflowId),
+  );
+  if (!hostCompatibility.ok) {
+    return buildCliResult<DiagnosticSuiteCliDetails>({
+      command: 'diagnostic',
+      subcommand: loaded.suite.suiteId,
+      status: 'HARNESS_BLOCKED',
+      detail: hostCompatibility.detail,
+      launchAttempted: false,
+      details: unlaunchedDetails(loaded, suiteExecutionId),
+      diagnostics: [
+        createDiagnostic(hostCompatibility.code, hostCompatibility.detail, {
+          context: hostCompatibility.context,
+        }),
+      ],
     });
   }
 

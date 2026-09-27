@@ -20,6 +20,7 @@ import {
 } from '../catalogue/fingerprint';
 import { cleanupRun, noOwnedLeaseCleanup } from '../cleanup/cleanup';
 import { createDiagnostic, type DiagnosticRecord } from '../contracts/diagnostics';
+import { assessHostCompatibility } from '../contracts/host-compatibility';
 import type {
   AllocationFailureReason,
   Capability,
@@ -986,9 +987,28 @@ export async function prepareDiagnosticRun(
           environmentCellId: candidate.environmentCell.cellId,
         }),
       });
-    }
-    meaningProviderRef = providerResult.ref;
-  } else {
+      }
+      meaningProviderRef = providerResult.ref;
+
+      const hostCompatibility = assessHostCompatibility(
+        meaningProviderRef.provider.hostCompatibility,
+        [route.workflowId],
+      );
+      if (!hostCompatibility.ok) {
+        return refused({
+          status: 'HARNESS_BLOCKED',
+          detail: hostCompatibility.detail,
+          diagnostics: [
+            createDiagnostic(hostCompatibility.code, hostCompatibility.detail, {
+              context: hostCompatibility.context,
+            }),
+          ],
+          details: detailsForPlanning(runId, planning, {
+            environmentCellId: candidate.environmentCell.cellId,
+          }),
+        });
+      }
+    } else {
     // Internal compile-once seam without an app root. The current runtime has no
     // provider authority, so it fails closed rather than fabricating one.
     const detail =

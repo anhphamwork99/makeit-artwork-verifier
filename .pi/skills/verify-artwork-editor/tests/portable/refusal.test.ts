@@ -27,6 +27,7 @@ import {
 import { releaseAllRunPortReservations } from '../../src/allocation/port-reservation';
 import { cleanupRun } from '../../src/cleanup/cleanup';
 import { runDiagnosticCommand, type DiagnosticCliDetails } from '../../src/cli/diagnostic';
+import { runDoctorCommand } from '../../src/cli/doctor';
 import type { CleanupCliDetails } from '../../src/cli/cleanup';
 import { runCli } from '../../src/cli/main';
 import { runWithCliStdout } from '../../src/cli/output';
@@ -55,7 +56,12 @@ import { resolveRepoRoot, resolveSkillRoot } from '../../src/runtime/paths';
 const PORTABLE_ROOT = path.dirname(fileURLToPath(import.meta.url));
 const FIXTURES_ROOT = path.join(PORTABLE_ROOT, 'fixtures');
 const APP_ROOT_COMPATIBLE = path.join(FIXTURES_ROOT, 'app-root-compatible');
+const APP_ROOT_MISSING_IMAGE_CAPABILITY = path.join(
+  FIXTURES_ROOT,
+  'app-root-missing-image-capability',
+);
 const APP_ROOT_INCOMPATIBLE_SCHEMA = path.join(FIXTURES_ROOT, 'app-root-incompatible-schema');
+const APP_ROOT_INCOMPATIBLE_BRIDGE = path.join(FIXTURES_ROOT, 'app-root-incompatible-bridge');
 const APP_ROOT_BAD_EXPORT = path.join(FIXTURES_ROOT, 'app-root-bad-export');
 const APP_ROOT_LOAD_FAILURE = path.join(FIXTURES_ROOT, 'app-root-load-failure');
 const APP_ROOT_NO_PROVIDER = path.join(FIXTURES_ROOT, 'app-root-no-provider');
@@ -245,6 +251,31 @@ describe('[ADR 0118] explicit app root preflight refusals', () => {
     expect(codes(result)).toContain('CLI_USAGE_INVALID');
     expectPreallocationRefusal(result, '');
   });
+
+  it('refuses a selected image workflow when the FE host omits its capability', async () => {
+    const runId = 'vt-refusal-host-image-capability';
+    const result = await runDiagnosticCommand({
+      casePath: path.join(
+        resolveSkillRoot(),
+        'cases',
+        'diagnostic',
+        'requests',
+        'layer-image-upload-replace.json',
+      ),
+      appRoot: APP_ROOT_MISSING_IMAGE_CAPABILITY,
+      runId,
+    });
+    expect(result.status).toBe('HARNESS_BLOCKED');
+    expect(result.status).not.toBe('BUG');
+    expect(codes(result)).toContain('HOST_CAPABILITY_MISSING');
+    expect(
+      result.diagnostics.find((entry) => entry.code === 'HOST_CAPABILITY_MISSING')?.context,
+    ).toMatchObject({
+      capabilityId: 'image-upload.public-control',
+      expectedVersion: 'role-name-v1',
+    });
+    expectPreallocationRefusal(result, runId);
+  });
 });
 
 describe('[ADR 0118] request refusals stay before provider load and allocation', () => {
@@ -307,6 +338,29 @@ describe('[ADR 0118] request refusals stay before provider load and allocation',
     expect(resolveExecutionSupport('default', 'shared.history').supported).toBe(true);
     expect(resolveExecutionSupport('default', 'shared.serialize').supported).toBe(true);
     expect(resolveExecutionSupport('text-specialized').supported).toBe(true);
+  });
+});
+
+describe('[current-source compatibility] Doctor preflight', () => {
+  it('requires an explicit app root before allocation', async () => {
+    const result = await runDoctorCommand({ runId: 'vt-doctor-no-root' });
+    expect(result.status).toBe('USAGE');
+    expect(result.launchAttempted).toBe(false);
+    expect(codes(result)).toContain('CLI_USAGE_INVALID');
+    expect(result.details?.allocation).toBeNull();
+    expect(result.details?.evidenceRoot).toBeNull();
+  });
+
+  it('refuses an incompatible declared bridge before allocation', async () => {
+    const result = await runDoctorCommand({
+      runId: 'vt-doctor-bridge-mismatch',
+      appRoot: APP_ROOT_INCOMPATIBLE_BRIDGE,
+    });
+    expect(result.status).toBe('HARNESS_BLOCKED');
+    expect(result.launchAttempted).toBe(false);
+    expect(codes(result)).toContain('HOST_BRIDGE_VERSION_INCOMPATIBLE');
+    expect(result.details?.allocation).toBeNull();
+    expect(result.details?.evidenceRoot).toBeNull();
   });
 });
 

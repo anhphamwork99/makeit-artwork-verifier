@@ -1258,6 +1258,18 @@ export type {
   RawCrosswordSemanticPayloadView,
 } from './contracts/product-meaning-provider';
 export {
+  HOST_CAPABILITY_REQUIREMENTS,
+  HOST_COMPATIBILITY_SCHEMA_VERSION,
+  assessHostCompatibility,
+  requiredHostCapabilitiesForWorkflows,
+} from './contracts/host-compatibility';
+export type {
+  HostCapabilityId,
+  HostCompatibilityAssessment,
+  HostCompatibilityDescriptorV1,
+  HostCompatibilityDiagnosticCode,
+} from './contracts/host-compatibility';
+export {
   loadProductMeaningProvider,
   productMeaningProviderEntryPath,
   resolveAppRoot,

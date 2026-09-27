@@ -8,6 +8,15 @@
  */
 const SCHEMA_VERSION = 1;
 const PROFILE_ID = 'artwork-product-meaning-v1';
+const hostCompatibility = Object.freeze({
+  schemaVersion: 1,
+  bridgeVersion: 7,
+  capabilities: Object.freeze({
+    'image-upload.public-control': 'role-name-v1',
+    'nested-object.identity-wrapper': 'chain-v1',
+    'history.semantic-transition': 'meaning-revision-v1',
+  }),
+});
 
 function canonicalize(value) {
   if (value === null || typeof value !== 'object') {
@@ -35,6 +44,7 @@ function fingerprint(value) {
 export const productMeaningProvider = Object.freeze({
   schemaVersion: SCHEMA_VERSION,
   profileId: PROFILE_ID,
+  hostCompatibility,
   normalizeArtworkProductMeaning(snapshot) {
     const source = snapshot !== null && typeof snapshot === 'object' ? snapshot : {};
     const layouts = Array.isArray(source.layouts) ? source.layouts : [];

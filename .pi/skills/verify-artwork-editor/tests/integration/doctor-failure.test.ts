@@ -6,6 +6,9 @@ import { describe, expect, it } from 'vitest';
 import { runDoctorCommand } from '../../src/cli/doctor';
 import { evidenceRootFor, expectedDistDirFor, scratchRootFor } from '../../src/allocation/lease';
 import { RUN_RECORD_FILE_NAME } from '../../src/evidence/writer';
+import { resolveRepoRoot } from '../../src/runtime/paths';
+
+const appRoot = path.resolve(resolveRepoRoot(), '..', '..');
 
 /**
  * Terminal-path failure surface for the owned runtime (Gate D).
@@ -17,7 +20,7 @@ import { RUN_RECORD_FILE_NAME } from '../../src/evidence/writer';
  */
 describe('[Gate D] owned runtime readiness failure', () => {
   it('fails as ENVIRONMENT_FAILURE and still cleans up on the terminal path', async () => {
-    const result = await runDoctorCommand({ readinessDeadlineMs: 1 });
+    const result = await runDoctorCommand({ appRoot, readinessDeadlineMs: 1 });
     const details = result.details;
     if (!details) throw new Error('doctor command returned no details');
     const runId = details.runId;
@@ -38,7 +41,7 @@ describe('[Gate D] owned runtime readiness failure', () => {
       expect(details.finalOutcome).toBe('ENVIRONMENT_FAILURE');
 
       expect(existsSync(scratchRootFor(runId))).toBe(false);
-      expect(existsSync(expectedDistDirFor(runId))).toBe(false);
+      expect(existsSync(expectedDistDirFor(runId, appRoot))).toBe(false);
 
       // A readiness failure is decided before any record exists: the current
       // command-v4 path writes no record at all and never a legacy manifest.
@@ -52,7 +55,7 @@ describe('[Gate D] owned runtime readiness failure', () => {
     } finally {
       rmSync(evidenceRootFor(runId), { recursive: true, force: true });
       rmSync(scratchRootFor(runId), { recursive: true, force: true });
-      rmSync(expectedDistDirFor(runId), { recursive: true, force: true });
+      rmSync(expectedDistDirFor(runId, appRoot), { recursive: true, force: true });
     }
   }, 60_000);
 });

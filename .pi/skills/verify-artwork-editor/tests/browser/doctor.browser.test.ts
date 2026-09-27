@@ -16,7 +16,8 @@ import { resolveRepoRoot } from '../../src/runtime/paths';
  * fresh Chromium context, and verifies exact cleanup and evidence survival.
  */
 
-const repoRoot = resolveRepoRoot();
+const toolkitRoot = resolveRepoRoot();
+const repoRoot = path.resolve(toolkitRoot, '..', '..');
 
 describe('[Gate D] real browser Doctor over an owned runtime', () => {
   it('passes Doctor and cleans every owned resource while preserving evidence', async () => {
@@ -27,7 +28,7 @@ describe('[Gate D] real browser Doctor over an owned runtime', () => {
     const nextEnvPath = path.join(repoRoot, 'next-env.d.ts');
     const nextEnvDigestBefore = digestOfFile(nextEnvPath);
 
-    const result = await runDoctorCommand({ readinessDeadlineMs: 300_000 });
+    const result = await runDoctorCommand({ appRoot: repoRoot, readinessDeadlineMs: 300_000 });
     const details = result.details;
     if (!details) throw new Error('doctor command returned no details');
     const runId = details.runId;
@@ -53,7 +54,7 @@ describe('[Gate D] real browser Doctor over an owned runtime', () => {
 
       // The owned scratch and namespaced build output are gone.
       expect(existsSync(scratchRootFor(runId))).toBe(false);
-      expect(existsSync(expectedDistDirFor(runId))).toBe(false);
+      expect(existsSync(expectedDistDirFor(runId, repoRoot))).toBe(false);
 
       // Raw Doctor JSON remains private scratch and is removed by cleanup. The
       // public transaction contains only the strict command record and optional

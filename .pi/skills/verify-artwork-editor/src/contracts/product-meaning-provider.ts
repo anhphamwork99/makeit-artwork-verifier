@@ -57,6 +57,12 @@ export interface RawCrosswordSemanticPayloadView {
 export interface ProductMeaningProviderV1 {
   readonly schemaVersion: number;
   readonly profileId: string;
+  /**
+   * FE-host compatibility declaration. It is validated separately from product
+   * meaning so the existing meaning schema remains stable while Diagnostic
+   * preflight can fail closed on host integration drift.
+   */
+  readonly hostCompatibility?: unknown;
   normalizeArtworkProductMeaning(snapshot: unknown): NormalizedArtworkMeaningView;
   canonicalizeNormalizedMeaning(value: unknown): string;
   fingerprintNormalizedMeaning(value: unknown): string;

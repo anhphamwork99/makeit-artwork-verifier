@@ -92,6 +92,7 @@ const AUTHORIZED_ROOT_ADDITIONS = [
  * A trailing slash authorizes every file under that path.
  */
 const AUTHORIZED_SKILL_ADDITIONS = [
+  'src/contracts/host-compatibility.ts',
   'src/contracts/product-meaning-provider.ts',
   'src/runtime/crossword-source.ts',
   'src/runtime/product-meaning-provider.ts',
@@ -100,6 +101,7 @@ const AUTHORIZED_SKILL_ADDITIONS = [
   'src/runtime/local-diagnostics.ts',
   'tests/foundation/browser-unavailable-outcome.test.ts',
   'tests/foundation/browser-unavailable.test.ts',
+  'tests/foundation/host-compatibility.test.ts',
   'src/version.ts',
   'tests/portable/contract.test.ts',
   'tests/portable/crossword-source-root.test.ts',

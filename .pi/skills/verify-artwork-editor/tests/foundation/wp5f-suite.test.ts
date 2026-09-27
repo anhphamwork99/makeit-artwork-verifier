@@ -135,7 +135,12 @@ function runSuite(input: Parameters<typeof runDiagnosticSuiteCommand>[0]) {
     createdDirs.push(parent);
     evidenceRoot = path.join(realpathSync(parent), 'aggregate');
   }
+  const appRoot = process.env.MAKEIT_ARTWORK_APP_ROOT;
+  if (!appRoot) {
+    throw new Error('wp5f-suite tests require MAKEIT_ARTWORK_APP_ROOT.');
+  }
   return runDiagnosticSuiteCommand({
+    appRoot,
     ...input,
     evidenceRoot,
   });

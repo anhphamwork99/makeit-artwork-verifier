@@ -151,10 +151,13 @@ describe('[WP1] Diagnostic suite monotonic duration', () => {
       '2026-09-26T09:59:00.000Z',
     ];
     let wallCalls = 0;
+    const appRoot = process.env.MAKEIT_ARTWORK_APP_ROOT;
+    if (!appRoot) throw new Error('suite-cli timing test requires MAKEIT_ARTWORK_APP_ROOT.');
     try {
       const result = await runDiagnosticSuiteCommand({
         suiteId: 'representative',
         runId: `suite-timing-${Date.now()}`,
+        appRoot,
         evidenceRoot,
         monotonicNow: () => monotonicValues.shift() ?? 500,
         wallNow: () => {

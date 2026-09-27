@@ -322,10 +322,17 @@ export const DIAGNOSTIC_SEVERITY = {
   // integration/harness refusal (never a product `BUG` and never
   // `ENVIRONMENT_FAILURE`): no meaning authority was established, so no run and
   // no evidence may be produced.
-  PRODUCT_MEANING_PROVIDER_REQUIRED: 'blocking',
-  PRODUCT_MEANING_PROVIDER_UNAVAILABLE: 'blocking',
-  PRODUCT_MEANING_PROVIDER_INCOMPATIBLE: 'blocking',
-} as const satisfies Record<string, FindingSeverity>;
+    PRODUCT_MEANING_PROVIDER_REQUIRED: 'blocking',
+    PRODUCT_MEANING_PROVIDER_UNAVAILABLE: 'blocking',
+    PRODUCT_MEANING_PROVIDER_INCOMPATIBLE: 'blocking',
+    // Current-source compatibility preflight. These are host/toolkit integration
+    // refusals discovered before allocation, launch, browser creation or evidence
+    // creation. They are never product BUG outcomes.
+    HOST_COMPATIBILITY_DESCRIPTOR_INVALID: 'blocking',
+    HOST_BRIDGE_VERSION_INCOMPATIBLE: 'blocking',
+    HOST_CAPABILITY_MISSING: 'blocking',
+    HOST_CAPABILITY_INCOMPATIBLE: 'blocking',
+  } as const satisfies Record<string, FindingSeverity>;
 
 export type DiagnosticCode = keyof typeof DIAGNOSTIC_SEVERITY;
 

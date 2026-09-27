@@ -20,6 +20,7 @@ import {
   DOCTOR_COMMAND_STATUS_AUTHORITY,
 } from '../commands/doctor-command-context';
 import { createDiagnostic, type DiagnosticRecord } from '../contracts/diagnostics';
+import { assessHostCompatibility } from '../contracts/host-compatibility';
 import type { CliStatus, Outcome } from '../contracts/discriminants';
 import type { CliResult, CleanupResult, RunAllocation } from '../contracts/runtime';
 import {
@@ -42,6 +43,10 @@ import type { CommandExecutionContextInput } from '../orchestration/command-exec
 import { loadEnvironmentCatalogue, resolveEnvironmentCell } from '../runtime/environment';
 import { collectAppRevision, collectEnvironmentFacts } from '../runtime/environment-facts';
 import { launchOwnedServer } from '../runtime/launch';
+import {
+  loadProductMeaningProvider,
+  type ProductMeaningProviderFailureCode,
+} from '../runtime/product-meaning-provider';
 import { generateRunId } from '../runtime/run-id';
 import { reconcileRegistry } from '../registry/reconcile';
 import { buildCliResult } from './output';
@@ -135,12 +140,72 @@ function details(input: Partial<DoctorCliDetails>): DoctorCliDetails {
   };
 }
 
+function productMeaningProviderDiagnosticCode(
+  code: ProductMeaningProviderFailureCode,
+): DiagnosticRecord['code'] {
+  if (code === 'PROVIDER_INCOMPATIBLE') return 'PRODUCT_MEANING_PROVIDER_INCOMPATIBLE';
+  return 'PRODUCT_MEANING_PROVIDER_UNAVAILABLE';
+}
+
 export async function runDoctorCommand(
   input: RunDoctorCommandInput = {},
 ): Promise<CliResult<DoctorCliDetails>> {
   const runId = input.runId ?? generateRunId();
 
-  const allocationResult = await allocateRun({ runId, appRoot: input.appRoot });
+  if (typeof input.appRoot !== 'string' || input.appRoot.trim().length === 0) {
+    const detail =
+      'doctor requires an explicit `--app-root <path>` naming the application checkout.';
+    return buildCliResult<DoctorCliDetails>({
+      command: 'doctor',
+      status: 'USAGE',
+      detail,
+      launchAttempted: false,
+      details: details({ runId }),
+      diagnostics: [createDiagnostic('CLI_USAGE_INVALID', detail)],
+    });
+  }
+
+  const providerResult = await loadProductMeaningProvider(input.appRoot);
+  if (!providerResult.ok) {
+    const code = productMeaningProviderDiagnosticCode(providerResult.code);
+    const detail = 'Doctor product-meaning provider preflight failed.';
+    return buildCliResult<DoctorCliDetails>({
+      command: 'doctor',
+      status: 'HARNESS_BLOCKED',
+      detail,
+      launchAttempted: false,
+      details: details({ runId }),
+      diagnostics: [
+        createDiagnostic(code, detail, {
+          context: { appRootCode: providerResult.code },
+        }),
+      ],
+    });
+  }
+
+  const hostCompatibility = assessHostCompatibility(
+    providerResult.ref.provider.hostCompatibility,
+    [],
+  );
+  if (!hostCompatibility.ok) {
+    return buildCliResult<DoctorCliDetails>({
+      command: 'doctor',
+      status: 'HARNESS_BLOCKED',
+      detail: hostCompatibility.detail,
+      launchAttempted: false,
+      details: details({ runId }),
+      diagnostics: [
+        createDiagnostic(hostCompatibility.code, hostCompatibility.detail, {
+          context: hostCompatibility.context,
+        }),
+      ],
+    });
+  }
+
+  const allocationResult = await allocateRun({
+    runId,
+    appRoot: providerResult.ref.appRoot,
+  });
   if (!allocationResult.ok) {
     const failureIsEnvironment =
       allocationFailureCliStatus(allocationResult.reason) === 'ENVIRONMENT_FAILURE';
