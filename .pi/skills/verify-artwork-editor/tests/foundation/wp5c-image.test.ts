@@ -324,7 +324,7 @@ describe('WP5 Slice 5-C — native workflow executor control/dialog roles', () =
     });
     expect(result.ok).toBe(true);
     expect(calls).toEqual([
-      'control:Test with image',
+      'control:Upload image',
       'file:Test with image:image/png,image/jpeg:upload-initial',
     ]);
     expect(result.ok && result.logs.map((log) => log.primitive)).toEqual([

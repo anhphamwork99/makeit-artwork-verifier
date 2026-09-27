@@ -917,6 +917,7 @@ export async function executeHistoryPlan(
       detail = 'Image tool unavailable.';
       return blocked();
     }
+    const preImage = (await page.evaluate(bridgeStateScript())) as HistoryBridgeStateView;
     const row = await clickUniqueTextRow(page, 'Add image placeholder');
     if (!row.ok) {
       harnessInvalid = true;
@@ -932,7 +933,6 @@ export async function executeHistoryPlan(
       undefined,
       { timeout: 10_000 },
     );
-    const beforeGotIt = (await page.evaluate(bridgeStateScript())) as HistoryBridgeStateView;
     const onboarding = await observeOnboardingPopover(page, 'Image placeholder');
     if (onboarding.present && onboarding.gotItActionable !== 1) {
       harnessInvalid = true;
@@ -956,7 +956,7 @@ export async function executeHistoryPlan(
       detail = 'Image onboarding Got it unavailable.';
       return blocked();
     }
-    settled = await settleHistory(settleRuntime, beforeGotIt.cursor, profileDeadline, now);
+    settled = await settleHistory(settleRuntime, preImage.cursor, profileDeadline, now);
     lastWakeSource = settled.wakeSource;
     watchdogWaits += settled.watchdogWaits;
     if (!settled.ok || settled.state === null) {
@@ -1193,9 +1193,7 @@ export async function executeHistoryPlan(
         expectedMeaning: step.expectedMeaning,
         meaningFingerprint: provider.fingerprintNormalizedMeaning(actualMeaning),
         expectedMeaningFingerprint:
-          expectedMeaning === null
-            ? null
-            : provider.fingerprintNormalizedMeaning(expectedMeaning),
+          expectedMeaning === null ? null : provider.fingerprintNormalizedMeaning(expectedMeaning),
         meaningStructurallyEqual,
         observationId: `history:${step.stepId}:${after.cursor.revision}`,
         idle: lastIdle,

@@ -28,7 +28,7 @@ export const INTERACTION_TARGET = Object.freeze({
  * Crossword layer (`More` left-tool button → `Crossword` element preset card).
  */
 export const PUBLIC_CONTROLS: Readonly<Record<string, string>> = Object.freeze({
-  'test-with-image': 'Test with image',
+  'test-with-image': 'Upload image',
   'replace-image': 'Replace image',
   more: 'More',
   crossword: 'Crossword',
