@@ -153,6 +153,7 @@ evidence and treat the run as non-PASS until the ownership issue is resolved.
 
 ## Transfer boundary
 
-`.planning/` provenance, historical or generated `evidence/`, dependencies,
-credentials/environment files, and build caches are never committed. Run
-`pnpm verify:transfer` before staging.
+The repository tracks only `.planning/maintain-verification-skills/` as its
+maintenance Project Home. Other `.planning/` provenance, historical or generated
+`evidence/`, dependencies, credentials/environment files, and build caches are
+never committed. Run `pnpm verify:transfer` before staging.

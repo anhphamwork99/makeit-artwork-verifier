@@ -15,8 +15,8 @@ import { configDefaults, defineConfig } from 'vitest/config';
  *    application checkout (`resolveRepoRoot()` / Next config / product source)
  *    or against historical `evidence/` that is intentionally not transferred.
  *
- * `root` stays the toolkit repository root so the transferred helpers that
- * resolve `.pi/skills/verify-artwork-editor` from `process.cwd()` keep working.
+ * `root` stays the toolkit repository root so package-root and canonical
+ * `agents/verify-artwork-editor` resolution remains deterministic.
  * Both excluded groups run through `vitest.fe-hosted.config.ts` (WP3).
  */
 const FE_COUPLED = [

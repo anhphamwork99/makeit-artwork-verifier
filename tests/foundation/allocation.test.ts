@@ -30,7 +30,7 @@ const RESOURCES = {
   port: 41001,
   processGroupId: 1001,
   distDir: '.verify-runs/instance-a/.next',
-  evidenceRoot: '.pi/skills/verify-artwork-editor/evidence/runs/run-a',
+  evidenceRoot: 'evidence/runs/run-a',
 };
 
 describe('[Gate B/D] enforceable pre-launch allocation (TS-1)', () => {
@@ -85,12 +85,12 @@ describe('[Gate B/D] enforceable pre-launch allocation (TS-1)', () => {
     const collidingPort = ledger.reserve(identity, 'instance-b', {
       ...RESOURCES,
       distDir: '.verify-runs/instance-b/.next',
-      evidenceRoot: '.pi/skills/verify-artwork-editor/evidence/runs/run-b',
+      evidenceRoot: 'evidence/runs/run-b',
     });
     const collidingDistDir = ledger.reserve(identity, 'instance-c', {
       ...RESOURCES,
       port: 41_002,
-      evidenceRoot: '.pi/skills/verify-artwork-editor/evidence/runs/run-c',
+      evidenceRoot: 'evidence/runs/run-c',
     });
 
     expect(first.status).toBe('RESERVED');
@@ -109,7 +109,7 @@ describe('[Gate B/D] enforceable pre-launch allocation (TS-1)', () => {
       ledger.reserve(identity, 'instance-b', {
         ...RESOURCES,
         distDir: '.verify-runs/instance-b/.next',
-        evidenceRoot: '.pi/skills/verify-artwork-editor/evidence/runs/run-b',
+        evidenceRoot: 'evidence/runs/run-b',
       }).status,
     ).toBe('RESERVED');
   });
@@ -124,7 +124,7 @@ describe('[Gate B/D] enforceable pre-launch allocation (TS-1)', () => {
         port: 41_002,
         processGroupId: 1002,
         distDir: '.verify-runs/instance-b/.next',
-        evidenceRoot: '.pi/skills/verify-artwork-editor/evidence/runs/run-b',
+        evidenceRoot: 'evidence/runs/run-b',
       }).status,
     ).toBe('RESERVED');
   });

@@ -763,7 +763,7 @@ function bugTextPayload(prepared: PreparedCase): FinalExecutionPayload {
 const OWNERSHIP_FIXTURE: RunOwnershipRecord = {
   runId: 'suite-owned-run',
   repoRoot: '/suite-fixture-repo',
-  skillRoot: '/suite-fixture-repo/.pi/skills/verify-artwork-editor',
+  skillRoot: '/suite-fixture-repo/agents/verify-artwork-editor',
   repoRelativeDistDir: '.next/verify-runs/suite-owned-run',
   distDir: '/suite-fixture-repo/.next/verify-runs/suite-owned-run',
   scratchRoot: '/suite-fixture-scratch/suite-owned-run',
@@ -873,7 +873,7 @@ function operationalFor(
       { ...OWNERSHIP_FIXTURE, runId },
       'launched',
       `.next/verify-runs/${runId}`,
-      '.pi/skills/verify-artwork-editor',
+      'agents/verify-artwork-editor',
     ),
     cleanup: buildCleanupProjection({ ...CLEANUP_FIXTURE, runId }),
     diagnostics: [],

@@ -6,13 +6,13 @@
  * authorized WP2 additions. This guard re-checks that boundary without a
  * network call and without Git:
  *
- *   1. Ignore-rule self-check — the `.gitignore` must exclude planning and
- *      provenance (`.planning/`), every evidence directory, dependencies,
- *      credentials, and generated caches. A pattern that stops ignoring those
- *      paths is a hard failure, because they would otherwise be committed.
+ *   1. Ignore-rule self-check — the `.gitignore` must exclude machine-local
+ *      planning/provenance while keeping the repository-owned maintenance
+ *      Project Home trackable, and must exclude evidence, dependencies,
+ *      credentials, and generated caches.
  *   2. Exclusion check — no forbidden path may enter the would-be-tracked
- *      inventory (secret-bearing filenames, `.planning/`, `evidence/`,
- *      `node_modules/`, `.env*`, caches).
+ *      inventory. The only `.planning/` exception is the explicit maintenance
+ *      Project Home allowlist.
  *   3. File-set / provenance check — every would-be-tracked file is either part
  *      of the WP1 manifest (pristine or intentionally edited) or an authorized
  *      WP2 addition. An unaccounted file is a hard failure.
@@ -29,14 +29,17 @@
  */
 
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
+import { existsSync, lstatSync, readFileSync, readdirSync, readlinkSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const DEFAULT_ROOT = path.resolve(HERE, '..');
 
-const SKILL_RELATIVE = '.pi/skills/verify-artwork-editor';
+const SKILL_RELATIVE = 'agents/verify-artwork-editor';
+const MAINTENANCE_PROJECT_RELATIVE = '.planning/maintain-verification-skills';
+const COMPATIBILITY_SKILL_RELATIVE = '.agents/skills/verify-artwork-editor';
+const COMPATIBILITY_SKILL_TARGET = '../../agents/verify-artwork-editor';
 const MANIFEST_RELATIVE = 'provenance/source-manifest.sha256';
 
 const MANIFEST_RELOCATIONS = new Map([
@@ -97,6 +100,10 @@ const AUTHORIZED_ROOT_ADDITIONS = [
   'scripts/',
   'provenance/',
   'docs/',
+  'agents/',
+  '.agents/',
+  '.planning/maintain-verification-skills/',
+  'AGENTS.md',
   'README.md',
   'CONTRIBUTING.md',
   'SECURITY.md',
@@ -129,6 +136,7 @@ const AUTHORIZED_SKILL_ADDITIONS = [
 /** Ignore-rule self-check: representative paths and the rule that must hide each. */
 const IGNORE_SELF_CHECK = [
   ['.planning/source-manifest.sha256', 'planning inventory'],
+  ['.planning/maintain-verification-skills/PROJECT.md', null],
   ['evidence/runs/example/run-record.json', 'top-level evidence'],
   ['node_modules/vitest/index.js', 'dependencies'],
   ['.env', 'environment file'],
@@ -246,7 +254,7 @@ function listFiles(root) {
       if (relativeDir === '' && entry.name === '.git') continue;
       const relative = relativeDir === '' ? entry.name : `${relativeDir}/${entry.name}`;
       if (entry.isDirectory()) walk(relative);
-      else if (entry.isFile()) files.push(relative);
+      else if (entry.isFile() || entry.isSymbolicLink()) files.push(relative);
     }
   };
   walk('');
@@ -270,6 +278,13 @@ function readManifest(root) {
     entries.set(trimmed.slice(separator + 2), trimmed.slice(0, separator));
   }
   return { entries, digest: createHash('sha256').update(source).digest('hex') };
+}
+
+function isAllowedMaintenanceProjectPath(relativePath) {
+  return (
+    relativePath === MAINTENANCE_PROJECT_RELATIVE ||
+    relativePath.startsWith(`${MAINTENANCE_PROJECT_RELATIVE}/`)
+  );
 }
 
 function isAuthorized(relativePath, authorized) {
@@ -343,11 +358,22 @@ function main() {
   const allFiles = listFiles(root);
   const inventory = allFiles.filter((relative) => !isIgnored(relative));
 
+  const compatibilitySkillPath = path.join(root, COMPATIBILITY_SKILL_RELATIVE);
+  if (!existsSync(compatibilitySkillPath)) {
+    violations.push(`Missing cross-harness compatibility skill link: ${COMPATIBILITY_SKILL_RELATIVE}`);
+  } else if (!lstatSync(compatibilitySkillPath).isSymbolicLink()) {
+    violations.push(`Compatibility skill path must be a symlink: ${COMPATIBILITY_SKILL_RELATIVE}`);
+  } else if (readlinkSync(compatibilitySkillPath) !== COMPATIBILITY_SKILL_TARGET) {
+    violations.push(
+      `Compatibility skill link must target ${COMPATIBILITY_SKILL_TARGET}: ${COMPATIBILITY_SKILL_RELATIVE}`,
+    );
+  }
+
   // 2. Exclusion check over the would-be-tracked inventory.
   for (const relative of inventory) {
     const segments = relative.split('/');
     const forbiddenSegment = segments.find((segment) => FORBIDDEN_PATH_SEGMENTS.has(segment));
-    if (forbiddenSegment !== undefined) {
+    if (forbiddenSegment !== undefined && !isAllowedMaintenanceProjectPath(relative)) {
       violations.push(`Forbidden path segment "${forbiddenSegment}" would be tracked: ${relative}`);
     }
     const name = path.posix.basename(relative);

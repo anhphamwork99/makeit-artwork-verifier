@@ -58,9 +58,9 @@ import { RunRecordExistsError, RunRecordWriteError } from '../../src/evidence/wr
 
 const RUN_ID = 'run-1';
 const REPO_ROOT = '/repo';
-const SKILL_ROOT = '/repo/.pi/skills/verify-artwork-editor';
+const SKILL_ROOT = '/repo/agents/verify-artwork-editor';
 const SCRATCH_ROOT = '/tmp/makeit-artwork-verification-run-1';
-const EVIDENCE_ROOT = '/repo/.pi/skills/verify-artwork-editor/evidence/runs/run-1';
+const EVIDENCE_ROOT = '/repo/evidence/runs/run-1';
 const DIST_DIR = '/repo/.next/verify-runs/run-1';
 const SERVER_LOG = `${EVIDENCE_ROOT}/server.log`;
 
@@ -211,7 +211,7 @@ function validPayload(overrides: Partial<LegacyPublicPayload> = {}): LegacyPubli
       record,
       'launched',
       `.next/verify-runs/${RUN_ID}`,
-      '.pi/skills/verify-artwork-editor',
+      'agents/verify-artwork-editor',
     ),
     cleanup: buildCleanupProjection(cleanupResult()),
     diagnostics: [],
@@ -445,6 +445,10 @@ describe('WP5 Slice 5-C R13 — domain-separated path and ownership fingerprints
 describe('WP5 Slice 5-C R13 — role-specific relative path and basename validators', () => {
   it('accepts only the exact canonical skill-root and next-dist-dir names', () => {
     expect(
+      validatePublicRelativePath('skill-root', 'agents/verify-artwork-editor', RUN_ID),
+    ).toBe('agents/verify-artwork-editor');
+    // Historical records keep their original public projection.
+    expect(
       validatePublicRelativePath('skill-root', '.pi/skills/verify-artwork-editor', RUN_ID),
     ).toBe('.pi/skills/verify-artwork-editor');
     expect(validatePublicRelativePath('next-dist-dir', `.next/verify-runs/${RUN_ID}`, RUN_ID)).toBe(
@@ -654,7 +658,7 @@ describe('WP5 Slice 5-C R13 — ownership projection honest union', () => {
     const appRootRecord = ownershipRecord({ repoRoot: '/some/fe-checkout' });
     const snapshot = captureCleanupAuthoritySnapshot(appRootRecord);
     expect(snapshot.publicOwnership.resources.skillRoot.relativePath).toBe(
-      '.pi/skills/verify-artwork-editor',
+      'agents/verify-artwork-editor',
     );
     expect(JSON.stringify(snapshot.publicOwnership)).not.toContain('..');
   });

@@ -11,7 +11,8 @@ import { fileURLToPath } from 'node:url';
  * the explicit toolkit root used by the test configuration.
  */
 
-const SKILL_ROOT_RELATIVE_PATH = path.join('.pi', 'skills', 'verify-artwork-editor');
+export const ACTIVE_SKILL_ROOT_RELATIVE_PATH = 'agents/verify-artwork-editor';
+export const LEGACY_SKILL_ROOT_RELATIVE_PATH = '.pi/skills/verify-artwork-editor';
 
 export function resolveToolkitRoot(): string {
   const moduleUrl = import.meta.url;
@@ -21,9 +22,9 @@ export function resolveToolkitRoot(): string {
   return path.resolve(process.cwd());
 }
 
-/** Agent-facing Pi skill root; executable source and data do not live here. */
+/** Canonical agent-neutral skill root; executable source and data do not live here. */
 export function resolveSkillRoot(): string {
-  return path.join(resolveToolkitRoot(), SKILL_ROOT_RELATIVE_PATH);
+  return path.join(resolveToolkitRoot(), ACTIVE_SKILL_ROOT_RELATIVE_PATH);
 }
 
 export function resolveRepoRoot(): string {
@@ -47,15 +48,20 @@ export function repoRelativeDistDir(runId: string): string {
  * The closed public `skill-root` role value, derived independently of any
  * application root.
  *
- * The agent skill remains at
- * `<toolkit repository root>/.pi/skills/verify-artwork-editor` even though the
- * executable package source and data now live at the toolkit root. Deriving
- * this from an explicit application `repoRoot` would leak a traversal for an
- * app-root run and fail the closed public projection.
+ * Current records use `agents/verify-artwork-editor`. The legacy `.pi` value is
+ * recognized only so historical evidence can still be read without rewriting
+ * it. Deriving this from an explicit application `repoRoot` would leak a
+ * traversal for an app-root run and fail the closed public projection.
  */
 export function toolkitRelativeSkillRoot(skillRoot: string): string {
-  const toolkitRepositoryRoot = path.resolve(skillRoot, '..', '..', '..');
-  return path.relative(toolkitRepositoryRoot, skillRoot).split(path.sep).join('/');
+  const normalized = path.resolve(skillRoot).split(path.sep).join('/');
+  for (const candidate of [
+    ACTIVE_SKILL_ROOT_RELATIVE_PATH,
+    LEGACY_SKILL_ROOT_RELATIVE_PATH,
+  ] as const) {
+    if (normalized === candidate || normalized.endsWith(`/${candidate}`)) return candidate;
+  }
+  throw new Error('Skill root is neither the active nor a supported legacy verifier skill root.');
 }
 
 /**

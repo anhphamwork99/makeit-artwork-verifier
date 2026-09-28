@@ -673,7 +673,7 @@ describe('[ADR 0021 N6] raw Node/tsx child-process core import proof', () => {
 });
 
 describe('[ADR 0021 N7] toolkit consumer import enforcement', () => {
-  const SKILL_ROOT = path.join(REPO_ROOT, '.pi/skills/verify-artwork-editor');
+  const SKILL_ROOT = REPO_ROOT;
 
   function collectFiles(dir: string, predicate: (rel: string) => boolean): string[] {
     const found: string[] = [];

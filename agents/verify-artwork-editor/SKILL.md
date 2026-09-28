@@ -235,12 +235,23 @@ record after cleanup. A toolkit checkout with authorized FE access can produce a
 the FE wrapper provides the same scoped commands from the prototype checkout.
 </cold-agent>
 
+<maintenance>
+When a requested behavior cannot be represented by the current Subject,
+Capability, Scenario, Workflow, Fixture, or Oracle contracts, do not extend the
+case by guesswork. Record a verification gap and route verifier evolution to
+`.planning/maintain-verification-skills/PROJECT.md`. That project is the source
+of truth for designing autonomous cross-repository maintenance; it is currently
+in discovery and must not be described as an implemented skill.
+</maintenance>
+
 <transfer-boundary>
-This repository is a private toolkit-only snapshot. `.planning/` provenance,
-historical or generated `evidence/`, dependencies, credentials/environment
-files, and build caches are outside the boundary and must never be committed.
-Run `pnpm verify:transfer` before staging; it checks ignore rules, the tracked
-file set, WP1 manifest provenance, and added-material secret signatures.
+This repository is a private toolkit-only snapshot. The only tracked planning
+path is `.planning/maintain-verification-skills/`. Other `.planning/`
+provenance, historical or generated `evidence/`, dependencies,
+credentials/environment files, and build caches are outside the boundary and
+must never be committed. Run `pnpm verify:transfer` before staging; it checks
+ignore rules, the tracked file set, the compatibility skill link, WP1 manifest
+provenance, and added-material secret signatures.
 </transfer-boundary>
 
 <helpers>

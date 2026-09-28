@@ -6,8 +6,12 @@
 # root unless a `**/` prefix is used so that a product-owned directory such as
 # `src/coverage/` or `src/evidence/` is never accidentally excluded.
 
-# --- WP1 planning / provenance inventory (never committed) ---
-/.planning/
+# --- Planning / provenance inventory ---
+# The maintenance Project Home is repository-owned and tracked. Every other
+# planning/provenance artifact remains machine-local and excluded.
+/.planning/*
+!/.planning/maintain-verification-skills/
+!/.planning/maintain-verification-skills/**
 
 # --- Verification evidence (historical and generated; never committed) ---
 # Historical run/suite records are revision-bound, contain maintainer-local

@@ -284,8 +284,14 @@ export function validatePublicRelativePath(
     throw new PublicPathError(`Role "${role}" may not expose a relative path.`);
   }
   validateRelativeShape(value);
-  if (role === 'skill-root' && value !== '.pi/skills/verify-artwork-editor') {
-    throw new PublicPathError('skill-root may expose only .pi/skills/verify-artwork-editor.');
+  if (
+    role === 'skill-root' &&
+    value !== 'agents/verify-artwork-editor' &&
+    value !== '.pi/skills/verify-artwork-editor'
+  ) {
+    throw new PublicPathError(
+      'skill-root may expose only the active agents/verify-artwork-editor path or its historical .pi path.',
+    );
   }
   if (role === 'next-dist-dir' && value !== `.next/verify-runs/${runId}`) {
     throw new PublicPathError(`next-dist-dir may expose only .next/verify-runs/${runId}.`);

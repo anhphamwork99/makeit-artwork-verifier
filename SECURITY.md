@@ -19,8 +19,10 @@ contents with unauthorized recipients.
 - New/changed material is scanned for high-confidence secret signatures
   (private-key headers, cloud/GitHub key IDs, JWT-like and `sk-`-style tokens)
   and for absolute home paths as warnings.
-- Historical evidence and `.planning/` provenance — which may contain
-  maintainer-local absolute paths — are never transferred or committed.
+- Historical evidence and machine-local `.planning/` provenance — which may
+  contain maintainer-local absolute paths — are never transferred or committed.
+  The sole planning exception is the reviewed, repository-owned
+  `.planning/maintain-verification-skills/` Project Home.
 - Fixture PNGs are project-generated, contain no third-party content, and carry
   a fixture-level provenance declaration only; that declaration is **not** a
   repository license grant.

@@ -5,13 +5,13 @@ import path from 'node:path';
 
 import { describe, expect, it } from 'vitest';
 
-import { resolveSkillRoot } from '../../src/runtime/paths';
+import { resolveSkillRoot, resolveToolkitRoot } from '../../src/runtime/paths';
 import { captureCliResult, removeTestRunArtifacts } from './helpers';
 
 const skillRoot = resolveSkillRoot();
-const repoRoot = path.resolve(skillRoot, '..', '..', '..');
+const repoRoot = resolveToolkitRoot();
 const ordinaryCase = path.join(
-  skillRoot,
+  repoRoot,
   'cases',
   'diagnostic',
   'requests',
@@ -27,9 +27,7 @@ describe('[TS-5] cold-agent current-source and evidence contract', () => {
     expect(skill).toContain('pnpm verify:artwork diagnostic --case');
     expect(skill).toContain('pnpm verify:artwork evidence verify --run');
     expect(skill).toContain('run-record.json');
-    expect(skill).not.toContain(
-      'python3 .pi/skills/verify-artwork-editor/scripts/verify_artwork.py run',
-    );
+    expect(skill).not.toContain('verify_artwork.py run');
     expect(skill).toContain('PASS`, `BUG`, `HARNESS_BLOCKED`, or `ENVIRONMENT_FAILURE`');
     expect(coldAgent).toContain('Node.js `>=20.11 <25`');
     expect(coldAgent).toContain('registry fingerprint');

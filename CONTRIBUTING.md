@@ -36,10 +36,11 @@ allocation, no evidence) for malformed/missing/incompatible inputs.
   from that explicit root.
 - **No product/engine duplication.** Do not vendor, reimplement, or shim the
   product normalization/canonicalization/fingerprint/Crossword core.
-- **Do not transfer excluded content.** `.planning/` provenance, historical or
-  generated `evidence/`, `.env*`, credentials, dependencies, and build caches
-  are outside the boundary. `.gitignore` blocks them; `pnpm verify:transfer`
-  re-checks.
+- **Do not transfer excluded content.** The only tracked planning path is
+  `.planning/maintain-verification-skills/`. Other `.planning/` provenance,
+  historical or generated `evidence/`, `.env*`, credentials, dependencies, and
+  build caches are outside the boundary. `.gitignore` blocks them;
+  `pnpm verify:transfer` re-checks.
 - **Preserve honest scope.** Do not expand claims to Release Credit, mobile,
   backend, cross-browser, exhaustive coverage, or production safety. Do not
   delete, rewrite, or relabel tests to make the historical suite look green.
@@ -65,8 +66,9 @@ pnpm verify:transfer --json   # machine-readable PASS/FAIL summary
 ## Staging discipline
 
 - Stage only the declared write set; never `git add -A` blindly.
-- Confirm the staged inventory contains no `.planning/`, `evidence/`, env, or
+- Confirm the staged inventory contains no planning path except
+  `.planning/maintain-verification-skills/`, and no `evidence/`, env, or
   dependency paths.
-- Keep the working tree's ignored artifacts (`.planning/`, `evidence/`,
-  `node_modules/`) untracked.
+- Keep ignored extraction provenance, `evidence/`, and `node_modules/`
+  untracked.
 - Commit only when the current work package authorizes it.

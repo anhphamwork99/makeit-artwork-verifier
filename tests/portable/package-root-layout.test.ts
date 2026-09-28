@@ -1,4 +1,4 @@
-import { readdirSync, statSync } from 'node:fs';
+import { existsSync, lstatSync, readlinkSync, readdirSync, statSync } from 'node:fs';
 import path from 'node:path';
 
 import { describe, expect, it } from 'vitest';
@@ -22,6 +22,18 @@ describe('package-root ownership boundary', () => {
       'SKILL.md',
       'references/cold-agent.md',
     ]);
+    const toolkitRoot = resolveToolkitRoot();
+    const compatibilityLink = path.join(
+      toolkitRoot,
+      '.agents',
+      'skills',
+      'verify-artwork-editor',
+    );
+    expect(lstatSync(compatibilityLink).isSymbolicLink()).toBe(true);
+    expect(readlinkSync(compatibilityLink)).toBe('../../agents/verify-artwork-editor');
+    expect(
+      existsSync(path.join(toolkitRoot, '.pi', 'skills', 'verify-artwork-editor', 'SKILL.md')),
+    ).toBe(false);
   });
 
   it('owns executable source, tests, package data, governance and evidence outside the skill', () => {

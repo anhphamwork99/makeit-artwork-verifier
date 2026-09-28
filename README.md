@@ -123,11 +123,13 @@ checkout (`MAKEIT_ARTWORK_APP_ROOT`) and belong to the WP3 integration surface.
 
 ## Transfer boundary
 
-This repository must never contain `.planning/` provenance, historical or
-generated `evidence/`, dependencies, credentials/environment files, or build
-caches. `.gitignore` enforces the boundary and `pnpm verify:transfer` re-checks
-ignore rules, the tracked file set, WP1 manifest provenance, and added-material
-secret signatures. See `CONTRIBUTING.md` and `SECURITY.md`.
+This repository tracks one planning exception: the repository-owned
+`.planning/maintain-verification-skills/` Project Home. Other `.planning/`
+provenance, historical or generated `evidence/`, dependencies,
+credentials/environment files, and build caches remain excluded. `.gitignore`
+and `pnpm verify:transfer` enforce the narrow allowlist, tracked file set, WP1
+manifest provenance, compatibility skill link, and added-material secret
+signatures. See `AGENTS.md`, `CONTRIBUTING.md`, and `SECURITY.md`.
 
 ## Layout
 
@@ -138,8 +140,11 @@ src/, tests/                                # toolkit implementation and verific
 cases/, catalogues/, fixtures/               # versioned runtime data and resources
 governance/authorities/                      # immutable reviewed trust inputs
 docs/features/, docs/archive/                # product maps and inactive legacy material
-.pi/skills/verify-artwork-editor/            # thin agent-facing skill
+agents/verify-artwork-editor/                 # canonical agent-neutral skill
   SKILL.md                                   # invocation and interpretation contract
   references/cold-agent.md                   # cold-agent operating guide
+.agents/skills/verify-artwork-editor          # cross-harness compatibility symlink
+.planning/maintain-verification-skills/       # tracked maintenance Project Home
+AGENTS.md                                     # repository-wide agent contract
 package.json, pnpm-lock.yaml, tsconfig.portable.json, vitest.*.config.ts
 ```

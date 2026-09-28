@@ -51,6 +51,10 @@ export const PROVENANCE_INCLUDED_PREFIXES: readonly string[] = Object.freeze([
   'vitest.browser.config.ts',
   'vitest.portable.config.ts',
   'vitest.fe-hosted.config.ts',
+  'agents/verify-artwork-editor/SKILL.md',
+  'agents/verify-artwork-editor/references/',
+  // Historical evidence may name the pre-migration instruction paths. They
+  // remain valid readback inputs but are no longer active repository paths.
   '.pi/skills/verify-artwork-editor/SKILL.md',
   '.pi/skills/verify-artwork-editor/references/',
 ]);

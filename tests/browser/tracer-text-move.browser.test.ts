@@ -371,7 +371,7 @@ describe('[Gate E] ordinary Text native drag tracer', () => {
         ownershipRecord,
         ownershipRecord.state,
         ownershipRecord.repoRelativeDistDir,
-        '.pi/skills/verify-artwork-editor',
+        'agents/verify-artwork-editor',
       ),
       cleanup: null,
       diagnostics: execution.diagnostics,

@@ -41,13 +41,12 @@ export function captureCleanupAuthoritySnapshot(
   record: RunOwnershipRecord,
 ): CleanupAuthoritySnapshot {
   // The public `skill-root` role is repo-relative to the *toolkit* repository
-  // that owns `.pi/skills/verify-artwork-editor`, not to the application root the
-  // run owns. `record.repoRoot` is the app checkout for an explicit app-root
-  // run, so deriving this from `record.repoRoot` would leak a `../..` path and
-  // fail the closed public projection. Evidence/skill identity stays
-  // toolkit-owned regardless of which application was verified, so the value is
-  // derived from the recorded skill root itself (which is verified to equal the
-  // toolkit's own skill root before this snapshot is captured).
+  // that owns `agents/verify-artwork-editor`, not to the application root the
+  // run owns. Historical `.pi` values remain readable without becoming active
+  // authority. `record.repoRoot` is the app checkout for an explicit app-root
+  // run, so deriving this from `record.repoRoot` would leak a traversal and fail
+  // the closed public projection. Evidence/skill identity stays toolkit-owned
+  // regardless of which application was verified.
   const skillRootRelativePath = toolkitRelativeSkillRoot(record.skillRoot);
   const publicOwnership = buildEstablishedOwnership(
     record,

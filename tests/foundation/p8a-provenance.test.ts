@@ -38,6 +38,8 @@ describe('[P8-A1] governed provenance path policy', () => {
       'src/x.ts',
       'tests/foundation/x.test.ts',
       'catalogues/readiness/x.v1.json',
+      'agents/verify-artwork-editor/SKILL.md',
+      // Legacy evidence readback remains supported without restoring this path.
       '.pi/skills/verify-artwork-editor/SKILL.md',
     ]) {
       expect(classifyGovernedProvenancePath(path), path).toBe('included');
