@@ -14,7 +14,6 @@
 # absolute paths, and stay outside the transfer boundary. New runs are written
 # here at runtime and are reproduced locally, not transferred.
 /evidence/
-/.pi/skills/verify-artwork-editor/evidence/
 
 # --- Dependencies ---
 node_modules/

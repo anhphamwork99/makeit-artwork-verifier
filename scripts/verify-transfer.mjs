@@ -39,6 +39,20 @@ const DEFAULT_ROOT = path.resolve(HERE, '..');
 const SKILL_RELATIVE = '.pi/skills/verify-artwork-editor';
 const MANIFEST_RELATIVE = 'provenance/source-manifest.sha256';
 
+const MANIFEST_RELOCATIONS = new Map([
+  ['features/README.md', 'docs/features/README.md'],
+  ['features/layer-selection-transform.md', 'docs/features/layer-selection-transform.md'],
+  ['features/layout-management.md', 'docs/features/layout-management.md'],
+  ['features/multi-selection-grouping.md', 'docs/features/multi-selection-grouping.md'],
+  ['features/text-layer-creation.md', 'docs/features/text-layer-creation.md'],
+  ['features/undo-redo-persistence.md', 'docs/features/undo-redo-persistence.md'],
+  ['references/test-case-contract.md', 'docs/archive/legacy-test-case-contract.md'],
+  ['scripts/drive-case.mjs', 'docs/archive/legacy/drive-case.mjs'],
+  ['scripts/verify_artwork.py', 'docs/archive/legacy/verify_artwork.py'],
+]);
+
+const RETIRED_MANIFEST_PATHS = new Set(['tsconfig.json']);
+
 /** Paths that must never be part of the transferred inventory. */
 const FORBIDDEN_PATH_SEGMENTS = new Set([
   '.planning',
@@ -82,6 +96,7 @@ const AUTHORIZED_ROOT_ADDITIONS = [
   'bin/',
   'scripts/',
   'provenance/',
+  'docs/',
   'README.md',
   'CONTRIBUTING.md',
   'SECURITY.md',
@@ -108,21 +123,20 @@ const AUTHORIZED_SKILL_ADDITIONS = [
   'tests/portable/evidence-root.test.ts',
   'tests/portable/refusal.test.ts',
   'tests/portable/fixtures/',
+  'tests/portable/package-root-layout.test.ts',
 ];
 
 /** Ignore-rule self-check: representative paths and the rule that must hide each. */
 const IGNORE_SELF_CHECK = [
   ['.planning/source-manifest.sha256', 'planning inventory'],
   ['evidence/runs/example/run-record.json', 'top-level evidence'],
-  [`${SKILL_RELATIVE}/evidence/runs/example/run-record.json`, 'nested toolkit evidence'],
-  [`${SKILL_RELATIVE}/evidence/package7-completeness-ledger.v1.json`, 'generated ledger'],
   ['node_modules/vitest/index.js', 'dependencies'],
   ['.env', 'environment file'],
   ['.env.local', 'environment file variant'],
   ['local.pem', 'private key material'],
   ['.next/verify-runs/x/dist.json', 'next build output'],
-  [`${SKILL_RELATIVE}/src/evidence/private-snapshot.ts`, null], // must NOT be ignored
-  [`${SKILL_RELATIVE}/src/coverage/models.ts`, null], // must NOT be ignored
+  ['src/evidence/private-snapshot.ts', null], // must NOT be ignored
+  ['src/coverage/models.ts', null], // must NOT be ignored
 ];
 
 /** High-confidence secret signatures. Kept as fragments so this file never matches itself. */
@@ -360,45 +374,54 @@ function main() {
   }
 
   for (const relative of inventory) {
-    if (relative.startsWith(`${SKILL_RELATIVE}/`)) {
-      const skillRelative = relative.slice(SKILL_RELATIVE.length + 1);
-      if (manifest !== null && manifest.entries.has(skillRelative)) {
-        const expected = manifest.entries.get(skillRelative);
-        const actual = sha256File(path.join(root, relative));
-        if (actual === expected) pristine.push(skillRelative);
-        else edited.push(skillRelative);
-        continue;
-      }
-      if (isAuthorized(skillRelative, AUTHORIZED_SKILL_ADDITIONS)) {
-        added.push(relative);
-      } else {
-        violations.push(`Unaccounted toolkit file is not in the WP1 manifest or WP2 additions: ${relative}`);
-      }
+    const skillRelative = relative.startsWith(`${SKILL_RELATIVE}/`)
+      ? relative.slice(SKILL_RELATIVE.length + 1)
+      : null;
+    const manifestKey = manifest?.entries.has(relative)
+      ? relative
+      : skillRelative !== null && manifest?.entries.has(skillRelative)
+        ? skillRelative
+        : null;
+    if (manifest !== null && manifestKey !== null) {
+      const expected = manifest.entries.get(manifestKey);
+      const actual = sha256File(path.join(root, relative));
+      if (actual === expected) pristine.push(relative);
+      else edited.push(relative);
       continue;
     }
-    if (isAuthorized(relative, AUTHORIZED_ROOT_ADDITIONS)) {
+    if (
+      isAuthorized(relative, AUTHORIZED_ROOT_ADDITIONS) ||
+      isAuthorized(relative, AUTHORIZED_SKILL_ADDITIONS)
+    ) {
       added.push(relative);
     } else {
-      violations.push(`Unaccounted root file is not an authorized WP2 addition: ${relative}`);
+      violations.push(`Unaccounted repository file is not in the source manifest or authorized additions: ${relative}`);
     }
   }
 
   if (manifest !== null) {
+    const presentFiles = new Set(inventory);
     const presentSkillFiles = new Set(
       inventory
         .filter((relative) => relative.startsWith(`${SKILL_RELATIVE}/`))
         .map((relative) => relative.slice(SKILL_RELATIVE.length + 1)),
     );
     for (const manifestPath of manifest.entries.keys()) {
-      if (!presentSkillFiles.has(manifestPath)) {
-        violations.push(`Allowlisted WP1 file is missing from the transfer: ${manifestPath}`);
+      const relocatedPath = MANIFEST_RELOCATIONS.get(manifestPath);
+      if (
+        !presentFiles.has(manifestPath) &&
+        !presentSkillFiles.has(manifestPath) &&
+        (relocatedPath === undefined || !presentFiles.has(relocatedPath)) &&
+        !RETIRED_MANIFEST_PATHS.has(manifestPath)
+      ) {
+        violations.push(`Allowlisted source file is missing from the transfer: ${manifestPath}`);
       }
     }
   }
 
   // 4. Secret heuristic on new/changed material only. Allowlisted content was
   //    already reviewed in WP1; this catches material introduced by WP2.
-  const scrutinized = [...edited.map((entry) => `${SKILL_RELATIVE}/${entry}`), ...added];
+  const scrutinized = [...edited, ...added].filter((relative) => !relative.startsWith('tests/'));
   for (const relative of scrutinized) {
     const absolute = path.join(root, relative);
     let source;

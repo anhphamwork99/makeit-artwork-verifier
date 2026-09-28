@@ -25,13 +25,13 @@ directory. Do not start or attach to a shared development server.
 ## Toolkit-root command surface
 
 ```sh
-pnpm cli -- --help     # schema-versioned JSON command surface (USAGE, exit 64)
-pnpm cli -- --version  # makeit-artwork-verifier 0.1.0 (PASS, exit 0)
+pnpm cli --help     # schema-versioned JSON command surface (USAGE, exit 64)
+pnpm cli --version  # makeit-artwork-verifier 0.1.0 (PASS, exit 0)
 ```
 
-The `FE-build` wrapper (`pnpm verify:artwork ...`) is **not implemented yet**
-(WP3). Until it lands, always invoke this toolkit's own CLI:
-`node bin/verify-artwork.mjs <command>` or `pnpm cli -- <command>`.
+The FE prototype consumes this toolkit through a pinned submodule and exposes
+`pnpm verify:artwork ...`. From a standalone toolkit checkout, use
+`node bin/verify-artwork.mjs <command>` or `pnpm cli <command>`.
 
 ## Explicit application root
 
@@ -44,9 +44,10 @@ from the same explicit root. There is no implicit adjacent checkout and no
 fallback: a missing, malformed, or incompatible provider is a harness refusal
 (`HARNESS_BLOCKED`), never a product `BUG`.
 
-> **Current limitation:** the FE provider export is not implemented yet, so a
-> live `diagnostic` run cannot be claimed today. Use `plan`, `validate`, help,
-> and the portable tests, which run without any FE checkout.
+> The FE prototype currently provides the accepted schema-1 product-meaning
+> provider and bridge-v7 compatibility descriptor. A different app root must pass
+> the same pre-allocation compatibility checks.
+
 
 ## Current Case Request shape
 
@@ -81,16 +82,16 @@ observation bridge cannot mutate product state.
 Plan a case without any launch or application checkout:
 
 ```sh
-pnpm cli -- plan \
-  --case .pi/skills/verify-artwork-editor/cases/diagnostic/requests/layer-text-move-drag-ordinary.json \
+pnpm cli plan \
+  --case cases/diagnostic/requests/layer-text-move-drag-ordinary.json \
   --out ./out/plan
 ```
 
 Run one current-source case against an authorized application checkout:
 
 ```sh
-pnpm cli -- diagnostic \
-  --case .pi/skills/verify-artwork-editor/cases/diagnostic/requests/layer-text-move-drag-ordinary.json \
+pnpm cli diagnostic \
+  --case cases/diagnostic/requests/layer-text-move-drag-ordinary.json \
   --app-root <FE-checkout>
 ```
 
@@ -121,14 +122,14 @@ partial/incomplete or unavailable; they must not be inferred as tested.
 ## Evidence and cleanup
 
 Each direct-toolkit run preserves `run-record.json` under
-`.pi/skills/verify-artwork-editor/evidence/runs/<run-id>/` after cleanup. An FE
+`evidence/runs/<run-id>/` after cleanup. An FE
 adapter may instead set `MAKEIT_ARTWORK_EVIDENCE_ROOT` to an existing canonical
 absolute evidence base; keep the same value for the run, recovery cleanup, and
 readback. Relative, missing, or symlinked configured roots fail closed. Read the
 record without mutation through:
 
 ```sh
-pnpm cli -- evidence verify --run <run-id>
+pnpm cli evidence verify --run <run-id>
 ```
 
 The verifier checks the canonical record, integrity and semantic digests,
@@ -139,7 +140,7 @@ such and cannot be promoted to current-source proof.
 Cleanup is **exact-id and fail-closed**:
 
 ```sh
-pnpm cli -- cleanup --run-id <run-id> --app-root <FE-checkout>
+pnpm cli cleanup --run-id <run-id> --app-root <FE-checkout>
 ```
 
 It may terminate only the recorded process group, close only the recorded port,

@@ -13,10 +13,10 @@ evidence, classify the result into a closed outcome, and clean every
 verification-owned process and scratch resource.
 
 This skill documents one CLI implementation, `makeit-artwork-verifier@0.1.0`.
-It contains no executable engine of its own: the `bin/` launcher inside this
-skill delegates to the same TypeScript entry point as the toolkit-root CLI. The
-skill never vendors, reimplements, or shims the product normalization,
-canonicalization, fingerprint, or Crossword core.
+It contains no executable engine of its own. Executable source, tests, cases,
+catalogues, fixtures and trust authorities live at the toolkit repository root;
+the skill only documents how an agent invokes that package. The skill never
+vendors, reimplements, or shims product meaning.
 </objective>
 
 <prerequisites>
@@ -39,8 +39,8 @@ the `cli` package script:
 
 ```sh
 node bin/verify-artwork.mjs --help
-pnpm cli -- --help          # documented command surface as a schema-versioned JSON envelope
-pnpm cli -- --version       # makeit-artwork-verifier 0.1.0
+pnpm cli --help          # documented command surface as a schema-versioned JSON envelope
+pnpm cli --version       # makeit-artwork-verifier 0.1.0
 ```
 
 `--help` is the first command for a cold agent. It prints `schemaVersion: 2`
@@ -50,29 +50,34 @@ with `status: "USAGE"` and `exitCode: 64`, listing every command and the
 Currently usable commands:
 
 ```sh
-pnpm cli -- plan --case <request.json> --out <dir>
-pnpm cli -- validate --all
-pnpm cli -- diagnostic --case <request.json> --app-root <FE-checkout>
-pnpm cli -- diagnostic --suite representative --app-root <FE-checkout>
-pnpm cli -- evidence verify --run <run-id>
-pnpm cli -- cleanup --run-id <run-id> --app-root <FE-checkout>
+pnpm cli plan --case <request.json> --out <dir>
+pnpm cli validate --all
+pnpm cli diagnostic --case <request.json> --app-root <FE-checkout>
+pnpm cli diagnostic --suite representative --app-root <FE-checkout>
+pnpm cli evidence verify --run <run-id>
+pnpm cli cleanup --run-id <run-id> --app-root <FE-checkout>
 ```
 
 `qualify`, `release`, `budget`, and `retention` are deferred and fail closed with
 `NOT_IMPLEMENTED`; they are not part of the correctness phase.
 
-**FE wrapper status:** the `FE-build` convenience wrapper is planned but **not
-yet implemented** (WP3). It is expected to expose `pnpm verify:artwork --help`,
-`pnpm verify:artwork diagnostic --case ...`, and
-`pnpm verify:artwork evidence verify --run ...` by forwarding to this CLI. Do
-not use those wrapper commands until WP3 lands; use the toolkit-root CLI above.
+**FE wrapper status:** `FE-build` consumes this private toolkit through a
+commit-pinned Git submodule and exposes `pnpm verify:artwork ...`. The wrapper
+binds the exact FE app root and the FE-owned
+`artwork-editor-verification/evidence/` base before forwarding to this CLI.
+
+```sh
+pnpm verify:artwork --help
+pnpm verify:artwork diagnostic --case <request.json>
+pnpm verify:artwork evidence verify --run <run-id>
+```
 
 The authoritative current Case Request examples and fixture ownership contract
 are in `cases/diagnostic/requests/`, `catalogues/`, and `references/cold-agent.md`.
 The cold-agent walkthrough, command examples, ownership rules, and evidence
 reader contract are in `references/cold-agent.md`. The older
-`references/test-case-contract.md` and the Python helper describe the preserved
-legacy driver and are explicitly **not** the current CLI acceptance contract.
+`docs/archive/legacy-test-case-contract.md` and `docs/archive/legacy/` preserve
+the old driver material and are explicitly **not** the current CLI contract.
 </launch>
 
 <app-root>
@@ -98,17 +103,16 @@ Refusals stay distinct from product defects:
 Reaching a live application requires separate, authorized private access to the
 `FE-build` checkout. This toolkit does not vendor, copy, or infer product source.
 
-The FE-owned provider export is implemented and the detached toolkit has passed
-the named representative browser suite against an authorized checkout. The
-FE convenience wrapper remains separate integration work; use the toolkit-root
-commands until that wrapper is installed.
+The FE-owned provider export and convenience wrapper are implemented. The
+wrapper binds the FE app root and FE-owned evidence base before invoking this
+commit-pinned toolkit package.
 </app-root>
 
 <diagnostic>
 For a single case:
 
 ```sh
-pnpm cli -- diagnostic --case .pi/skills/verify-artwork-editor/cases/diagnostic/requests/layer-text-move-drag-ordinary.json --app-root <FE-checkout>
+pnpm cli diagnostic --case cases/diagnostic/requests/layer-text-move-drag-ordinary.json --app-root <FE-checkout>
 ```
 
 The command compiles and validates the request before allocation, validates the
@@ -166,7 +170,7 @@ unless a future feature file explicitly documents another production boundary.
 <evidence>
 Each Diagnostic run receives a durable directory. Direct toolkit use defaults to:
 
-`.pi/skills/verify-artwork-editor/evidence/runs/$RUN_ID/`
+`evidence/runs/$RUN_ID/`
 
 An installed FE adapter may set `MAKEIT_ARTWORK_EVIDENCE_ROOT` to an existing,
 canonical absolute evidence base; then runs and suites live below its `runs/`
@@ -212,7 +216,7 @@ evidence directory.
 To clean a previously interrupted owned run, use the current CLI surface:
 
 ```sh
-pnpm cli -- cleanup --run-id $RUN_ID --app-root $APP_ROOT
+pnpm cli cleanup --run-id $RUN_ID --app-root $APP_ROOT
 ```
 
 Cleanup is exact-id and exact-root, fail-closed: `--app-root` is mandatory and
@@ -226,9 +230,9 @@ development-server port.
 The documented correctness profile is Diagnostic correctness with a closed
 outcome and separate coverage. Read `references/cold-agent.md` before
 interpreting a run, and use
-`pnpm cli -- evidence verify --run $RUN_ID` to independently verify the durable
+`pnpm cli evidence verify --run $RUN_ID` to independently verify the durable
 record after cleanup. A toolkit checkout with authorized FE access can produce a scoped live `PASS`;
-the FE convenience wrapper is separate integration work.
+the FE wrapper provides the same scoped commands from the prototype checkout.
 </cold-agent>
 
 <transfer-boundary>
@@ -240,9 +244,8 @@ file set, WP1 manifest provenance, and added-material secret signatures.
 </transfer-boundary>
 
 <helpers>
-- `scripts/verify_artwork.py` — legacy owned launch/doctor/drive orchestration; preserved for reference, not the current CLI acceptance path.
-- `scripts/drive-case.mjs` — legacy Playwright doctor and real-browser case driver; preserved for reference.
-- `scripts/verify-engine-branching.mjs` — toolkit self-check helper.
+- `docs/archive/legacy/verify_artwork.py` and `drive-case.mjs` — archived legacy drivers, never the current CLI path.
+- `scripts/verify-engine-branching.mjs` — active toolkit self-check helper.
 
 Both legacy drivers manipulate only their selected owned port, exact process
 group, temporary run state, and the run evidence directory.

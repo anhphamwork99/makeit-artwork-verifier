@@ -29,7 +29,7 @@ export default defineConfig({
   test: {
     environment: 'node',
     globals: false,
-    include: ['.pi/skills/verify-artwork-editor/tests/browser/**/*.{test,spec}.ts'],
+    include: ['tests/browser/**/*.{test,spec}.ts'],
     testTimeout: 360_000,
     hookTimeout: 120_000,
     fileParallelism: false,

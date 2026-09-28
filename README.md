@@ -8,7 +8,7 @@ the product-meaning provider all stay in the separate `FE-build` checkout.
 
 - **Package:** `makeit-artwork-verifier@0.1.0`
 - **License:** `UNLICENSED` — private, no license grant, no public distribution.
-- **Status:** WP2 packaging/handoff complete; FE-build adapter (WP3) not started.
+- **Status:** private package-root toolkit consumed by the FE prototype through a commit-pinned submodule.
 - **Coverage claim:** representative Diagnostic correctness only. No Release
   Credit, mobile, backend, cross-browser, exhaustive, or production-safety claim.
 
@@ -38,8 +38,8 @@ envelope (`schemaVersion: 2`) on stdout and sets a meaningful exit code.
 
 ```sh
 node bin/verify-artwork.mjs --help          # documented command surface (USAGE, exit 64)
-pnpm cli -- --help                          # same, via the package script
-pnpm cli -- --version                       # makeit-artwork-verifier 0.1.0 (PASS, exit 0)
+pnpm cli --help                          # same, via the package script
+pnpm cli --version                       # makeit-artwork-verifier 0.1.0 (PASS, exit 0)
 ```
 
 Currently usable commands:
@@ -47,18 +47,18 @@ Currently usable commands:
 ```sh
 # Static planning of one Diagnostic case request (no app root, no launch)
 # `--out` should point at a generated directory such as `./out/plan` (ignored by Git)
-pnpm cli -- plan --case .pi/skills/verify-artwork-editor/cases/diagnostic/requests/layer-text-move-drag-ordinary.json --out ./out/plan
+pnpm cli plan --case cases/diagnostic/requests/layer-text-move-drag-ordinary.json --out ./out/plan
 
 # Static catalogue validation
-pnpm cli -- validate --all
+pnpm cli validate --all
 
 # Diagnostics that own a local product instance (require an explicit app root)
-pnpm cli -- diagnostic --case <request.json> --app-root <FE-checkout>
-pnpm cli -- diagnostic --suite representative --app-root <FE-checkout>
+pnpm cli diagnostic --case <request.json> --app-root <FE-checkout>
+pnpm cli diagnostic --suite representative --app-root <FE-checkout>
 
 # Evidence readback and cleanup (exact-id, exact-root, fail-closed)
-pnpm cli -- evidence verify --run <run-id>
-pnpm cli -- cleanup --run-id <run-id> --app-root <FE-checkout>
+pnpm cli evidence verify --run <run-id>
+pnpm cli cleanup --run-id <run-id> --app-root <FE-checkout>
 ```
 
 `qualify`, `release`, `budget`, and `retention` commands print on the deferred
@@ -96,14 +96,14 @@ the `FE-build` checkout; this repository does not vendor product source.
 
 The FE-owned provider export is implemented and the detached toolkit has passed
 the named eight-case representative browser suite against an authorized FE
-checkout. The `pnpm verify:artwork` convenience adapter remains a separate FE
-integration step; toolkit-root commands above are authoritative until it lands.
+checkout. The FE prototype exposes the accepted `pnpm verify:artwork` adapter; toolkit-root
+commands remain the standalone interface.
 
 When an application adapter installs this repository as a dependency, it may set
 `MAKEIT_ARTWORK_EVIDENCE_ROOT` to an existing canonical absolute directory so
 run and suite evidence survives dependency reinstalls. Direct toolkit users
 should leave it unset; the default remains
-`.pi/skills/verify-artwork-editor/evidence/`. The same value must be present for
+`evidence/`. The same value must be present for
 the run, recovery cleanup, and `evidence verify`. Invalid, relative, or symlinked
 values fail closed before evidence is written.
 
@@ -134,9 +134,12 @@ secret signatures. See `CONTRIBUTING.md` and `SECURITY.md`.
 ```
 bin/verify-artwork.mjs                       # CLI launcher (TS entry via tsx)
 scripts/verify-transfer.mjs                  # transfer/inventory guard
-.pi/skills/verify-artwork-editor/            # the bundled Pi skill + CLI implementation
-  SKILL.md                                   # skill/CLI documentation
-  references/                                # cold-agent guide and legacy notes
-  src/, tests/, cases/, catalogues/, ...      # toolkit source, tests, approved data
+src/, tests/                                # toolkit implementation and verification
+cases/, catalogues/, fixtures/               # versioned runtime data and resources
+governance/authorities/                      # immutable reviewed trust inputs
+docs/features/, docs/archive/                # product maps and inactive legacy material
+.pi/skills/verify-artwork-editor/            # thin agent-facing skill
+  SKILL.md                                   # invocation and interpretation contract
+  references/cold-agent.md                   # cold-agent operating guide
 package.json, pnpm-lock.yaml, tsconfig.portable.json, vitest.*.config.ts
 ```

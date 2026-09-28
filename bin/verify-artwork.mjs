@@ -15,10 +15,9 @@ import { createRequire } from 'node:module';
  */
 const here = path.dirname(fileURLToPath(import.meta.url));
 const toolkitRoot = path.resolve(here, '..');
-const skillRoot = path.join(toolkitRoot, '.pi', 'skills', 'verify-artwork-editor');
 const require = createRequire(import.meta.url);
 const tsxCli = require.resolve('tsx/cli');
-const entry = path.join(skillRoot, 'src', 'cli', 'main.ts');
+const entry = path.join(toolkitRoot, 'src', 'cli', 'main.ts');
 
 const result = spawnSync(process.execPath, [tsxCli, entry, ...process.argv.slice(2)], {
   cwd: toolkitRoot,
