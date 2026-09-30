@@ -3,17 +3,17 @@
   "packageName": "makeit-artwork-verifier",
   "packageVersion": "0.3.3",
   "identityKind": "package-snapshot",
-  "repositoryRevision": "c624c6b62095cb5ade1264d88e6d8cade0a2b83b",
+  "repositoryRevision": "6a33cd7079f99e562e9f90b37c682e0e4e6b540d",
   "dirtyPolicy": "clean",
   "lockfileDigest": "44f2db4ea4af408fcc0d1be18548c1ad6c93ebf3d4f9d1397ca95e628056b722",
   "governedEntries": [
     {
       "path": "agents/verify-artwork-editor/references/cold-agent.md",
-      "sha256": "cdbc8e54b19d82867813af92e5d9f1c9dfcd0fbb3364aa6a70623815f3841190"
+      "sha256": "7cb7ad76c85d8e9f60f573d339712dbfd98a9f4739bb90d3236c43ae127c7007"
     },
     {
       "path": "agents/verify-artwork-editor/SKILL.md",
-      "sha256": "fc384849007cb3e25c6c5b5b703f823ee77ef4d0c182a0d0398aabee87b0be47"
+      "sha256": "25b03478f5de84051fc5fd47ff00b76e2976da953f2364b9978313a64542c488"
     },
     {
       "path": "bin/verify-artwork.mjs",

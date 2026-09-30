@@ -1,3 +1,8 @@
+> **Historical plan — superseded.** This plan records the prior submodule/gitlink
+> migration approach. Do not execute its commands. The active architecture uses
+> the package-based Integration Kit documented in `../../../../integrations/makeit-fe/README.md`
+> and the current Project Home `../PROJECT.md`.
+
 # Official canonical host migration
 
 **Status:** Owner-approved implementation

@@ -44,8 +44,9 @@ allocation, no evidence) for malformed/missing/incompatible inputs.
 - **Preserve honest scope.** Do not expand claims to Release Credit, mobile,
   backend, cross-browser, exhaustive coverage, or production safety. Do not
   delete, rewrite, or relabel tests to make the historical suite look green.
-- **No Release/license/dependency expansion.** Do not add a license, publish to
-  a registry, or broadly upgrade dependencies without owner authorization.
+- **No public Release/license expansion.** Private immutable Git tags are the
+  approved package distribution mechanism. Do not publish to a public registry,
+  add a license, or broadly upgrade dependencies without owner authorization.
 
 ## Allowlisted snapshot and provenance
 

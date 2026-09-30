@@ -1,374 +1,251 @@
 # MakeIt Artwork Verifier
 
-Private, standalone correctness toolkit cho MakeIt Artwork Editor. Repository
-này sở hữu skills và tools để static-plan, chạy browser behavior, phân loại
-outcome, kiểm tra durable evidence và maintain verification contracts khi
-Artwork Editor thay đổi.
+Private, installable correctness toolkit cho MakeIt Artwork Editor. Repository
+này là nguồn authority duy nhất cho CLI, planner, browser runtime, catalogues,
+cases, evidence integrity, agent skill và MakeIt FE Integration Kit.
 
-- **Package:** `makeit-artwork-verifier@0.1.0`
+- **Package:** `makeit-artwork-verifier@0.3.3`
+- **Git distribution tag:** `v0.3.3`
 - **Branch:** `main`
 - **License:** `UNLICENSED` — private, không cấp quyền public distribution.
-- **Current profile:** representative **Diagnostic correctness** cho frontend
+- **Current profile:** representative Diagnostic correctness cho frontend
   Artwork Editor.
-- **Không claim:** Release Credit, exhaustive coverage, mobile, backend,
-  cross-browser hoặc production safety.
+- **Không claim:** exhaustive coverage, Release Credit, mobile, backend hoặc
+  cross-browser.
 
-## Start here — handoff
+## Start here
 
-Người mới tiếp nhận nên đọc theo thứ tự:
-
-1. [`AGENTS.md`](AGENTS.md) — repository-wide authority, boundaries và rules.
-2. [`agents/verify-artwork-editor/SKILL.md`](agents/verify-artwork-editor/SKILL.md)
-   — standalone verification workflow.
-3. [`agents/verify-artwork-editor/references/cold-agent.md`](agents/verify-artwork-editor/references/cold-agent.md)
-   — cold-start commands và evidence interpretation.
-4. [`.planning/maintain-verification-skills/PROJECT.md`](.planning/maintain-verification-skills/PROJECT.md)
-   — Project Home để thiết kế workflow maintain skills/tools.
-5. [`CONTRIBUTING.md`](CONTRIBUTING.md) và [`SECURITY.md`](SECURITY.md).
-
-Nếu mục tiêu chỉ là chạy verification từ một compatible FE host, bắt đầu tại
-`agents/verify-artwork-editor/SKILL.md` trong checkout đó và dùng FE wrapper
-thay vì gọi standalone CLI trực tiếp.
+1. [`AGENTS.md`](AGENTS.md) — repository rules và ownership boundary.
+2. [`integrations/makeit-fe/README.md`](integrations/makeit-fe/README.md) — cách
+   maintainer tích hợp Host Adapter vào official frontend.
+3. [`agents/verify-artwork-editor/SKILL.md`](agents/verify-artwork-editor/SKILL.md)
+   — agent-neutral verification workflow.
+4. [`agents/verify-artwork-editor/references/cold-agent.md`](agents/verify-artwork-editor/references/cold-agent.md)
+   — cold-start và evidence interpretation.
+5. [`.planning/maintain-verification-skills/PROJECT.md`](.planning/maintain-verification-skills/PROJECT.md)
+   — maintenance Project Home.
 
 ## Kiến trúc hiện tại
 
-### Repository topology
+```text
+makeit-artwork-verifier repository
+├── installable package: CLI/runtime/cases/evidence
+├── canonical agent skill
+└── integrations/makeit-fe/ Integration Kit
+                │
+                │ one-time reviewed patch
+                ▼
+MakeIT-POD/fe-editor
+├── version-pinned verifier dependency
+├── app-specific Host Adapter
+└── FE-owned local evidence/report workspace
+```
 
-| Thành phần | Repository | Sở hữu |
-|---|---|---|
-| Canonical product host target | `MakeIT-POD/fe-editor:dev` | Artwork Editor product, read-only verification bridge, product-meaning provider, consumer adapter, user-facing skill, FE-owned evidence/reports after team-owned merge |
-| Secondary transition consumer | [`anhphamwork99/makeit-demo`](https://github.com/anhphamwork99/makeit-demo) | Existing compatible host retained during migration |
-| Private verifier | repository này — [`anhphamwork99/makeit-artwork-verifier`](https://github.com/anhphamwork99/makeit-artwork-verifier) | CLI, planner, catalogues, cases, runtime, browser driver, Oracles, evidence contracts/verifier, standalone skill, maintenance Project Home |
-| Product/planning records | [`anhphamwork99/makeit-docs`](https://github.com/anhphamwork99/makeit-docs) | Product truth, accepted ADRs và integration acceptance records |
-| Official source | `MakeIT-POD/*` | Read-only upstream; không nhận prototype commits hoặc pushes |
+### Ownership
 
-FE consume private verifier qua commit-pinned Git submodule:
+| Thành phần | Nơi sở hữu |
+|---|---|
+| CLI, planner, browser drivers, Oracles | verifier repository |
+| Cases, catalogues, fixtures, evidence contracts | verifier repository |
+| Agent skill và maintenance Project Home | verifier repository |
+| Integration Kit và MR handoff | verifier repository |
+| Artwork state/store mapping | official frontend Host Adapter |
+| Product-meaning provider | official frontend Host Adapter |
+| Read-only observation seam | official frontend Host Adapter |
+| Product source và production build | official frontend |
+
+Prototype `makeit-demo` chỉ lưu candidate review branch trong giai đoạn bàn
+giao. Nó không còn là dependency, installation source hoặc runtime requirement.
+Team member không cần clone prototype repository.
+
+## Distribution
+
+Hiện tại package được cài từ private Git tag vì chưa có package-registry release
+được phê duyệt:
+
+```json
+{
+  "devDependencies": {
+    "makeit-artwork-verifier": "github:anhphamwork99/makeit-artwork-verifier#v0.3.3"
+  }
+}
+```
+
+`pnpm-lock.yaml` khóa tag thành exact commit. Package dùng immutable
+`provenance/package-snapshot.json` để evidence integrity không phụ thuộc vào
+`.git` metadata hoặc Git submodule trong consumer checkout.
+
+Không publish package ra public registry. Nếu chuyển sang private registry sau
+này, giữ nguyên package name, host contract và provenance gates.
+
+## MakeIt FE Integration Kit
 
 ```text
-FE-build/.tooling/makeit-artwork-verifier
+integrations/makeit-fe/
+├── README.md
+├── compatibility.json
+├── host-adapter.patch
+├── verify-integration.mjs
+└── MERGE_REQUEST.md
 ```
 
-Data flow một chiều: official source → deliberate prototype adaptation. Prototype
-changes không được đẩy ngược về official repositories.
-
-### Runtime flow
-
-```mermaid
-flowchart LR
-  U[User / Agent] --> S[FE canonical skill]
-  S --> SETUP[verify:artwork:setup]
-  SETUP --> PIN[Validate exact submodule pin]
-  PIN --> CLI[Private verifier CLI]
-
-  S --> INTAKE[File / URL / inline JSON / natural language]
-  INTAKE --> CAP[Capability inventory]
-  CAP -->|supported| PLAN[Static plan]
-  CAP -->|missing authority| GAP[VERIFICATION_GAP]
-  GAP --> MP[Maintenance Project Home]
-
-  PLAN -->|launchable| RUN[Owned Diagnostic run]
-  RUN --> APP[Explicit FE app root]
-  RUN --> CHROME[Owned Chromium]
-  APP --> BRIDGE[Read-only observation bridge]
-  APP --> PROVIDER[Product-meaning provider]
-  RUN --> EVIDENCE[Durable evidence]
-  EVIDENCE --> VERIFY[Independent evidence verify]
-  VERIFY --> REPORT[Friendly FE report]
-```
-
-### Component responsibilities
-
-#### 1. FE product host
-
-FE là authority cho product behavior và product meaning. Live Diagnostic nhận
-explicit `--app-root`; verifier không infer adjacent checkout.
-
-Repository identity không tham gia compatibility. Chạy read-only preflight:
+Maintainer áp dụng kit một lần vào official FE rồi tạo MR qua workflow của team.
+Sau khi merge, mọi member nhận Host Adapter bằng `git pull` và verifier package
+bằng `pnpm install --frozen-lockfile`.
 
 ```bash
-pnpm cli host doctor --app-root <FE-checkout>
+node integrations/makeit-fe/verify-integration.mjs --app-root <FE-checkout>
 ```
 
-Command này chỉ load và validate versioned provider/host contract; nó không
-allocate port, start Next.js, launch browser hoặc ghi evidence.
+Xem [Integration Kit README](integrations/makeit-fe/README.md) để có exact
+baseline, commands, acceptance và rollback.
 
-FE cung cấp:
+## Runtime flow
 
-- real Artwork Editor UI;
-- read-only `window.__MAKEIT_ARTWORK_VERIFICATION__` bridge;
-- `src/lib/artwork/verification/productMeaningProvider.mjs`;
-- bridge/provider compatibility descriptor;
-- FE-owned evidence, reports và request workspace.
+```text
+User/Agent
+→ FE wrapper
+→ installed verifier package
+→ pre-allocation host compatibility
+→ static plan
+→ owned Next.js + Chromium
+→ read-only Host Adapter observations
+→ durable evidence
+→ independent evidence verify
+→ friendly report
+```
 
-Bridge chỉ quan sát. Fixture và behavior phải được drive qua public UI/native
-browser input; bridge không được mutate Artwork state.
+Live commands luôn nhận explicit product app root. Repository name, remote URL
+hoặc checkout location không cấp compatibility. Host phải cung cấp:
 
-#### 2. FE consumer adapter
+- `productMeaningProvider` schema 1;
+- profile `artwork-product-meaning-v1`;
+- observation bridge version 7;
+- declared capability descriptor.
 
-FE wrapper che giấu submodule/app-root/evidence-root details khỏi người dùng:
+Thiếu hoặc incompatible contract trả `HARNESS_BLOCKED` trước launch.
+
+## Sử dụng trong official FE sau merge
 
 ```bash
+pnpm install --frozen-lockfile
 pnpm verify:artwork:setup
+pnpm verify:artwork:host
 pnpm verify:artwork:capabilities
 pnpm verify:artwork:run --case <request.json>
 pnpm verify:artwork:run --suite representative
-pnpm verify:artwork:gap --input <gap.json>
 ```
 
-Setup chỉ trả `READY` khi exact gitlink, dependencies, Chromium, CLI version và
-canonical planning smoke đều pass.
+Không cần:
 
-#### 3. Private verifier toolkit
+- `git clone --recurse-submodules`;
+- `.tooling/makeit-artwork-verifier`;
+- `pnpm verify:artwork:install`;
+- prototype checkout.
 
-Toolkit sở hữu:
+## Standalone development
 
-- strict Case Request contracts;
-- Subject, Capability, Workflow, Fixture, Correctness, Coverage và Environment
-  catalogues;
-- static planner và launchability decision;
-- pre-allocation FE-host compatibility checks;
-- owned process/port/browser lifecycle;
-- native-input behavior drivers và Oracles;
-- strict run/suite evidence records;
-- evidence integrity/readback và exact-id cleanup.
+Từ verifier repository:
 
-Toolkit không vendor hoặc duplicate product normalization, canonicalization,
-fingerprint hay Crossword core.
-
-#### 4. Skills
-
-Canonical standalone skill:
-
-```text
-agents/verify-artwork-editor/SKILL.md
+```bash
+corepack enable
+pnpm install --frozen-lockfile
+pnpm cli --help
+pnpm cli --version
+pnpm cli plan --case cases/diagnostic/requests/layer-text-move-drag-ordinary.json --out ./out/plan
+pnpm cli diagnostic --case <request.json> --app-root <compatible-fe-checkout>
+pnpm cli evidence verify --run <run-id>
 ```
 
-Cross-harness compatibility projection:
+No-FE surface gồm help, version, plan, portable tests và typecheck. Live
+Diagnostic cần một authorized compatible FE checkout.
 
-```text
-.agents/skills/verify-artwork-editor
-  → ../../agents/verify-artwork-editor
-```
-
-Không có active `.pi` skill. Legacy `.pi/skills/verify-artwork-editor` value chỉ
-được chấp nhận khi đọc historical evidence; nó không phải discovery hoặc
-execution authority.
-
-#### 5. Maintenance Project Home
-
-```text
-.planning/maintain-verification-skills/PROJECT.md
-```
-
-Project hiện ở discovery/wayfinding. Destination là một agent-neutral workflow
-có thể biến:
-
-```text
-FE source/behavior delta
-→ verification impact
-→ catalogue/runtime/skill update
-→ live proof + failure-boundary proof
-→ verifier commit/push
-→ FE gitlink/bridge/skill update
-→ FE commit/push
-```
-
-Không mô tả project này như một implemented maintenance skill trước khi có
-engineering specification được owner phê duyệt và implementation gates pass.
-
-## Intake và verification-gap flow
-
-User-facing FE skill nhận:
-
-- representative suite;
-- local hoặc toolkit Case Request path;
-- URL tài liệu;
-- inline JSON;
-- natural-language test case.
-
-Agent phải đối chiếu `verify:artwork:capabilities` trước khi author request.
-Request mới chỉ có execution authority sau khi static plan trả:
-
-```text
-status: PASS
-launchAttempted: false
-launchability.launchable: true
-```
-
-Nếu thiếu Subject, Capability, Scenario, Workflow, Fixture hoặc Oracle
-authority, không launch browser. Tạo sanitized `VERIFICATION_GAP` và route tới
-maintenance Project Home. Gap không phải `PASS`, `BUG`, `HARNESS_BLOCKED` hay
-`ENVIRONMENT_FAILURE`.
-
-## Outcome và scope model
-
-Closed runtime outcomes:
+## Outcome model
 
 | Outcome | Ý nghĩa |
 |---|---|
-| `PASS` | Native action và required Oracles pass; cleanup/evidence requirements được đáp ứng |
-| `BUG` | Real user action chạy được nhưng product behavior không khớp declared expectation |
-| `HARNESS_BLOCKED` | Verifier không thiết lập được trustworthy contract/fixture/target/readiness |
-| `ENVIRONMENT_FAILURE` | Launch, browser, process, port, package hoặc host prerequisite thất bại |
-| `USAGE` | CLI argument hoặc Case Request không hợp lệ |
+| `PASS` | Behavior checks và durable evidence integrity cùng đạt |
+| `BUG` | Native action chạy được nhưng product behavior sai expectation |
+| `HARNESS_BLOCKED` | Thiếu trustworthy contract, fixture, target hoặc evidence |
+| `ENVIRONMENT_FAILURE` | Package, browser, process, port, build hoặc runtime lỗi |
+| `USAGE` | Argument hoặc request không hợp lệ |
 
-Coverage là dimension riêng: `complete`, `partial` hoặc `incomplete`. Một
-behavior `PASS` không tự động cấp exhaustive coverage hoặc Release Credit.
+Coverage là dimension riêng. Behavior PASS không cấp exhaustive coverage hoặc
+Release Credit.
 
 ## Evidence ownership
 
-Standalone toolkit mặc định ghi generated evidence dưới ignored root:
+Official FE wrapper bind generated artifacts vào ignored workspace:
 
 ```text
-evidence/
-├── runs/<run-id>/
-└── suites/<suite-id>/
-```
-
-FE adapter bind `MAKEIT_ARTWORK_EVIDENCE_ROOT` tới application-owned workspace:
-
-```text
-FE-build/artwork-editor-verification/
-├── evidence/
-│   ├── runs/
-│   └── suites/
+artwork-editor-verification/
+├── evidence/{runs,suites}/
 ├── reports/
 └── requests/
 ```
 
-Mỗi current run chứa tối thiểu:
+Chỉ kết luận **Đạt** khi behavior và independent evidence verification đều
+`PASS`. Package-installed runs bind provenance bằng immutable package snapshot;
+standalone verifier development runs tiếp tục dùng exact Git provenance.
 
-- `run-record.json` — candidate/source/environment/scope/outcome/cleanup identity;
-- `intended-inventory.json` — declared artifact set;
-- `final-manifest.json` — sealed transaction và artifact integrity;
-- bounded observation/visual artifacts và diagnostics;
-- owned server log.
+## Production safety
 
-Chỉ kết luận **Đạt** khi behavior status và independent evidence verification
-đều `PASS`.
+Host Adapter chỉ hoạt động với explicit non-production verification gate.
+Production-absence gate phải chứng minh:
 
-## Prerequisites
+- emitted artifact scan không có seam marker;
+- browser initial/reload không có observation/setup globals hoặc Symbol slots;
+- requested chunks đều map vào emitted output;
+- exact owned cleanup hoàn tất.
 
-| Requirement | Value |
-|---|---|
-| Node.js | `>=20.11 <25` |
-| pnpm | `10.33.0` |
-| Install | `pnpm install --frozen-lockfile` |
-| Live run | Authorized FE checkout + Playwright Chromium |
+Official FE Integration Kit thêm bounded `ARTWORK_VERIFY_DIST_DIR` support chỉ
+cho `.next/verify-runs/<safe-id>`; normal production build không đổi `distDir`.
 
-## Standalone CLI
-
-```bash
-pnpm install --frozen-lockfile
-pnpm cli --help
-pnpm cli --version
-```
-
-Usable commands:
-
-```bash
-# Plan only — không launch browser
-pnpm cli plan \
-  --case cases/diagnostic/requests/layer-text-move-drag-ordinary.json \
-  --out ./out/plan
-
-# Static catalogue validation
-pnpm cli validate --all
-
-# Live Diagnostic — explicit FE root bắt buộc
-pnpm cli diagnostic --case <request.json> --app-root <FE-checkout>
-pnpm cli diagnostic --suite representative --app-root <FE-checkout>
-
-# Durable readback và exact-id cleanup
-pnpm cli evidence verify --run <run-id>
-pnpm cli cleanup --run-id <run-id> --app-root <FE-checkout>
-```
-
-`qualify`, `release`, `budget` và `retention` thuộc deferred surface và fail
-closed với `NOT_IMPLEMENTED`; chúng không thuộc correctness phase hiện tại.
-
-`validate --all` trong toolkit-only checkout có thể trả `HARNESS_BLOCKED` vì
-Crossword product source hoặc accepted suite evidence không được transfer. Đây
-là honest refusal, không phải toolkit defect.
-
-## Verification gates
-
-Minimum verifier proof trước commit:
+## Verification gates trước verifier commit
 
 ```bash
 pnpm test
 pnpm test:contract
 pnpm test:refusal
 pnpm typecheck
+pnpm build:package-snapshot
 pnpm verify:transfer --strict
 node bin/verify-artwork.mjs --help
 ```
 
-Change runtime/browser behavior phải có thêm focused live proof bằng authorized
-FE checkout và kiểm tra failure/diagnostic surface liên quan.
+Khi thay đổi browser/runtime/host contract, chạy thêm Integration Kit host tests,
+live representative proof, frontend build và production-absence.
 
-## Two-repository change transaction
+## Change transaction
 
-Khi verifier change ảnh hưởng FE:
+1. Hoàn thành verifier change và gates.
+2. Tạo immutable private Git tag; không rewrite tag.
+3. Update Integration Kit/package pin và compatibility metadata.
+4. Build candidate từ exact official FE baseline.
+5. Chạy host, focused, live, build và production-absence proofs.
+6. Maintainer FE áp dụng kit và merge qua official review workflow.
 
-1. implement và verify trong private verifier;
-2. commit + push verifier `origin/main`;
-3. update FE gitlink tới exact pushed verifier commit;
-4. verify FE setup, adapter tests, typecheck, build và affected live flow;
-5. commit + push FE `origin/main`.
-
-Không để FE pin commit chưa push. Không sửa product chỉ để làm verifier PASS.
-Không force-push hoặc rewrite accepted history để recovery.
-
-## Transfer boundary
-
-Tracked planning exception duy nhất:
-
-```text
-.planning/maintain-verification-skills/
-```
-
-Các nội dung sau không được commit:
-
-- planning/provenance khác dưới `.planning/`;
-- generated/historical `evidence/` trong verifier repo;
-- dependencies, caches và build output;
-- credentials, `.env*`, private keys;
-- machine-local artifacts.
-
-`pnpm verify:transfer --strict` kiểm tra ignore rules, tracked inventory,
-provenance manifest, compatibility skill symlink và secret signatures.
+Không update gitlink; kiến trúc active không còn Git submodule.
 
 ## Repository layout
 
 ```text
 AGENTS.md
-agents/verify-artwork-editor/                 # canonical standalone skill
+agents/verify-artwork-editor/                 # canonical skill
 .agents/skills/verify-artwork-editor          # compatibility symlink
 .planning/maintain-verification-skills/       # maintenance Project Home
-bin/verify-artwork.mjs                        # CLI launcher
-scripts/verify-transfer.mjs                   # transfer/inventory guard
-src/                                          # planner/runtime/evidence/contracts
-tests/                                        # toolkit verification
-cases/, catalogues/, fixtures/                # versioned verification inputs
-governance/authorities/                       # immutable reviewed trust inputs
-docs/features/, docs/archive/                 # feature maps và legacy material
-provenance/source-manifest.sha256              # extraction baseline
+integrations/makeit-fe/                       # official FE Integration Kit
+bin/verify-artwork.mjs                        # package CLI
+scripts/build-package-snapshot.mjs            # immutable package provenance
+scripts/verify-transfer.mjs                   # privacy/inventory guard
+src/                                          # toolkit implementation
+tests/                                        # portable/browser/contract tests
+cases/, catalogues/, fixtures/                # versioned inputs
+governance/authorities/                       # immutable trust inputs
+provenance/package-snapshot.json              # installed-package identity
 ```
 
-
-## Accepted baseline và references
-
-Agent-neutral migration được ghi tại MakeIt ADR 0127. Baseline handoff ngày
-2026-09-28:
-
-- private verifier commit `dd81e3d2d7d970785c051414a74dfd0cd9fa6129`;
-- FE integration commit `d293650906dba3be160d73dac6ffc45cc5812668`;
-- portable suite `610/610 PASS`;
-- contract suite `107/107 PASS`;
-- refusal suite `29/29 PASS`;
-- FE adapter suite `20/20 PASS`;
-- live Text-move behavior + evidence integrity `PASS`.
-
-Repository `main` là current delivery authority; các hash trên là accepted
-migration baseline, không phải instruction để downgrade future pins.
+Historical planning files may mô tả prototype/submodule architecture tại thời
+điểm của chúng. Chúng là history, không phải current installation guidance.
+Active guidance chỉ nằm trong README, AGENTS, canonical skill, cold-agent,
+Integration Kit và current Project Home.

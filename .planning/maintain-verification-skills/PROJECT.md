@@ -3,98 +3,117 @@
 **Owner:** Product Owner
 **Tracker:** local Markdown
 **Lifecycle:** Approved implementation
-**Current phase:** official-host migration
+**Current phase:** Integration Kit maintenance
 **Status:** active
 
 ## Purpose
 
-Thiết kế một maintenance workflow để agent có thể nhận yêu cầu “cập nhật
-verification cho tính năng Artwork mới”, tự xác định source delta, đánh giá
-verification impact, cập nhật đúng repository, chứng minh behavior/failure
-surfaces, rồi commit và push an toàn vào các prototype origins.
+Thiết kế và duy trì workflow để verifier tiến hóa an toàn khi Artwork Editor có
+behavior mới hoặc thay đổi. Workflow phải phân biệt rõ:
 
-Project này tách riêng khỏi việc chạy một Diagnostic test case. Runtime
-verification hiện tại tiếp tục fail-closed; project này xác định cách verifier
-được mở rộng khi Product thay đổi.
+```text
+verifier package change
+→ private immutable tag
+→ Integration Kit/Host Adapter impact
+→ exact official-baseline candidate
+→ live + failure + production-absence proof
+→ maintainer-owned official FE merge
+```
 
-## Destination
+Project này khác với việc chạy một Diagnostic case. Runtime verification tiếp
+tục fail-closed; Project Home này điều phối cách contracts, package, skill và
+Host Adapter được maintain.
 
-Một engineering specification được Product Owner phê duyệt, đủ rõ để triển
-khai repository-local, agent-neutral maintenance skill với:
+## Accepted architecture
 
-1. baseline và current-source identity rõ ràng;
-2. source-delta discovery và behavior-impact map;
-3. verification-gap intake từ file, URL và natural-language test case;
-4. update compiler cho catalogue, request, adapter, workflow, fixture, Oracle,
-   evidence contract và user-facing skill;
-5. verification gates cho toolkit và FE host;
-6. atomic two-repository commit/push transaction với rollback/recovery;
-7. owner-facing report phân biệt clean, changed và blocked.
-
-## Accepted boundaries
-
-- FE prototype checkout đã tồn tại; maintenance workflow không clone FE.
-- Workflow mới không phụ thuộc Pi. Canonical skill contract là agent-neutral.
-- Official `MakeIT-POD/*` repositories luôn read-only.
-- Verifier changes chỉ push vào
-  `anhphamwork99/makeit-artwork-verifier:main`.
-- Official `MakeIT-POD/fe-editor:dev` là canonical target host. Vì official
-  remote là read-only trong workspace này, implementation candidate được xây
-  trên exact `upstream/dev` và chỉ push tới một branch của
-  `anhphamwork99/makeit-demo`; team áp dụng candidate bằng official review/merge
-  workflow của họ.
-- `anhphamwork99/makeit-demo:main` tiếp tục là secondary consumer trong giai
-  đoạn chuyển đổi và không còn là compatibility authority duy nhất.
-- Compatibility được xác định bằng versioned host contract, không bằng
-  repository name, remote URL hoặc machine-local checkout path.
-- Product code không được sửa chỉ để làm verification PASS.
-- Unsupported hoặc ambiguous behavior tạo verification gap; không được suy
-  diễn thành PASS hay product BUG.
-- Release Credit, deployment và production-safety claim nằm ngoài destination
-  của project này.
+- Verifier repository là nguồn duy nhất cho engine, cases, catalogues, evidence,
+  skill và Integration Kit.
+- Official `MakeIT-POD/fe-editor` sở hữu app-specific Host Adapter.
+- Verifier được phân phối bằng private immutable Git tag qua
+  `package.json`/`pnpm-lock.yaml`; không dùng submodule/gitlink.
+- `integrations/makeit-fe/` là handoff authority cho official frontend.
+- Team member không cần prototype repository.
+- Workspace hiện tại vẫn coi `MakeIT-POD/*` là read-only; maintainer FE mới là
+  người áp dụng kit, tạo/review/merge MR vào official repo.
+- Candidate có thể được đẩy lên authorized prototype branch để review artifact,
+  nhưng prototype không phải consumer authority hoặc runtime dependency.
+- Compatibility dựa trên versioned provider/bridge/capability contract, không
+  dựa repository name, remote URL hoặc path.
+- Product code không sửa chỉ để verifier PASS.
+- Unsupported behavior tạo verification gap, không suy diễn thành BUG/PASS.
 
 ## Primary repositories
 
 | Responsibility | Repository/workspace | Branch |
 |---|---|---|
-| Verifier CLI, catalogues, runtime, cases, tests | repository này (`anhphamwork99/makeit-artwork-verifier`) | `main` |
-| Canonical FE host target | `MakeIT-POD/fe-editor` | `dev`, read-only source; team-owned merge |
-| Official-host implementation candidate | `anhphamwork99/makeit-demo` | dedicated branch based on exact `upstream/dev` |
-| Secondary FE consumer | `anhphamwork99/makeit-demo` | `main` |
-| Project decisions/specification | `.planning/maintain-verification-skills/` trong repository này | `main` |
+| Package, runtime, cases, Integration Kit | repository này | `main` + immutable tags |
+| Canonical product host | `MakeIT-POD/fe-editor` | `dev`, maintainer-owned merge |
+| Review candidate transport | `anhphamwork99/makeit-demo` | dedicated exact-baseline branch only |
+| Product decisions/historical acceptance | MakeIt docs repository | `main` |
 
 ## Active implementation
 
-[Official canonical host migration plan](plans/official-canonical-host-migration.md)
+Current delivered artifacts:
 
-## Required deliverables
+- `integrations/makeit-fe/README.md`;
+- `integrations/makeit-fe/compatibility.json`;
+- `integrations/makeit-fe/host-adapter.patch`;
+- `integrations/makeit-fe/verify-integration.mjs`;
+- `integrations/makeit-fe/MERGE_REQUEST.md`;
+- package-installed immutable provenance support.
 
-1. Wayfinding decision map được giải quyết hoàn chỉnh.
-2. Normative maintenance specification.
-3. Architecture và repository transaction contract.
-4. Machine-readable maintenance result/gap schemas.
-5. Work Packages có exact write sets và verification commands.
-6. Independent review criteria và recovery/rollback playbook.
+The previous
+[`official-canonical-host-migration.md`](plans/official-canonical-host-migration.md)
+is a completed historical migration plan. Its submodule/gitlink steps are
+superseded by this Project Home and must not be used as current instructions.
 
-## Current evidence
+## Maintenance deliverables
 
-- [Current maintenance gap](research/current-maintenance-gap.md)
-- [Wayfinding map](wayfinding/map.md)
-- [Decision tickets](wayfinding/issues/)
+1. Source delta và behavior-impact map.
+2. Verifier package changes with portable/failure tests.
+3. Immutable package snapshot và private Git tag.
+4. Updated Integration Kit patch + compatibility metadata + MR body.
+5. Exact official-baseline frontend candidate.
+6. Host contract, focused product tests, live case, evidence integrity, build và
+   production-absence proof.
+7. Recovery/rollback instructions and owner-facing report.
+
+## Required gates
+
+Verifier:
+
+```bash
+pnpm test
+pnpm test:contract
+pnpm test:refusal
+pnpm typecheck
+pnpm build:package-snapshot
+pnpm verify:transfer --strict
+```
+
+Official FE candidate:
+
+```bash
+pnpm install --frozen-lockfile
+node <verifier>/integrations/makeit-fe/verify-integration.mjs --app-root "$PWD"
+pnpm test:verify:adapter
+pnpm verify:artwork:run --case <representative-case>
+pnpm build
+pnpm verify:artwork production-absence --app-root "$(pwd -P)"
+```
 
 ## Non-goals
 
-- Không thay thế Product feature discovery.
-- Không tự sửa product regressions.
-- Không tự thay đổi official upstream.
+- Không thay Product discovery.
+- Không tự sửa product regression.
+- Không push/merge official upstream từ workspace read-only.
 - Không deploy Vercel/Railway.
-- Không cấp Release Credit.
-- Không hứa exhaustive test generation cho behavior chưa có observable
-  contract.
+- Không publish public package.
+- Không cấp Release Credit hoặc exhaustive coverage.
+- Không duy trì secondary submodule consumer.
 
 ## Routing
 
-Project được truy cập qua file này trong private verifier repository. Wayfinding
-map chỉ là index các decision tickets; implementation tickets và specification
-sẽ được thêm sau khi frontier đã được giải quyết. Không duy trì một Project Home
-cạnh tranh trong FE hoặc MakeIt planning repository.
+Project được truy cập qua file này. Active integration instructions nằm trong
+`integrations/makeit-fe/README.md`. Historical plans/decisions chỉ cung cấp
+provenance; khi mâu thuẫn với current Project Home, current architecture thắng.

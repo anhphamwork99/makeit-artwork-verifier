@@ -29,9 +29,10 @@ pnpm cli --help     # schema-versioned JSON command surface (USAGE, exit 64)
 pnpm cli --version  # makeit-artwork-verifier 0.1.0 (PASS, exit 0)
 ```
 
-Compatible FE hosts consume this toolkit through a pinned submodule and expose
-`pnpm verify:artwork ...`. The official frontend is the canonical target;
-`makeit-demo` remains a secondary transition consumer. From a standalone toolkit checkout, use
+Compatible FE hosts consume this toolkit through a version-pinned package
+dependency and expose `pnpm verify:artwork ...`. The official frontend is the
+canonical product host. Prototype repositories are not installation or runtime
+prerequisites. From a standalone toolkit checkout, use
 `node bin/verify-artwork.mjs <command>` or `pnpm cli <command>`.
 
 ## Explicit application root
@@ -155,7 +156,8 @@ evidence and treat the run as non-PASS until the ownership issue is resolved.
 
 ## Transfer boundary
 
-The repository tracks only `.planning/maintain-verification-skills/` as its
-maintenance Project Home. Other `.planning/` provenance, historical or generated
+The repository tracks `.planning/maintain-verification-skills/` as its
+maintenance Project Home and `integrations/makeit-fe/` as the reviewed official
+frontend handoff. Other `.planning/` provenance, historical or generated
 `evidence/`, dependencies, credentials/environment files, and build caches are
 never committed. Run `pnpm verify:transfer` before staging.

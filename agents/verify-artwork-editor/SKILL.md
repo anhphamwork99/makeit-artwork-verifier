@@ -61,10 +61,11 @@ pnpm cli cleanup --run-id <run-id> --app-root <FE-checkout>
 `qualify`, `release`, `budget`, and `retention` are deferred and fail closed with
 `NOT_IMPLEMENTED`; they are not part of the correctness phase.
 
-**FE wrapper status:** compatible FE hosts consume this private toolkit through
-a commit-pinned Git submodule and expose `pnpm verify:artwork ...`. The wrapper
+**FE wrapper status:** compatible FE hosts install this private package through a
+version-pinned dependency and expose `pnpm verify:artwork ...`. The wrapper
 binds the exact FE app root and the FE-owned
-`artwork-editor-verification/evidence/` base before forwarding to this CLI.
+`artwork-editor-verification/evidence/` base before forwarding to the installed
+CLI. No prototype checkout or Git submodule is required.
 
 ```sh
 pnpm verify:artwork --help
@@ -103,9 +104,9 @@ Refusals stay distinct from product defects:
 Reaching a live application requires separate, authorized access to a compatible
 FE checkout. This toolkit does not vendor, copy, or infer product source.
 
-The FE-owned provider export and convenience wrapper are implemented. The
-wrapper binds the FE app root and FE-owned evidence base before invoking this
-commit-pinned toolkit package.
+The FE-owned provider export and convenience wrapper are supplied by the
+reviewed Integration Kit. The wrapper binds the FE app root and FE-owned
+evidence base before invoking the version-pinned installed package.
 </app-root>
 
 <diagnostic>
@@ -232,7 +233,7 @@ outcome and separate coverage. Read `references/cold-agent.md` before
 interpreting a run, and use
 `pnpm cli evidence verify --run $RUN_ID` to independently verify the durable
 record after cleanup. A toolkit checkout with authorized FE access can produce a scoped live `PASS`;
-the FE wrapper provides the same scoped commands from the prototype checkout.
+the FE wrapper provides the same scoped commands from the official frontend checkout.
 </cold-agent>
 
 <maintenance>

@@ -100,6 +100,7 @@ const AUTHORIZED_ROOT_ADDITIONS = [
   'scripts/',
   'provenance/',
   'docs/',
+  'integrations/',
   'agents/',
   '.agents/',
   '.planning/maintain-verification-skills/',

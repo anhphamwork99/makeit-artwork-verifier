@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "integrationId": "makeit-fe-artwork-verifier-host-v1",
+  "officialRepository": "https://github.com/MakeIT-POD/fe-editor.git",
+  "targetBranch": "dev",
+  "baselineCommit": "31dfece8",
+  "candidateCommit": "e3a26ec9",
+  "candidateRepository": "https://github.com/anhphamwork99/makeit-demo.git",
+  "candidateBranch": "migration/official-verifier-host",
+  "verifierPackage": {
+    "name": "makeit-artwork-verifier",
+    "version": "0.3.3",
+    "gitTag": "v0.3.3",
+    "gitCommit": "e9cb895"
+  },
+  "hostContract": {
+    "providerSchemaVersion": 1,
+    "profileId": "artwork-product-meaning-v1",
+    "bridgeVersion": 7
+  },
+  "patchSha256": "640c2ddd682f72c12f6f40189bed5f43fd1f834a3957279ca596244d57c86b05"
+}
