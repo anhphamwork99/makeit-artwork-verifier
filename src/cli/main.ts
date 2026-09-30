@@ -344,6 +344,7 @@ async function runCliInvocations(argv: readonly string[], options: RunCliOptions
         );
       }
       const runId = parsed.flags.get('run-id');
+      const appRoot = parsed.flags.get('app-root');
       const buildRaw = parsed.flags.get('build-timeout-ms');
       const startRaw = parsed.flags.get('start-timeout-ms');
       const buildDeadlineMs = buildRaw === undefined ? undefined : Number(buildRaw);
@@ -362,6 +363,7 @@ async function runCliInvocations(argv: readonly string[], options: RunCliOptions
       return emitCliResult(
         await runProductionAbsenceCommand({
           runId,
+          ...(appRoot === undefined ? {} : { appRoot }),
           buildDeadlineMs,
           startDeadlineMs,
           keepDistDir: parsed.booleans.has('keep-dist-dir'),
