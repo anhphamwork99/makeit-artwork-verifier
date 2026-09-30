@@ -2,8 +2,8 @@
 
 **Owner:** Product Owner
 **Tracker:** local Markdown
-**Lifecycle:** Wayfinding toward an approved engineering specification
-**Current phase:** discovery
+**Lifecycle:** Approved implementation
+**Current phase:** official-host migration
 **Status:** active
 
 ## Purpose
@@ -38,8 +38,15 @@ khai repository-local, agent-neutral maintenance skill với:
 - Official `MakeIT-POD/*` repositories luôn read-only.
 - Verifier changes chỉ push vào
   `anhphamwork99/makeit-artwork-verifier:main`.
-- FE host/submodule/skill changes chỉ push vào
-  `anhphamwork99/makeit-demo:main`.
+- Official `MakeIT-POD/fe-editor:dev` là canonical target host. Vì official
+  remote là read-only trong workspace này, implementation candidate được xây
+  trên exact `upstream/dev` và chỉ push tới một branch của
+  `anhphamwork99/makeit-demo`; team áp dụng candidate bằng official review/merge
+  workflow của họ.
+- `anhphamwork99/makeit-demo:main` tiếp tục là secondary consumer trong giai
+  đoạn chuyển đổi và không còn là compatibility authority duy nhất.
+- Compatibility được xác định bằng versioned host contract, không bằng
+  repository name, remote URL hoặc machine-local checkout path.
 - Product code không được sửa chỉ để làm verification PASS.
 - Unsupported hoặc ambiguous behavior tạo verification gap; không được suy
   diễn thành PASS hay product BUG.
@@ -51,8 +58,14 @@ khai repository-local, agent-neutral maintenance skill với:
 | Responsibility | Repository/workspace | Branch |
 |---|---|---|
 | Verifier CLI, catalogues, runtime, cases, tests | repository này (`anhphamwork99/makeit-artwork-verifier`) | `main` |
-| FE bridge/provider, consumer adapter và canonical skill | `anhphamwork99/makeit-demo` (local thường là `../makeit/FE-build`) | `main` |
+| Canonical FE host target | `MakeIT-POD/fe-editor` | `dev`, read-only source; team-owned merge |
+| Official-host implementation candidate | `anhphamwork99/makeit-demo` | dedicated branch based on exact `upstream/dev` |
+| Secondary FE consumer | `anhphamwork99/makeit-demo` | `main` |
 | Project decisions/specification | `.planning/maintain-verification-skills/` trong repository này | `main` |
+
+## Active implementation
+
+[Official canonical host migration plan](plans/official-canonical-host-migration.md)
 
 ## Required deliverables
 
