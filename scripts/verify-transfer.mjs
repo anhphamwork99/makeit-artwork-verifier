@@ -132,6 +132,7 @@ const AUTHORIZED_SKILL_ADDITIONS = [
   'tests/portable/refusal.test.ts',
   'tests/portable/fixtures/',
   'tests/portable/package-root-layout.test.ts',
+  'tests/portable/package-install-provenance.test.ts',
 ];
 
 /** Ignore-rule self-check: representative paths and the rule that must hide each. */

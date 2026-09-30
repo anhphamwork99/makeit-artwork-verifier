@@ -6,6 +6,7 @@ import {
   fstatSync,
   lstatSync,
   openSync,
+  readFileSync,
   readSync,
 } from 'node:fs';
 import path from 'node:path';
@@ -55,6 +56,19 @@ export class ProvenanceCollectorError extends Error {
     super(message);
     this.name = 'ProvenanceCollectorError';
     this.code = code;
+  }
+}
+
+function isStandaloneGitRoot(repoRoot: string): boolean {
+  try {
+    const topLevel = execFileSync('git', ['rev-parse', '--show-toplevel'], {
+      cwd: repoRoot,
+      encoding: 'utf8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }).trim();
+    return path.resolve(topLevel) === repoRoot;
+  } catch {
+    return false;
   }
 }
 
@@ -192,6 +206,90 @@ function assertRegularGovernedPath(repoRoot: string, relative: string): string {
   return absolute;
 }
 
+interface PackageProvenanceSnapshot {
+  readonly schemaVersion: 1;
+  readonly packageName: string;
+  readonly packageVersion: string;
+  readonly identityKind: 'package-snapshot';
+  readonly repositoryRevision: string;
+  readonly dirtyPolicy: 'clean';
+  readonly lockfileDigest: string;
+  readonly governedEntries: readonly GovernedPathEntry[];
+}
+
+function collectInstalledPackageProvenance(repoRoot: string): RepositoryProvenanceInputs {
+  let snapshot: PackageProvenanceSnapshot;
+  try {
+    snapshot = JSON.parse(
+      readFileSync(path.join(repoRoot, 'provenance', 'package-snapshot.json'), 'utf8'),
+    ) as PackageProvenanceSnapshot;
+  } catch (error) {
+    throw new ProvenanceCollectorError(
+      'PROVENANCE_COLLECTOR_REPOSITORY_INVALID',
+      `Installed verifier package snapshot is unavailable: ${(error as Error).message}`,
+    );
+  }
+  if (
+    snapshot.schemaVersion !== 1 ||
+    snapshot.identityKind !== 'package-snapshot' ||
+    !/^[0-9a-f]{40}$/i.test(snapshot.repositoryRevision) ||
+    !/^[0-9a-f]{64}$/i.test(snapshot.lockfileDigest) ||
+    !Array.isArray(snapshot.governedEntries)
+  ) {
+    throw new ProvenanceCollectorError(
+      'PROVENANCE_COLLECTOR_REPOSITORY_INVALID',
+      'Installed verifier package snapshot is invalid.',
+    );
+  }
+  const packageManifest = JSON.parse(
+    readFileSync(path.join(repoRoot, 'package.json'), 'utf8'),
+  ) as { name?: unknown; version?: unknown };
+  if (
+    packageManifest.name !== snapshot.packageName ||
+    packageManifest.version !== snapshot.packageVersion
+  ) {
+    throw new ProvenanceCollectorError(
+      'PROVENANCE_COLLECTOR_REPOSITORY_INVALID',
+      'Installed verifier package identity does not match its snapshot.',
+    );
+  }
+
+  const unique = new Set<string>();
+  const governedEntries = snapshot.governedEntries.map((entry) => {
+    const relative = entry.path;
+    if (
+      typeof relative !== 'string' ||
+      typeof entry.sha256 !== 'string' ||
+      !/^[0-9a-f]{64}$/i.test(entry.sha256) ||
+      unique.has(relative) ||
+      path.posix.normalize(relative) !== relative ||
+      !isGovernedRepositoryRelativePath(relative) ||
+      classifyGovernedProvenancePath(relative) === 'prohibited'
+    ) {
+      throw new ProvenanceCollectorError(
+        'PROVENANCE_COLLECTOR_PATH_INVALID',
+        'Installed verifier package snapshot contains an unsafe governed path.',
+      );
+    }
+    unique.add(relative);
+    const actual = sha256FileSync(assertRegularGovernedPath(repoRoot, relative));
+    if (actual !== entry.sha256.toLowerCase()) {
+      throw new ProvenanceCollectorError(
+        'PROVENANCE_COLLECTOR_HASH_FAILED',
+        `Installed verifier package file does not match its snapshot: ${relative}`,
+      );
+    }
+    return Object.freeze({ path: relative, sha256: actual });
+  });
+
+  return Object.freeze({
+    repositoryRevision: snapshot.repositoryRevision.toLowerCase(),
+    dirtyPolicy: 'clean',
+    governedEntries: Object.freeze(governedEntries),
+    lockfileDigest: snapshot.lockfileDigest.toLowerCase(),
+  });
+}
+
 /**
  * Collect only repository-relative governed inputs. The returned value contains
  * no repository root, absolute path, cleanup handle, or write capability.
@@ -200,6 +298,9 @@ export function collectRepositoryProvenanceInputs(
   options: CollectRepositoryProvenanceOptions = {},
 ): RepositoryProvenanceInputs {
   const repoRoot = safeRepositoryRoot(options.repoRoot ?? resolveRepoRoot());
+  if (options.runGit === undefined && !isStandaloneGitRoot(repoRoot)) {
+    return collectInstalledPackageProvenance(repoRoot);
+  }
   const runGit = options.runGit ?? defaultRunGit;
   let revision = text(runGit(['rev-parse', 'HEAD'], repoRoot)).trim();
   if (!/^[0-9a-f]{40}$/i.test(revision)) {

@@ -1,6 +1,6 @@
 {
   "name": "makeit-artwork-verifier",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "description": "Installable MakeIt Artwork Editor Diagnostic correctness toolkit and official-host Integration Kit (private).",
@@ -20,7 +20,9 @@
     "test:fe-hosted": "vitest run --config vitest.fe-hosted.config.ts",
     "test:browser": "vitest run --config vitest.browser.config.ts",
     "typecheck": "tsc --noEmit -p tsconfig.portable.json",
-    "verify:transfer": "node scripts/verify-transfer.mjs"
+    "verify:transfer": "node scripts/verify-transfer.mjs",
+    "build:package-snapshot": "node scripts/build-package-snapshot.mjs",
+    "prepack": "pnpm build:package-snapshot"
   },
   "dependencies": {
     "@playwright/test": "^1.59.1",
@@ -38,5 +40,16 @@
     "vite-plugin-svgr": "^5.2.0",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^3.2.6"
-  }
+  },
+  "files": [
+    "bin",
+    "src",
+    "cases",
+    "catalogues",
+    "fixtures",
+    "governance",
+    "agents",
+    "provenance/package-snapshot.json",
+    "tsconfig.portable.json"
+  ]
 }
