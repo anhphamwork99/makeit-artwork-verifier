@@ -63,16 +63,18 @@ https://github.com/anhphamwork99/makeit-artwork-verifier.git
 branch: main
 ```
 
-### FE consumer
+### FE hosts
 
-FE prototype sở hữu product code, verification bridge/provider, consumer
-adapter, user-facing skill và gitlink pin tới repository này.
+Một compatible FE host sở hữu product code, verification bridge/provider,
+consumer adapter, user-facing skill và gitlink pin tới repository này.
 
-```text
-https://github.com/anhphamwork99/makeit-demo.git
-branch: main
-common local workspace: ../makeit/FE-build
-```
+- Canonical target: `MakeIT-POD/fe-editor:dev`, được team áp dụng qua official
+  review/merge workflow.
+- Secondary transition consumer:
+  `anhphamwork99/makeit-demo:main`.
+- Compatibility được quyết định bằng versioned provider/bridge/capability
+  contract từ explicit `--app-root`, không bằng repository name, remote URL
+  hoặc checkout path.
 
 Repository official `MakeIT-POD/*` là read-only upstream. Không commit, push,
 open prototype PR hoặc sửa history của official repositories.
@@ -148,7 +150,9 @@ Khi verifier change yêu cầu FE pin/adapter change:
 2. commit + push verifier `origin/main`;
 3. update FE gitlink đúng pushed commit;
 4. verify FE setup, adapter, typecheck và behavior/failure surface liên quan;
-5. commit + push FE `origin/main`.
+5. với secondary consumer, commit + push `makeit-demo` `origin/main`;
+6. với canonical official target, tạo candidate từ exact official baseline và
+   giao cho team áp dụng; không push hoặc mở prototype PR vào `MakeIT-POD/*`.
 
 Không để FE gitlink trỏ tới verifier commit chưa push. Không force-push hoặc
 rewrite history để recovery. Nếu phase sau fail, giữ commit phase trước và báo

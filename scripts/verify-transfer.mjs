@@ -116,6 +116,7 @@ const AUTHORIZED_ROOT_ADDITIONS = [
 const AUTHORIZED_SKILL_ADDITIONS = [
   'src/contracts/host-compatibility.ts',
   'src/contracts/product-meaning-provider.ts',
+  'src/cli/host.ts',
   'src/runtime/crossword-source.ts',
   'src/runtime/product-meaning-provider.ts',
   'src/runtime/evidence-root.ts',

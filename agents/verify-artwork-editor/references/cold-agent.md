@@ -12,7 +12,7 @@ conversation history. Run every command from the **toolkit repository root**
 3. Confirm that Playwright Chromium is available to the installed package
    before attempting any live run.
 4. For a live `diagnostic` run, obtain separate, authorized access to a
-   `FE-build` checkout and pass it explicitly with `--app-root`.
+   compatible FE checkout and pass it explicitly with `--app-root`.
 5. Keep the verification source local. Diagnostic evidence records the commit,
    dirty state, lockfile digest, resolved **registry fingerprint**, and
    environment cell; it does not turn an uncommitted tree into a release claim.
@@ -29,8 +29,9 @@ pnpm cli --help     # schema-versioned JSON command surface (USAGE, exit 64)
 pnpm cli --version  # makeit-artwork-verifier 0.1.0 (PASS, exit 0)
 ```
 
-The FE prototype consumes this toolkit through a pinned submodule and exposes
-`pnpm verify:artwork ...`. From a standalone toolkit checkout, use
+Compatible FE hosts consume this toolkit through a pinned submodule and expose
+`pnpm verify:artwork ...`. The official frontend is the canonical target;
+`makeit-demo` remains a secondary transition consumer. From a standalone toolkit checkout, use
 `node bin/verify-artwork.mjs <command>` or `pnpm cli <command>`.
 
 ## Explicit application root
@@ -44,9 +45,10 @@ from the same explicit root. There is no implicit adjacent checkout and no
 fallback: a missing, malformed, or incompatible provider is a harness refusal
 (`HARNESS_BLOCKED`), never a product `BUG`.
 
-> The FE prototype currently provides the accepted schema-1 product-meaning
-> provider and bridge-v7 compatibility descriptor. A different app root must pass
-> the same pre-allocation compatibility checks.
+> Compatibility is repository-neutral. Every app root, including the canonical
+> official frontend target and the secondary demo consumer, must provide the
+> accepted schema-1 product-meaning provider and bridge-v7 compatibility
+> descriptor and pass the same pre-allocation checks.
 
 
 ## Current Case Request shape

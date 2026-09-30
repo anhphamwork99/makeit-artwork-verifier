@@ -22,7 +22,7 @@ vendors, reimplements, or shims product meaning.
 <prerequisites>
 - Node.js `>=20.11 <25` and pnpm `10.33.0` (declared `packageManager`).
 - `pnpm install --frozen-lockfile` at the toolkit root.
-- For a live `diagnostic` run only: a separate, authorized `FE-build` checkout
+- For a live `diagnostic` run only: a separate, authorized compatible FE checkout
   passed explicitly as `--app-root`.
 - No login, shared server, production environment, or conversation-only fixture
   state is required. The verification bridge is compiled out of production
@@ -61,8 +61,8 @@ pnpm cli cleanup --run-id <run-id> --app-root <FE-checkout>
 `qualify`, `release`, `budget`, and `retention` are deferred and fail closed with
 `NOT_IMPLEMENTED`; they are not part of the correctness phase.
 
-**FE wrapper status:** `FE-build` consumes this private toolkit through a
-commit-pinned Git submodule and exposes `pnpm verify:artwork ...`. The wrapper
+**FE wrapper status:** compatible FE hosts consume this private toolkit through
+a commit-pinned Git submodule and expose `pnpm verify:artwork ...`. The wrapper
 binds the exact FE app root and the FE-owned
 `artwork-editor-verification/evidence/` base before forwarding to this CLI.
 
@@ -100,8 +100,8 @@ Refusals stay distinct from product defects:
   generated-Crossword source drift → `HARNESS_BLOCKED` (exit 2);
 - never a product `BUG`.
 
-Reaching a live application requires separate, authorized private access to the
-`FE-build` checkout. This toolkit does not vendor, copy, or infer product source.
+Reaching a live application requires separate, authorized access to a compatible
+FE checkout. This toolkit does not vendor, copy, or infer product source.
 
 The FE-owned provider export and convenience wrapper are implemented. The
 wrapper binds the FE app root and FE-owned evidence base before invoking this

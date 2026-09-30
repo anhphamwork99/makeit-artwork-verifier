@@ -20,7 +20,7 @@ import { defineConfig, type Plugin } from 'vitest/config';
 const appRoot = process.env.MAKEIT_ARTWORK_APP_ROOT;
 if (!appRoot) {
   throw new Error(
-    'test:fe-hosted requires MAKEIT_ARTWORK_APP_ROOT pointing at an authorised FE-build checkout.',
+    'test:fe-hosted requires MAKEIT_ARTWORK_APP_ROOT pointing at an authorised compatible FE checkout.',
   );
 }
 

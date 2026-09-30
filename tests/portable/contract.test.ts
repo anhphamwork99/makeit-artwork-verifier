@@ -347,10 +347,38 @@ describe('[WP2 C2] CLI surface is versioned and help is a documented USAGE', () 
     expect(envelope.schemaVersion).toBe(2);
     expect(envelope.status).toBe('USAGE');
     expect(envelope.exitCode).toBe(64);
-    expect(envelope.launchAttempted).toBe(false);
-    expect(envelope.detail).toContain('diagnostic --case <request.json> --app-root <path>');
-    expect(envelope.detail).toContain('--app-root <path>');
-  });
+      expect(envelope.launchAttempted).toBe(false);
+      expect(envelope.detail).toContain('host doctor --app-root <path>');
+      expect(envelope.detail).toContain('diagnostic --case <request.json> --app-root <path>');
+      expect(envelope.detail).toContain('--app-root <path>');
+    });
+
+    it('inspects a compatible host contract without launching runtime resources', async () => {
+      const { code, stdout } = await captureCli([
+        'host',
+        'doctor',
+        '--app-root',
+        APP_ROOT_COMPATIBLE,
+      ]);
+      expect(code).toBe(0);
+      const envelope = JSON.parse(stdout) as {
+        status: string;
+        launchAttempted: boolean;
+        details: {
+          appRootValidated: boolean;
+          providerEntryLoaded: boolean;
+          providerProfileId: string;
+          compatibility: { schemaVersion: number; bridgeVersion: number };
+        };
+      };
+      expect(envelope.status).toBe('PASS');
+      expect(envelope.launchAttempted).toBe(false);
+      expect(envelope.details.appRootValidated).toBe(true);
+      expect(envelope.details.providerEntryLoaded).toBe(true);
+      expect(envelope.details.providerProfileId).toBe(PRODUCT_MEANING_PROVIDER_PROFILE_ID);
+      expect(envelope.details.compatibility.schemaVersion).toBe(1);
+      expect(envelope.details.compatibility.bridgeVersion).toBe(7);
+    });
 
   it('answers no command as USAGE/exit 64', async () => {
     const { code, stdout } = await captureCli([]);

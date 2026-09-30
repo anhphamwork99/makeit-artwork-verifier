@@ -142,9 +142,10 @@ async function runCliInvocations(argv: readonly string[], options: RunCliOptions
           '  diagnostic — required current-source correctness (PASS/BUG/HARNESS_BLOCKED/ENVIRONMENT_FAILURE).',
           '  qualify — optional reproducibility, non-creditable and separate from Diagnostic.',
           '  release — deferred Release Credit; unavailable in the correctness phase.',
-          'Commands:',
-          '  validate --all',
-          '  plan --case <request.json> --out <dir>',
+            'Commands:',
+            '  validate --all',
+            '  plan --case <request.json> --out <dir>',
+            '  host doctor --app-root <path>',
             '  doctor --app-root <path> [--run-id <id>] [--readiness-timeout-ms <n>] [--keep-dist-dir]',
           '  diagnostic --case <request.json> --app-root <path> [--run-id <id>] [--port <n>] [--keep-dist-dir]',
           '  diagnostic --suite <suite-id> --app-root <path> [--run-id <suite-execution-id>]',
@@ -164,7 +165,7 @@ async function runCliInvocations(argv: readonly string[], options: RunCliOptions
           '  budget inspect --approved <approval-id>',
           '  retention audit',
           'Flags:',
-            '  --app-root <path>  Explicit application checkout that owns the Next.js runtime and product-meaning provider; required by doctor and diagnostic.',
+            '  --app-root <path>  Explicit application checkout that owns the Next.js runtime and product-meaning provider; required by host doctor, doctor and diagnostic.',
           '  --version          Print the toolkit name and version.',
           '  --help             Print this schema-versioned command surface.',
         ].join('\n'),
@@ -176,7 +177,7 @@ async function runCliInvocations(argv: readonly string[], options: RunCliOptions
     return emitCliResult(
       usage(
         '(none)',
-        'No command supplied. Expected one of: validate, plan, doctor, diagnostic, cleanup, production-absence, evidence, manifest.',
+          'No command supplied. Expected one of: validate, plan, host, doctor, diagnostic, cleanup, production-absence, evidence, manifest.',
       ),
     );
   }
@@ -186,8 +187,18 @@ async function runCliInvocations(argv: readonly string[], options: RunCliOptions
     return emitCliResult(usage(command, deferredProfileRefusal));
   }
 
-  switch (command) {
-    case 'manifest': {
+    switch (command) {
+      case 'host': {
+        if (subcommand !== 'doctor') {
+          return emitCliResult(
+            usage('host', 'host requires exactly `host doctor --app-root <path>`.'),
+          );
+        }
+        const appRoot = parsed.flags.get('app-root');
+        const { runHostDoctorCommand } = await import('./host');
+        return emitCliResult(await runHostDoctorCommand(appRoot));
+      }
+      case 'manifest': {
       const { runManifestCommand } = await import('./manifest');
       return emitCliResult(runManifestCommand(argv.slice(1)));
     }

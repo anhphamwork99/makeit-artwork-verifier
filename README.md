@@ -26,9 +26,9 @@ Người mới tiếp nhận nên đọc theo thứ tự:
    — Project Home để thiết kế workflow maintain skills/tools.
 5. [`CONTRIBUTING.md`](CONTRIBUTING.md) và [`SECURITY.md`](SECURITY.md).
 
-Nếu mục tiêu chỉ là chạy verification từ FE prototype, bắt đầu tại
-`FE-build/agents/verify-artwork-editor/SKILL.md` và dùng FE wrapper thay vì gọi
-standalone CLI trực tiếp.
+Nếu mục tiêu chỉ là chạy verification từ một compatible FE host, bắt đầu tại
+`agents/verify-artwork-editor/SKILL.md` trong checkout đó và dùng FE wrapper
+thay vì gọi standalone CLI trực tiếp.
 
 ## Kiến trúc hiện tại
 
@@ -36,7 +36,8 @@ standalone CLI trực tiếp.
 
 | Thành phần | Repository | Sở hữu |
 |---|---|---|
-| Product host / FE consumer | [`anhphamwork99/makeit-demo`](https://github.com/anhphamwork99/makeit-demo) | Artwork Editor product, read-only verification bridge, product-meaning provider, consumer adapter, user-facing skill, FE-owned evidence/reports |
+| Canonical product host target | `MakeIT-POD/fe-editor:dev` | Artwork Editor product, read-only verification bridge, product-meaning provider, consumer adapter, user-facing skill, FE-owned evidence/reports after team-owned merge |
+| Secondary transition consumer | [`anhphamwork99/makeit-demo`](https://github.com/anhphamwork99/makeit-demo) | Existing compatible host retained during migration |
 | Private verifier | repository này — [`anhphamwork99/makeit-artwork-verifier`](https://github.com/anhphamwork99/makeit-artwork-verifier) | CLI, planner, catalogues, cases, runtime, browser driver, Oracles, evidence contracts/verifier, standalone skill, maintenance Project Home |
 | Product/planning records | [`anhphamwork99/makeit-docs`](https://github.com/anhphamwork99/makeit-docs) | Product truth, accepted ADRs và integration acceptance records |
 | Official source | `MakeIT-POD/*` | Read-only upstream; không nhận prototype commits hoặc pushes |
@@ -81,6 +82,15 @@ flowchart LR
 
 FE là authority cho product behavior và product meaning. Live Diagnostic nhận
 explicit `--app-root`; verifier không infer adjacent checkout.
+
+Repository identity không tham gia compatibility. Chạy read-only preflight:
+
+```bash
+pnpm cli host doctor --app-root <FE-checkout>
+```
+
+Command này chỉ load và validate versioned provider/host contract; nó không
+allocate port, start Next.js, launch browser hoặc ghi evidence.
 
 FE cung cấp:
 

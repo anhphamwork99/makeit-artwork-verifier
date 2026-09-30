@@ -341,7 +341,31 @@ describe('[ADR 0118] request refusals stay before provider load and allocation',
   });
 });
 
-describe('[current-source compatibility] Doctor preflight', () => {
+  describe('[current-source compatibility] Doctor preflight', () => {
+    it('host doctor refuses a missing provider without allocation or launch', async () => {
+      const result = await captureCli([
+        'host',
+        'doctor',
+        '--app-root',
+        APP_ROOT_NO_PROVIDER,
+      ]);
+      expect(result.status).toBe('HARNESS_BLOCKED');
+      expect(result.launchAttempted).toBe(false);
+      expect(codes(result)).toContain('PRODUCT_MEANING_PROVIDER_UNAVAILABLE');
+    });
+
+    it('host doctor refuses an incompatible bridge without allocation or launch', async () => {
+      const result = await captureCli([
+        'host',
+        'doctor',
+        '--app-root',
+        APP_ROOT_INCOMPATIBLE_BRIDGE,
+      ]);
+      expect(result.status).toBe('HARNESS_BLOCKED');
+      expect(result.launchAttempted).toBe(false);
+      expect(codes(result)).toContain('HOST_BRIDGE_VERSION_INCOMPATIBLE');
+    });
+
   it('requires an explicit app root before allocation', async () => {
     const result = await runDoctorCommand({ runId: 'vt-doctor-no-root' });
     expect(result.status).toBe('USAGE');
