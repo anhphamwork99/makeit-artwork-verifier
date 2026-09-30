@@ -88,6 +88,7 @@ const FORBIDDEN_NAME_PATTERNS = [
  */
 const AUTHORIZED_ROOT_ADDITIONS = [
   '.gitignore',
+  '.gitattributes',
   '.npmrc',
   'package.json',
   'pnpm-lock.yaml',
