@@ -1,9 +1,9 @@
 {
   "name": "makeit-artwork-verifier",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "description": "Standalone MakeIt Artwork Editor Diagnostic correctness toolkit (private).",
+  "description": "Installable MakeIt Artwork Editor Diagnostic correctness toolkit and official-host Integration Kit (private).",
   "license": "UNLICENSED",
   "engines": {
     "node": ">=20.11 <25"
