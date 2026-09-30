@@ -474,7 +474,7 @@ index 61f2eeee..718c5191 100644
      ...nextConfig.experimental,
      reactCompiler: phase === PHASE_PRODUCTION_BUILD,
 diff --git a/package.json b/package.json
-index 1cc9a329..98758df4 100644
+index 1cc9a329..d6032dd3 100644
 --- a/package.json
 +++ b/package.json
 @@ -23,6 +23,14 @@
@@ -496,12 +496,12 @@ index 1cc9a329..98758df4 100644
      "@vitest/coverage-v8": "^3.2.6",
      "jsdom": "^29.1.1",
      "lefthook": "^2.1.4",
-+    "makeit-artwork-verifier": "github:anhphamwork99/makeit-artwork-verifier#v0.3.3",
++    "makeit-artwork-verifier": "github:anhphamwork99/makeit-artwork-verifier#v0.3.4",
      "postcss": "^8",
      "tailwindcss": "^4",
      "typescript": "^5",
 diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
-index c0b03907..7a663e13 100644
+index c0b03907..8d0cadec 100644
 --- a/pnpm-lock.yaml
 +++ b/pnpm-lock.yaml
 @@ -180,16 +180,19 @@ importers:
@@ -521,8 +521,8 @@ index c0b03907..7a663e13 100644
          specifier: ^2.1.4
          version: 2.1.4
 +      makeit-artwork-verifier:
-+        specifier: github:anhphamwork99/makeit-artwork-verifier#v0.3.3
-+        version: https://codeload.github.com/anhphamwork99/makeit-artwork-verifier/tar.gz/e9cb895f8118aec3a063242f19f5613c65e686ba
++        specifier: github:anhphamwork99/makeit-artwork-verifier#v0.3.4
++        version: https://codeload.github.com/anhphamwork99/makeit-artwork-verifier/tar.gz/eb0f74810f899496487fb2cfcc55042e654b3546
        postcss:
          specifier: ^8
          version: 8.5.8
@@ -872,9 +872,9 @@ index c0b03907..7a663e13 100644
      resolution: {integrity: sha512-hXdUTZYIVOt1Ex//jAQi+wTZZpUpwBj/0QsOzqegb3rGMMeJiSEu5xLHnYfBrRV4RH2+OCSOO95Is/7x1WJ4bw==}
      engines: {node: '>=10'}
  
-+  makeit-artwork-verifier@https://codeload.github.com/anhphamwork99/makeit-artwork-verifier/tar.gz/e9cb895f8118aec3a063242f19f5613c65e686ba:
-+    resolution: {tarball: https://codeload.github.com/anhphamwork99/makeit-artwork-verifier/tar.gz/e9cb895f8118aec3a063242f19f5613c65e686ba}
-+    version: 0.3.3
++  makeit-artwork-verifier@https://codeload.github.com/anhphamwork99/makeit-artwork-verifier/tar.gz/eb0f74810f899496487fb2cfcc55042e654b3546:
++    resolution: {tarball: https://codeload.github.com/anhphamwork99/makeit-artwork-verifier/tar.gz/eb0f74810f899496487fb2cfcc55042e654b3546}
++    version: 0.3.4
 +    engines: {node: '>=20.11 <25'}
 +    hasBin: true
 +
@@ -1136,7 +1136,7 @@ index c0b03907..7a663e13 100644
      dependencies:
        semver: 7.7.4
  
-+  makeit-artwork-verifier@https://codeload.github.com/anhphamwork99/makeit-artwork-verifier/tar.gz/e9cb895f8118aec3a063242f19f5613c65e686ba:
++  makeit-artwork-verifier@https://codeload.github.com/anhphamwork99/makeit-artwork-verifier/tar.gz/eb0f74810f899496487fb2cfcc55042e654b3546:
 +    dependencies:
 +      '@playwright/test': 1.59.1
 +      tsx: 4.23.15

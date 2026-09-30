@@ -6,7 +6,7 @@
 
 ## Summary
 
-- Install `makeit-artwork-verifier` from private verifier tag `v0.3.3` via
+- Install `makeit-artwork-verifier` from private verifier tag `v0.3.4` via
   `package.json`/`pnpm-lock.yaml`.
 - Add the MakeIt-specific read-only Host Adapter, product-meaning provider and
   production-safe observation seams.
@@ -40,7 +40,7 @@ Artwork state and geometry into the versioned host contract.
    non-production verification gate.
 2. `next.config.mjs` accepts only owned `.next/verify-runs/<safe-id>` paths.
 3. Production output contains no observation/setup globals or Symbol slots.
-4. `package.json` and lockfile pin verifier tag `v0.3.3`.
+4. `package.json` and lockfile pin verifier tag `v0.3.4`.
 5. No `.gitmodules` or `.tooling/makeit-artwork-verifier` remains.
 
 ## Rollback

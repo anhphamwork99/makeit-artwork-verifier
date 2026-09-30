@@ -4,8 +4,8 @@ Private, installable correctness toolkit cho MakeIt Artwork Editor. Repository
 này là nguồn authority duy nhất cho CLI, planner, browser runtime, catalogues,
 cases, evidence integrity, agent skill và MakeIt FE Integration Kit.
 
-- **Package:** `makeit-artwork-verifier@0.3.3`
-- **Git distribution tag:** `v0.3.3`
+- **Package:** `makeit-artwork-verifier@0.3.4`
+- **Git distribution tag:** `v0.3.4`
 - **Branch:** `main`
 - **License:** `UNLICENSED` — private, không cấp quyền public distribution.
 - **Current profile:** representative Diagnostic correctness cho frontend
@@ -66,7 +66,7 @@ Hiện tại package được cài từ private Git tag vì chưa có package-re
 ```json
 {
   "devDependencies": {
-    "makeit-artwork-verifier": "github:anhphamwork99/makeit-artwork-verifier#v0.3.3"
+    "makeit-artwork-verifier": "github:anhphamwork99/makeit-artwork-verifier#v0.3.4"
   }
 }
 ```

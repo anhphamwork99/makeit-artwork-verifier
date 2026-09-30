@@ -18,7 +18,7 @@ if (!existsSync(appRoot) || realpathSync(appRoot) !== appRoot) {
 }
 
 const manifest = JSON.parse(readFileSync(path.join(appRoot, 'package.json'), 'utf8'));
-const expectedDependency = 'github:anhphamwork99/makeit-artwork-verifier#v0.3.3';
+const expectedDependency = 'github:anhphamwork99/makeit-artwork-verifier#v0.3.4';
 const actualDependency = manifest.devDependencies?.['makeit-artwork-verifier'];
 const requiredPaths = [
   'scripts/artwork-verifier-package.mjs',

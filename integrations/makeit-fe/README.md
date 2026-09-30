@@ -2,7 +2,7 @@
 
 Integration Kit này là artifact bàn giao một lần cho maintainer của
 `MakeIT-POD/fe-editor`. Nó đưa Host Adapter vào official frontend và ghim
-`makeit-artwork-verifier@v0.3.3` như một Git package dependency. Team member sau
+`makeit-artwork-verifier@v0.3.4` như một Git package dependency. Team member sau
 khi merge chỉ cần làm việc trong official frontend; không cần prototype
 repository và không cần Git submodule.
 

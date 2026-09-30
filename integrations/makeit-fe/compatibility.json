@@ -4,19 +4,19 @@
   "officialRepository": "https://github.com/MakeIT-POD/fe-editor.git",
   "targetBranch": "dev",
   "baselineCommit": "31dfece8",
-  "candidateCommit": "e3a26ec9",
+  "candidateCommit": "2e49375a",
   "candidateRepository": "https://github.com/anhphamwork99/makeit-demo.git",
   "candidateBranch": "migration/official-verifier-host",
   "verifierPackage": {
     "name": "makeit-artwork-verifier",
-    "version": "0.3.3",
-    "gitTag": "v0.3.3",
-    "gitCommit": "e9cb895"
+    "version": "0.3.4",
+    "gitTag": "v0.3.4",
+    "gitCommit": "eb0f748"
   },
   "hostContract": {
     "providerSchemaVersion": 1,
     "profileId": "artwork-product-meaning-v1",
     "bridgeVersion": 7
   },
-  "patchSha256": "640c2ddd682f72c12f6f40189bed5f43fd1f834a3957279ca596244d57c86b05"
+  "patchSha256": "649e670d3d0449f9fd44ea120dff3515ac12fe1d8f58210770e76334c763dbdb"
 }
