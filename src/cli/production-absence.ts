@@ -118,6 +118,8 @@ export interface ProductionAbsenceCliDetails {
 
 export interface RunProductionAbsenceCommandInput {
   runId?: string;
+  /** Explicit product application root when the verifier is installed as a package. */
+  appRoot?: string;
   buildDeadlineMs?: number;
   startDeadlineMs?: number;
   /** Diagnostic override only; production always removes the owned distDir. */
@@ -181,7 +183,7 @@ export async function runProductionAbsenceCommand(
 ): Promise<CliResult<ProductionAbsenceCliDetails>> {
   const runId = input.runId ?? generateRunId();
 
-  const allocationResult = await allocateRun({ runId });
+  const allocationResult = await allocateRun({ runId, appRoot: input.appRoot });
   if (!allocationResult.ok) {
     const failureIsEnvironment =
       allocationFailureCliStatus(allocationResult.reason) === 'ENVIRONMENT_FAILURE';

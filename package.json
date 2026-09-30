@@ -1,6 +1,6 @@
 {
   "name": "makeit-artwork-verifier",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "private": true,
   "type": "module",
   "description": "Installable MakeIt Artwork Editor Diagnostic correctness toolkit and official-host Integration Kit (private).",

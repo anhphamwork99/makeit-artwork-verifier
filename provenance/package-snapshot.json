@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "packageName": "makeit-artwork-verifier",
-  "packageVersion": "0.3.1",
+  "packageVersion": "0.3.2",
   "identityKind": "package-snapshot",
-  "repositoryRevision": "19a3da4a33b26f0af139c28be9dd6e79a1272094",
+  "repositoryRevision": "50d641309bb3b1800a5a88a139bbdb2c3ad2de41",
   "dirtyPolicy": "clean",
   "lockfileDigest": "44f2db4ea4af408fcc0d1be18548c1ad6c93ebf3d4f9d1397ca95e628056b722",
   "governedEntries": [
@@ -13,7 +13,7 @@
     },
     {
       "path": "agents/verify-artwork-editor/SKILL.md",
-      "sha256": "4e6814f2f31e798a17478ebbbd739692db9998c0599a624eb96d20f38c0ecdb4"
+      "sha256": "ed39a570b2dc6145d0c64689a0647cef55139f14268fb141e4aa53d18afc2776"
     },
     {
       "path": "bin/verify-artwork.mjs",
@@ -385,7 +385,7 @@
     },
     {
       "path": "src/cli/production-absence.ts",
-      "sha256": "6baace2bcf8984394dbcd0fdb2a699a786ea09c8da9e18cc410c70103ce53c13"
+      "sha256": "529df75f199c8f856e92ee4058d07723ca31297f94bd5dabb4a29251515a9639"
     },
     {
       "path": "src/cli/qualification.ts",
@@ -1033,7 +1033,7 @@
     },
     {
       "path": "src/version.ts",
-      "sha256": "d44c3a5f65f841312df7e73d63fbd3e2e236f3bb8e952433bad8247b16717d1e"
+      "sha256": "f2c3444efb7a8bd66671b5b7c095a67ed8eb7f3337998e1bd3fb5ece68457921"
     },
     {
       "path": "src/workflows/execute.ts",

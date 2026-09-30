@@ -7,4 +7,4 @@
  * asserts the parity, so a divergent version fails the no-FE suite.
  */
 export const TOOLKIT_NAME = 'makeit-artwork-verifier';
-export const TOOLKIT_VERSION = '0.3.1';
+export const TOOLKIT_VERSION = '0.3.2';
