@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "packageName": "makeit-artwork-verifier",
-  "packageVersion": "0.3.0",
+  "packageVersion": "0.3.1",
   "identityKind": "package-snapshot",
-  "repositoryRevision": "2f485024d9acceb793bdc305471d5cde92db9dd6",
+  "repositoryRevision": "19a3da4a33b26f0af139c28be9dd6e79a1272094",
   "dirtyPolicy": "clean",
   "lockfileDigest": "44f2db4ea4af408fcc0d1be18548c1ad6c93ebf3d4f9d1397ca95e628056b722",
   "governedEntries": [
@@ -13,7 +13,7 @@
     },
     {
       "path": "agents/verify-artwork-editor/SKILL.md",
-      "sha256": "1276d9ebf405627a7a32168a0b32c8167b75c82f1270d1ba531e63fbce6d7703"
+      "sha256": "4e6814f2f31e798a17478ebbbd739692db9998c0599a624eb96d20f38c0ecdb4"
     },
     {
       "path": "bin/verify-artwork.mjs",
@@ -1033,7 +1033,7 @@
     },
     {
       "path": "src/version.ts",
-      "sha256": "92d3b9ce13947e48bd4ec2976f07ed1348c4d667da77f5b1226c5b452927664c"
+      "sha256": "d44c3a5f65f841312df7e73d63fbd3e2e236f3bb8e952433bad8247b16717d1e"
     },
     {
       "path": "src/workflows/execute.ts",

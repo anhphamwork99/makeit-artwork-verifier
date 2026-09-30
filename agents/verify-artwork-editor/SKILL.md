@@ -1,7 +1,7 @@
 ---
 name: verify-artwork-editor
 description: Standalone private toolkit that verifies the MakeIt Artwork Editor Diagnostic profile through an explicitly supplied, separately authorized application checkout and real browser input, producing reproducible behavior evidence and a closed outcome classification.
-version: 0.3.0
+version: 0.3.1
 ---
 
 <objective>
@@ -12,7 +12,7 @@ live application is available, collect current state plus bounded visual
 evidence, classify the result into a closed outcome, and clean every
 verification-owned process and scratch resource.
 
-This skill documents one CLI implementation, `makeit-artwork-verifier@0.3.0`.
+This skill documents one CLI implementation, `makeit-artwork-verifier@0.3.1`.
 It contains no executable engine of its own. Executable source, tests, cases,
 catalogues, fixtures and trust authorities live at the toolkit repository root;
 the skill only documents how an agent invokes that package. The skill never
